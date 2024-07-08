@@ -23,6 +23,8 @@ func main(){
 	fmt.Println(r)
 
 	tset.Abc()
+
+	tset.Ccc()
 }
 
 
