@@ -46,6 +46,29 @@ func login(c echo.Context) error {
 	}
 }
 
+type Movie struct {
+	Id    int64  `json:"id"`    // 电影id
+	Title string `json:"title"` // 电影标题
+}
+
+type moviesRes struct {
+	Movies []*Movie `json:"movies"` // 电影列表
+}
+
+func movies(c echo.Context) error {
+	res := &moviesRes{}
+	res.Movies = append(res.Movies, &Movie{
+		Id:    1,
+		Title: "猪猪波",
+	})
+	res.Movies = append(res.Movies, &Movie{
+		Id:    2,
+		Title: "钢铁",
+	})
+
+	return c.JSON(200, res)
+}
+
 func main() {
 	// 调用echo通过New赋值给e
 	e := echo.New()
@@ -53,6 +76,8 @@ func main() {
 	e.Static("/", "static")
 
 	e.POST("/api/login", login)
+
+	e.GET("/api/movies", movies)
 	//e使用echo里的GET方法，调用上面 s1 与 s2
 	e.GET("/s1", s1)
 	// e调用方法，开始启动监听下面的端口号
