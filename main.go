@@ -14,6 +14,7 @@ func main() {
 	e.POST("/api/login", handler.HandleLogin)
 
 	e.GET("/api/movies", handler.HandleMovies)
+	e.POST("/api/movies", handler.HandleAddMovie)
 
 	e.GET("/api/movies/:id", handler.HandleMovie)
 

@@ -19,11 +19,70 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             cursor: pointer;
         }
+        .add-movie-container {
+            margin-bottom: 20px;
+        }
+        .add-movie-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>Movies</h1>
+    <div class="add-movie-container">
+        <button onclick="openModal()">Add Movie</button>
+    </div>
     <div id="movie-list"></div>
+
+    <div id="addMovieModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Movie</h2>
+            <input type="text" id="newMovieTitle" placeholder="Title">
+            <textarea id="newMovieDescription" placeholder="Description"></textarea>
+            <button onclick="addMovie()">Add</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -52,6 +111,41 @@
                 });
             });
         });
+
+        function openModal() {
+            document.getElementById('addMovieModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addMovieModal').style.display = 'none';
+        }
+
+        function addMovie() {
+            const title = document.getElementById('newMovieTitle').value;
+            const description = document.getElementById('newMovieDescription').value;
+            const token = localStorage.getItem('jwt');
+
+            fetch('/api/movies', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title, description })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Movie added successfully');
+                    location.reload(); // Reload the page to see the new movie in the list
+                } else {
+                    alert('Failed to add movie');
+                }
+            });
+
+            closeModal();
+        }
     </script>
 </body>
 </html>
+
