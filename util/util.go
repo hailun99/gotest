@@ -4,10 +4,15 @@ import (
 	"fmt"
 )
 
-func Add(a, b int) int{
-	return a + b
+func aa() {
+	fmt.Println("aa")
 }
 
-func aa (){
-	fmt.Println("aa")
+type A struct {
+	Id   int64
+	Name string
+}
+
+func (a A) print() {
+
 }
