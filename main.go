@@ -1,11 +1,23 @@
 package main
 
 import (
+	"log"
+
+	"github.com/hailun99/gotest/dbutil"
 	"github.com/hailun99/gotest/handler"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
+	err := dbutil.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = dbutil.DB.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// 调用echo通过New赋值给e
 	e := echo.New()
 

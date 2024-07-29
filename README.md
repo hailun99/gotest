@@ -108,7 +108,7 @@ fmt.Println()
 
 
 for _, value := range a {
-	fmt.print(value, "\t")
+	fmt.print(value)
 } 
 ```
 
@@ -269,7 +269,7 @@ func main() {
 }
 ```
 
-panic(惶恐)
+panic
 ```
 func main() {
   A()
@@ -563,4 +563,38 @@ ch := make(chan int)
 
 通道缓冲区
 ch := make(chan int, 100)
+```
+
+# MySQL
+
+创建数据库
+```
+create database gotest;
+```
+
+切换到数据库
+
+```
+use gotest;
+```
+
+查看数据库下的表
+```
+show tables;
+```
+
+创建一个表
+```
+CREATE TABLE movies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(100) NOT NULL,
+    created INT
+);
+```
+
+查询表的所有数据
+
+```
+select * from movies;
 ```
