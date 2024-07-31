@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
-	err := dbutil.Init()
+	err := dbutil.Init() //调用输出化数据库的函数
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = dbutil.DB.Ping()
+	err = dbutil.DB.Ping() //验证用户名与密码,尝试链接数据库
 	if err != nil {
 		log.Fatal(err)
 	}

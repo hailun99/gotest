@@ -567,7 +567,46 @@ ch := make(chan int, 100)
 
 # MySQL
 
-创建数据库
+## Mysql知识点
+```
+DDL:操作数据库的
+DML：表的增删改查
+DCL:用户及权限
+```
+
+ 存储引擎
+```
+MySQL支持插件式的存储引擎.
+常见的存储引擎:MylSAM和lnnoDB。
+```
+
+MyLSAM:
+```
+1.查询速度快
+2.只支持表锁
+3.不支持事务
+```
+
+lnnoDB
+```
+1.整体速度快
+2.支持表锁和行锁
+3.支持事务
+```
+
+事务
+```
+把多个SQL操作当成一个整体
+
+事务的特点:
+ACID:
+    1.原子性:事务要么成功要么失败,没有中间状态.
+    2.一致性:数据的完整性没有被破坏
+    3.隔离性：事务之间是相互隔离的.事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）
+    4.持久性:事务操作的结果是不会丢失的.
+```
+
+## 创建数据库
 ```
 create database gotest;
 ```
@@ -593,8 +632,130 @@ CREATE TABLE movies (
 );
 ```
 
+插入数据
+```
+insert into user(id,title) values(1,哈哈哈哈)
+```
+
 查询表的所有数据
 
 ```
 select * from movies;
+```
+
+单行查询
+```
+select title from user where id=1;
+
+select id,title,description from user where id=1; 
+```
+
+
+# GO操作MySQL
+
+```
+database/sql
+```
+
+## 链接
+```
+func Open(drverName,dataSourcname string) (*DB,error)
+```
+
+链接数据库
+```
+db, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/gotest")
+```
+
+初始化链接
+```
+func queryOne(id int){}
+```
+
+## 查询
+
+写单条查询记录的sql语句
+```
+var u1 user
+
+sqlStr := ` select id, title,description from user where id=1;`
+```
+
+查看某条数据
+```
+queryOne(?)
+```
+
+执行 拿取结果
+```
+db.QueryRow(sqlStr).Scan(&u1, &u1.title, &u1,description)
+```
+
+设置数据库最大的连接数
+```
+db.SetMaxOpenConns(10)
+```
+
+多行查询
+```
+sqlStr := ` select id, title,description from user where id > ?;`
+```
+
+关闭rows
+```
+defer rows.Close()
+```
+
+取结果
+```
+for rows.Next() {}
+```
+
+插入数据
+```
+sqlStr := ` insert ino user(id, title) values(?,?)`
+
+stmt, err := db.Prepare(sqlStr)
+
+db.Exec(sqlStr)
+```
+
+更新数据
+```
+sqlStr := "movies user set id=? where title= ?"
+```
+
+删除数据
+```
+sqlStr := `delete from suer where id=?`
+```
+
+## MySQL预处理
+
+预处理查询
+```
+defer stmt.Close()
+	rows, err := stmt.Query(0)
+```
+
+预处理插入
+```
+defer stmt.Close()
+	_, err = stmt.Exec("?", ?)
+```
+
+## GO实现MySQL事务
+开始事务
+```
+func (db *DB) Begin() (*Tx, error)
+```
+
+提交事务
+```
+func (tx *Tx) Commit() error
+```
+
+回滚事务
+```
+func (tx *Tx) Rollback() error
 ```
