@@ -829,7 +829,7 @@ rdb := redis.NewClient(&redis.Options{
 })
 ```
 
-Redis Sentinel模式
+### Redis Sentinel模式
 ```
 rdb := redis.NewFailoverClient(&redis.FailoverOptions{
     MasterName:    "master-name",
@@ -837,7 +837,7 @@ rdb := redis.NewFailoverClient(&redis.FailoverOptions{
 })
 ```
 
-Redis Cluster模式
+### Redis Cluster模式
 ```
 rdb := redis.NewClusterClient(&redis.ClusterOptions{
     Addrs: []string{":7000", ":7001", ":7002", ":7003", ":7004", ":7005"},
@@ -896,6 +896,7 @@ err := rdb.ZAdd(ctx, "scores", &redis.Z{Score: 100, Member: "Alice"}, &redis.Z{S
 scores, err := rdb.ZRangeWithScores(ctx, "scores", 0, -1).Result()
 ```
 
+# Redis扩展
 ## 安装Redis客户端
 ```
 go get github.com/go-redis/redis/v8
@@ -1406,5 +1407,3 @@ GO111MODULE 是否开启go mod模式设置为no
 
 GODPROXY 开启go远程代理设置为 https://goproxy.io
 ```
-
-# GO操作Redis
