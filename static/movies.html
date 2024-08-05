@@ -17,7 +17,16 @@
             margin: 10px 0;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .movie-details {
             cursor: pointer;
+        }
+        .movie-actions {
+            display: flex;
+            gap: 10px;
         }
         .add-movie-container {
             margin-bottom: 20px;
@@ -70,7 +79,7 @@
 <body>
     <h1>Movies</h1>
     <div class="add-movie-container">
-        <button onclick="openModal()">Add Movie</button>
+        <button onclick="openAddModal()">Add Movie</button>
     </div>
     <div id="movie-list"></div>
 
@@ -80,7 +89,18 @@
             <input type="text" id="newMovieTitle" placeholder="Title">
             <textarea id="newMovieDescription" placeholder="Description"></textarea>
             <button onclick="addMovie()">Add</button>
-            <button onclick="closeModal()">Cancel</button>
+            <button onclick="closeAddModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="editMovieModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Movie</h2>
+            <input type="hidden" id="editMovieId">
+            <input type="text" id="editMovieTitle" placeholder="Title">
+            <textarea id="editMovieDescription" placeholder="Description"></textarea>
+            <button onclick="editMovie()">Save</button>
+            <button onclick="closeEditModal()">Cancel</button>
         </div>
     </div>
 
@@ -103,20 +123,41 @@
                 data.movies.forEach(movie => {
                     const div = document.createElement('div');
                     div.className = 'movie';
-                    div.innerText = movie.title;
-                    div.onclick = () => {
+
+                    const detailsDiv = document.createElement('div');
+                    detailsDiv.className = 'movie-details';
+                    detailsDiv.innerText = movie.title;
+                    detailsDiv.onclick = () => {
                         window.location.href = `/movie.html?id=${movie.id}`;
                     };
+
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'movie-actions';
+
+                    const editButton = document.createElement('button');
+                    editButton.innerText = 'Edit';
+                    editButton.onclick = () => openEditModal(movie.id, movie.title, movie.description);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.onclick = () => deleteMovie(movie.id);
+
+                    actionsDiv.appendChild(editButton);
+                    actionsDiv.appendChild(deleteButton);
+
+                    div.appendChild(detailsDiv);
+                    div.appendChild(actionsDiv);
+
                     movieList.appendChild(div);
                 });
             });
         });
 
-        function openModal() {
+        function openAddModal() {
             document.getElementById('addMovieModal').style.display = 'block';
         }
 
-        function closeModal() {
+        function closeAddModal() {
             document.getElementById('addMovieModal').style.display = 'none';
         }
 
@@ -143,9 +184,66 @@
                 }
             });
 
-            closeModal();
+            closeAddModal();
+        }
+
+        function openEditModal(id, title, description) {
+            document.getElementById('editMovieId').value = id;
+            document.getElementById('editMovieTitle').value = title;
+            document.getElementById('editMovieDescription').value = description;
+            document.getElementById('editMovieModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editMovieModal').style.display = 'none';
+        }
+
+        function editMovie() {
+            const id = document.getElementById('editMovieId').value;
+            const title = document.getElementById('editMovieTitle').value;
+            const description = document.getElementById('editMovieDescription').value;
+            const token = localStorage.getItem('jwt');
+
+            fetch(`/api/movies/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title, description })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Movie updated successfully');
+                    location.reload(); // Reload the page to see the updated movie in the list
+                } else {
+                    alert('Failed to update movie');
+                }
+            });
+
+            closeEditModal();
+        }
+
+        function deleteMovie(id) {
+            const token = localStorage.getItem('jwt');
+
+            fetch(`/api/movies/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Movie deleted successfully');
+                    location.reload(); // Reload the page to see the updated movie list
+                } else {
+                    alert('Failed to delete movie');
+                }
+            });
         }
     </script>
 </body>
 </html>
-

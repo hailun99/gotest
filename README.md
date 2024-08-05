@@ -1614,7 +1614,7 @@ CREATE TABLE students (
 );
 ```
 
-删除索引的语法(DROP INDEX/ALTER TABLE)
+删除索引的语法(DROP INDEX / ALTER TABLE)
 ```
 DROP INDEX index_name ON table_name;
 

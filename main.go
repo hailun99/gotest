@@ -31,6 +31,10 @@ func main() {
 
 	e.GET("/api/movies/:id", handler.HandleMovie)
 
+	e.PUT("/api/movies/:id", handler.HandleEditMovie)
+
+	e.DELETE("/api/movies/:id", handler.HandleDeleteMovie)
+
 	// e调用方法，开始启动监听下面的端口号
 	e.Logger.Fatal(e.Start("0.0.0.0:1323"))
 }
