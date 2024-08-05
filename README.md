@@ -1407,3 +1407,590 @@ GO111MODULE 是否开启go mod模式设置为no
 
 GODPROXY 开启go远程代理设置为 https://goproxy.io
 ```
+
+## sql.db类型上用于查询的方法:
+```
+Context // 上下文
+Query // 0行或者多行记录
+QueryRow // 单行查询
+QueryContext
+QueryRowContext
+```
+
+Rows的方法:
+```
+返回的类型是: type Rpws struct{}
+
+func(rs*Rows)Close()error //关闭
+
+func(rs*Rows)ColumnTypes()([]*CloumnType,error) // 返回结果数据里列里的所有信息
+
+func(rs*Rows)Columns()([]string,error) // 返回所有列名
+
+func(rs*Rows)Err()error // 返回错误
+
+func(rs*Rows)Next()bool // 返回遍历的结果 (每次一行)
+
+func(rs*Rows)NextResultSet()bool // 返回多个结果集
+
+func(rs*Rows)Scan(dest...interface{})error //拷贝出来放在变量里
+```
+
+更新(执行命令)
+```
+Exec
+
+ExecContext
+```
+
+# SQL
+```
+创建数据库：`CREATE DATABASE database_name;`
+删除数据库：`DROP DATABASE database_name;`
+创建表格：`CREATE TABLE table_name (column1 datatype, column2 datatype, column3 datatype, ...);`
+删除表格：`DROP TABLE table_name;`
+插入数据：`INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);`
+查询数据：`SELECT * FROM table_name WHERE condition;`
+```
+
+SELECT语句：用于从一个或多个数据表中选择数据
+```
+SELECT column1, column2, ... FROM table_name;
+```
+
+INSERT语句：用于向数据表中插入新的行。
+```
+INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
+```
+
+UPDATE语句：用于更新数据表中的已有行
+```
+UPDATE table_name SET column1=value1, column2=value2, ... WHERE condition;
+```
+
+DELETE语句：用于从数据表中删除行
+```
+DELETE FROM table_name WHERE condition;
+```
+
+ 模糊模糊查询 LIKE
+ ```
+SELECT column1, column2, ...
+FROM table_name
+WHERE column_name LIKE pattern;
+ ```
+
+出重  UNION
+```
+SELECT column1, column2, ...
+FROM table1
+UNION
+SELECT column1, column2, ...
+FROM table2
+[ORDER BY column1, column2, ...];
+```
+
+ORDER BY(排序) 语句
+```
+SELECT column1, column2, ...
+FROM table_name
+ORDER BY column1 [ASC | DESC], column2 [ASC | DESC], ...;
+//升序（ASC）或降序（DESC）
+```
+
+GROUP BY 语句,分组
+```
+SELECT column1, aggregate_function(column2)
+FROM table_name
+GROUP BY column1;
+```
+
+连接的使用
+```
+INNER JOIN（内连接,或等值连接）
+LEFT JOIN（左连接）
+RIGHT JOIN（右连接）
+```
+NULL 值处理
+```
+IS NULL: 当列的值是 NULL,此运算符返回 true。
+IS NOT NULL: 当列的值不为 NULL, 运算符返回 true。
+<=>: 比较操作符（不同于 = 运算符），当比较的的两个值相等或者都为 NULL 时返回 true
+```
+
+## 正则表达式
+```
+.：匹配任意单个字符。
+^：匹配字符串的开始。
+$：匹配字符串的结束。
+*：匹配零个或多个前面的元素。
++：匹配一个或多个前面的元素。
+?：匹配零个或一个前面的元素。
+[abc]：匹配字符集中的任意一个字符。
+[^abc]：匹配除了字符集中的任意一个字符以外的字符。
+[a-z]：匹配范围内的任意一个小写字母。 BINARY 关键字，使得匹配区分大小写
+[0-9]：匹配一个数字字符。
+\w：匹配一个字母数字字符（包括下划线）。SELECT * FROM products WHERE product_name RLIKE '^[0-9]';
+\s：匹配一个空白字符。
+```
+
+MySQL 事务
+```
+1、用 BEGIN, ROLLBACK, COMMIT 来实现
+BEGIN 或 START TRANSACTION：开用于开始一个事务。
+ROLLBACK 事务回滚，取消之前的更改。
+COMMIT：事务确认，提交事务，使更改永久生效。
+
+2、直接用 SET 来改变 MySQL 的自动提交模式:
+
+SET AUTOCOMMIT=0 禁止自动提交
+SET AUTOCOMMIT=1 开启自动提交
+```
+
+## ALTER 命令
+添加列
+```
+ALTER TABLE employees
+ADD COLUMN birth_date DATE;
+```
+
+修改列的数据类型
+```
+ALTER TABLE employees
+MODIFY COLUMN salary DECIMAL(10,2);
+```
+
+修改列名
+```
+ALTER TABLE employees
+CHANGE COLUMN old_column_name new_column_name VARCHAR(255);
+```
+
+删除列
+```
+ALTER TABLE employees
+DROP COLUMN birth_date;
+```
+
+添加 PRIMARY KEY(添加一个主键)
+```
+ALTER TABLE employees
+ADD PRIMARY KEY (employee_id);
+```
+
+添加 FOREIGN KEY(添加一个外键)
+```
+ALTER TABLE orders
+ADD CONSTRAINT fk_customer
+FOREIGN KEY (customer_id)
+REFERENCES customers (customer_id);
+```
+
+修改表名
+```
+ALTER TABLE employees
+RENAME TO staff;
+```
+
+## 索引
+创建索引(CREATE INDEX)
+```
+CREATE INDEX idx_name ON students (name);
+```
+
+修改表结构(添加索引) ALTER TABLE
+```
+ALTER TABLE employees
+ADD INDEX idx_age (age);
+```
+
+创建表的时候直接指定(CREATE TABLE)
+```
+CREATE TABLE students (
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  age INT,
+  INDEX idx_age (age)
+);
+```
+
+删除索引的语法(DROP INDEX/ALTER TABLE)
+```
+DROP INDEX index_name ON table_name;
+
+ALTER TABLE table_name
+DROP INDEX index_name;
+```
+
+### 唯一索引(CREATE UNIQUE INDEX)
+```
+CREATE UNIQUE INDEX idx_email ON employees (email);
+```
+
+修改表结构添加索引
+关键字:(UNIQUE)
+```
+ALTER TABLE employees
+ADD CONSTRAINT idx_email UNIQUE (email);
+```
+
+创建表的时候直接指定
+```
+CREATE TABLE employees (
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  email VARCHAR(100) UNIQUE
+);
+```
+
+使用ALTER 命令添加和删除索引
+```
+mysql> ALTER TABLE testalter_tbl ADD INDEX (c);
+
+mysql> ALTER TABLE testalter_tbl DROP INDEX c;
+```
+
+使用 ALTER 命令添加和删除主键
+```
+mysql> ALTER TABLE testalter_tbl MODIFY i INT NOT NULL;
+mysql> ALTER TABLE testalter_tbl ADD PRIMARY KEY (i);
+
+mysql> ALTER TABLE testalter_tbl DROP PRIMARY KEY;
+```
+
+显示索引信息
+```
+mysql> SHOW INDEX FROM table_name\G
+........
+```
+
+## 临时表
+创建临时表
+```
+CREATE TEMPORARY TABLE temp_table_name (
+  column1 datatype,
+  column2 datatype,
+  ...
+);
+或
+CREATE TEMPORARY TABLE temp_table_name AS
+SELECT column1, column2, ...
+FROM source_table
+WHERE condition;
+```
+
+插入数据到临时表
+```
+INSERT INTO temp_table_name (column1, column2, ...)
+VALUES (value1, value2, ...);
+```
+
+查询临时表
+```
+SELECT * FROM temp_table_name;
+```
+
+修改临时表
+```
+ALTER TABLE temp_table_name
+ADD COLUMN new_column datatype;
+```
+
+删除临时表
+```
+DROP TEMPORARY TABLE IF EXISTS temp_table_name;
+```
+
+复制表(CREATE TABLE ... SELECT)
+```
+mysql> INSERT INTO clone_tbl (runoob_id,
+    ->                        runoob_title,
+    ->                        runoob_author,
+    ->                        submission_date)
+    -> SELECT runoob_id,runoob_title,
+    ->        runoob_author,submission_date
+    -> FROM runoob_tbl;
+//Records: 3  Duplicates: 0  Warnings: 0
+```
+
+使用 mysqldump 命令
+```
+mysqldump -u username -p dbname old_table > old_table_dump.sql
+
+mysql -u username -p new_dbname < old_table_dump.sql
+```
+
+## MySQL 元数据
+查看所有数据库：
+```
+SHOW DATABASES;
+```
+
+选择数据库：
+```
+USE database_name;
+```
+
+查看数据库中的所有表：
+```
+SHOW TABLES;
+```
+
+查看表的结构：
+```
+DESC table_name;
+```
+
+查看表的索引：
+```
+SHOW INDEX FROM table_name;
+```
+
+查看表的创建语句：
+```
+SHOW CREATE TABLE table_name;
+```
+
+查看表的行数：
+```
+SELECT COUNT(*) FROM table_name;
+```
+
+查看列的信息：
+```
+SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_KEY
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_SCHEMA = 'your_database_name'
+AND TABLE_NAME = 'your_table_name';
+```
+
+查看外键信息：
+```
+SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+    TABLE_SCHEMA = 'your_database_name'
+    AND TABLE_NAME = 'your_table_name'
+    AND REFERENCED_TABLE_NAME IS NOT NULL;
+```
+
+## 系统数数据库(information_schema 数据库)
+SCHEMATA 表
+存储有关数据库的信息，如数据库名、字符集、排序规则等
+```
+SELECT * FROM information_schema.SCHEMATA;
+```
+
+TABLES 表 包含有关数据库中所有表的信息，如表名、数据库名、引擎、行数等
+```
+SELECT * FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'your_database_name';
+```
+
+COLUMNS 表
+包含有关表中列的信息，如列名、数据类型、是否允许 NULL 等
+```
+SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = 'your_database_name' AND TABLE_NAME = 'your_table_name';
+```
+
+STATISTICS 表
+提供有关表索引的统计信息，如索引名、列名、唯一性等。
+```
+SELECT * FROM information_schema.STATISTICS WHERE TABLE_SCHEMA = 'your_database_name' AND TABLE_NAME = 'your_table_name';
+```
+
+KEY_COLUMN_USAGE 表
+包含有关表中外键的信息，如外键名、列名、关联表等。
+```
+SELECT * FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = 'your_database_name' AND TABLE_NAME = 'your_table_name';
+```
+
+REFERENTIAL_CONSTRAINTS 表
+存储有关外键约束的信息，如约束名、关联表等。
+```
+SELECT * FROM information_schema.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_SCHEMA = 'your_database_name' AND TABLE_NAME = 'your_table_name';
+```
+
+## 序列使用 （AUTO_INCREMENT）自增主键
+使用 AUTO_INCREMENT 创建表的例子：
+```
+CREATE TABLE example_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+);
+```
+
+使用 LAST_INSERT_ID() 函数来获取刚刚插入的行的自增值
+```
+SELECT LAST_INSERT_ID();
+```
+
+获取表的当前自增值
+```
+SHOW TABLE STATUS LIKE 'example_table';
+```
+
+## 处理重复数据
+防止表中出现重复数据
+```
+双主键模式
+CREATE TABLE person_tbl
+(
+   first_name CHAR(20) NOT NULL,
+   last_name CHAR(20) NOT NULL,
+   sex CHAR(10),
+   PRIMARY KEY (last_name, first_name)
+);
+
+INSERT IGNORE INTO 当插入数据时，在设置了记录的唯一性后，如果插入重复数据，将不返回错误，只以警告形式返回。 而 REPLACE INTO 如果存在 primary 或 unique 相同的记录，则先删除掉。再插入新记录。
+mysql> INSERT IGNORE INTO person_tbl (last_name, first_name)
+    -> VALUES( 'Jay', 'Thomas');
+Query OK, 1 row affected (0.00 sec)
+mysql> INSERT IGNORE INTO person_tbl (last_name, first_name)
+    -> VALUES( 'Jay', 'Thomas');
+Query OK, 0 rows affected (0.00 sec)
+```
+
+UNIQUE（唯一）
+```
+CREATE TABLE person_tbl
+(
+   first_name CHAR(20) NOT NULL,
+   last_name CHAR(20) NOT NULL,
+   sex CHAR(10),
+   UNIQUE (last_name, first_name)
+);
+
+```
+
+统计重复数据
+```
+mysql> SELECT COUNT(*) as repetitions, last_name, first_name
+    -> FROM person_tbl
+    -> GROUP BY last_name, first_name
+    -> HAVING repetitions > 1;
+```
+
+过滤重复数据
+```
+mysql> SELECT DISTINCT last_name, first_name
+    -> FROM person_tbl;
+
+mysql> SELECT last_name, first_name
+    -> FROM person_tbl
+    -> GROUP BY (last_name, first_name);
+```
+
+删除重复数据
+```
+mysql> CREATE TABLE tmp SELECT last_name, first_name, sex FROM person_tbl  GROUP BY (last_name, first_name, sex);
+mysql> DROP TABLE person_tbl;
+mysql> ALTER TABLE tmp RENAME TO person_tbl;
+
+ 通过INDEX（索引） 和 PRIMAY KEY（主键）来删除
+mysql> ALTER IGNORE TABLE person_tbl
+    -> ADD PRIMARY KEY (last_name, first_name);
+```
+
+## 及 SQL 注入
+```
+规定范围
+addcslashes(string,characters)
+```
+
+## 导出数据
+```
+SELECT...INTO OUTFILE
+
+LOAD DATA INFILE是SELECT ... INTO OUTFILE的逆操作
+```
+
+mysqldump 是 MySQL 提供的用于备份和导出数据库的命令行工具
+```
+$ mysqldump -u root -p --no-create-info \
+            --tab=/tmp RUNOOB runoob_tbl
+password ******
+```
+
+导出整个数据库
+```
+mysqldump -u root -p mydatabase > mydatabase_backup.sql
+```
+
+导出特定表
+```
+mysqldump -u username -p password -h hostname database_name table_name > output_file.sql
+或
+mysqldump -u root -p mydatabase mytable > mytable_backup.sql
+```
+
+导出数据库结构
+```
+mysqldump -u username -p password -h hostname --no-data database_name > output_file.sql
+```
+
+导出压缩文件
+```
+mysqldump -u username -p password -h hostname database_name | gzip > output_file.sql.gz
+```
+
+导出 SQL 格式的数据
+```
+$ mysqldump -u root -p RUNOOB runoob_tbl > dump.txt
+password ******
+```
+
+### 将数据表及数据库拷贝至其他主机
+```
+如果你需要将数据拷贝至其他的 MySQL 服务器上, 你可以在 mysqldump 命令中指定数据库名及数据表。
+
+在源主机上执行以下命令，将数据备份至 dump.txt 文件中:
+
+$ mysqldump -u root -p database_name table_name > dump.txt
+password *****
+如果完整备份数据库，则无需使用特定的表名称。
+
+如果你需要将备份的数据库导入到MySQL服务器中，可以使用以下命令，使用以下命令你需要确认数据库已经创建：
+
+$ mysql -u root -p database_name < dump.txt
+password *****
+你也可以使用以下命令将导出的数据直接导入到远程的服务器上，但请确保两台服务器是相通的，是可以相互访问的：
+
+$ mysqldump -u root -p database_name \
+       | mysql -h other-host.com database_name
+以上命令中使用了管道来将导出的数据导入到指定的远程主机上
+```
+
+## 导入数据
+```
+# mysql -uroot -p123456 < runoob.sql
+```
+
+source 命令导入
+```
+source 命令导入数据库需要先登录到数库终端：
+
+mysql> create database abc;      # 创建数据库
+mysql> use abc;                  # 使用已创建的数据库 
+mysql> set names utf8;           # 设置编码
+mysql> source /home/abc/abc.sql  # 导入备份数据库
+使用 source 命令的好处是，你可以在 MySQL 命令行中直接执行，而无需退出 MySQL 并使用其他命令。
+```
+
+使用 LOAD DATA 导入数据
+```
+mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl;
+```
+
+使用 mysqlimport 导入数据
+```
+从文件 dump.txt 中将数据导入到 mytbl 数据表中, 可以使用以下命令：
+
+$ mysqlimport -u root -p --local mytbl dump.txt
+```
+

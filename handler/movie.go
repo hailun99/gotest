@@ -17,11 +17,13 @@ type Movie struct {
 
 // 定义一个方法       参数         返回值
 func HandleMovie(c echo.Context) error {
-	//用一个匿名函数与id来接收, 一个长度为10容量为64的变量
+	//用一个匿名函数来接收id, 一个长度为10容量为64的变量
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 
+	// 初始化Movie
 	mov := &Movie{}
 
+	// 查询数据库里的信息并赋值
 	err := dbutil.DB.QueryRow("select id, title, description, created from movies where id = ?", id).
 		Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created)
 	if err != nil {

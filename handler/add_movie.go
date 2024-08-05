@@ -27,7 +27,7 @@ func HandleAddMovie(c echo.Context) error {
 	//绑定req
 	c.Bind(req)
 
-	//
+	// 向数据库里增加数据
 	r, err := dbutil.DB.Exec("INSERT INTO movies (title, description, created) VALUES (?, ?, ?)",
 		req.Title, req.Description, time.Now().Unix())
 	//判断是否正确，正确返回结果,错误返回f
