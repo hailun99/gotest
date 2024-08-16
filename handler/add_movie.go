@@ -24,7 +24,7 @@ func HandleAddMovie(c echo.Context) error {
 	//取其地址赋值给req
 	req := &addMovieReq{}
 
-	//绑定req
+	//绑定请求参数
 	c.Bind(req)
 
 	// 向数据库里增加数据
