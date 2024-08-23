@@ -35,6 +35,19 @@ func main() {
 
 	e.DELETE("/api/movies/:id", handler.HandleDeleteMovie)
 
+	//登录页
+	e.POST("/api/ragiser", handler.HanbleRagiser)
+
+	e.POST("/api/modifypassword", handler.HandleModifyRagiser)
+
+	//
+	e.GET("/api/books", handler.HanbleBooks)
+
+	e.POST("/api/books", handler.HanbleAddRagiser)
+
+	e.GET("/api/books/:id", handler.HanbleBook)
+
 	// e调用方法，开始启动监听下面的端口号
 	e.Logger.Fatal(e.Start("0.0.0.0:1323"))
+
 }

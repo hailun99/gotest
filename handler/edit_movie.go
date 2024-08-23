@@ -27,7 +27,7 @@ func HandleEditMovie(c echo.Context) error {
 	c.Bind(req)
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 
-	// 插入数据
+	// 更新数据
 	r, err := dbutil.DB.Exec("update movies set title = ?, description = ? where id = ?",
 		req.Title, req.Description, id)
 	if err != nil {
