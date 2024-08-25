@@ -305,3 +305,19 @@ create table users(
   created int
 );
 ```
+
+CREATE TABLE movies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(100) NOT NULL,
+    created INT
+);
+
+create table comments(
+  id int auto_increment primary key,
+  username varchar(50) not null unique,
+  movieid int not null,
+  score int not null,
+  comment varchar(200),
+  created int
+);

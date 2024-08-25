@@ -8,9 +8,9 @@ import (
 )
 
 type editRagiserReq struct {
-	Username    string `json:"username"` // 用户名
-	Password    string `json:"password"` // 密码
-	Oldpassword string `json:"oldpassword"`
+	Username    string `json:"username"`    // 用户名
+	Password    string `json:"password"`    // 密码
+	Oldpassword string `json:"oldpassword"` //旧密码
 }
 
 // 返回一个相应结果

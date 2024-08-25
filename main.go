@@ -24,28 +24,27 @@ func main() {
 	e.Static("/", "static")
 
 	e.POST("/api/login", handler.HandleLogin)
+	e.POST("/api/ragiser", handler.HanbleRagiser)
+	e.POST("/api/modifypassword", handler.HandleModifyRagiser)
 
 	//
 	e.GET("/api/movies", handler.HandleMovies)
 	e.POST("/api/movies", handler.HandleAddMovie)
-
 	e.GET("/api/movies/:id", handler.HandleMovie)
-
 	e.PUT("/api/movies/:id", handler.HandleEditMovie)
-
 	e.DELETE("/api/movies/:id", handler.HandleDeleteMovie)
 
-	//登录页
-	e.POST("/api/ragiser", handler.HanbleRagiser)
+	// 添加评论
+	e.POST("/api/addcomment", handler.HanbleComments)
 
-	e.POST("/api/modifypassword", handler.HandleModifyRagiser)
+	// 删除评论（根据评论id）
+	e.DELETE("/api/deletecomment/:id", handler.HandleDeleteComment)
 
-	//
-	e.GET("/api/books", handler.HanbleBooks)
+	// 修改评论（根据 id 修改评分）
+	e.POST("/api/HandleEditComment/:id", handler.HandleEditComment)
 
-	e.POST("/api/books", handler.HanbleAddRagiser)
-
-	e.GET("/api/books/:id", handler.HanbleBook)
+	// 查询一个电影的所有评论（根据电影 id）
+	e.GET("/api/sltcomments/:id", handler.HandlSltCommentsRes)
 
 	// e调用方法，开始启动监听下面的端口号
 	e.Logger.Fatal(e.Start("0.0.0.0:1323"))
