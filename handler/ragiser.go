@@ -15,9 +15,10 @@ type ragiserReq struct {
 
 }
 
-// 定义一个结构体返回响应结果
+// 定义一个结构体返回响应
 type ragiserRes struct {
-	Success bool `json:"success"`
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 func HanbleRagiser(c echo.Context) error {
@@ -25,17 +26,20 @@ func HanbleRagiser(c echo.Context) error {
 
 	c.Bind(req)
 
+	res := &ragiserRes{}
+
 	r, err := dbutil.DB.Exec("INSERT INTO users(username, password, created) VALUES (?, ?, ?)",
 		req.Username, req.Password, time.Now().Unix())
 	if err != nil {
-		return err
+		res.Code = 100010
+		res.Msg = err.Error()
+		return c.JSON(200, res)
 	} else {
 		log.Println(r)
 	}
 
-	res := &ragiserRes{
-		Success: true,
-	}
+	res.Code = 0
+	res.Msg = "ok"
 	return c.JSON(200, res)
 
 }

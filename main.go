@@ -29,22 +29,25 @@ func main() {
 
 	//
 	e.GET("/api/movies", handler.HandleMovies)
-	e.POST("/api/movies", handler.HandleAddMovie)
-	e.GET("/api/movies/:id", handler.HandleMovie)
-	e.PUT("/api/movies/:id", handler.HandleEditMovie)
+	e.POST("/api/add_movies", handler.HandleAddMovie)
+	e.GET("/api/queryRow_movies/:id", handler.HandleMovie)
+	e.PUT("/api/modify_movies/:id", handler.HandleEditMovie)
 	e.DELETE("/api/movies/:id", handler.HandleDeleteMovie)
 
 	// 添加评论
-	e.POST("/api/addcomment", handler.HanbleComments)
+	e.POST("/api/add_comment", handler.HanbleComments)
 
 	// 删除评论（根据评论id）
-	e.DELETE("/api/deletecomment/:id", handler.HandleDeleteComment)
+	e.DELETE("/api/comment/:id", handler.HandleDeleteComment)
 
-	// 修改评论（根据 id 修改评分）
-	e.POST("/api/HandleEditComment/:id", handler.HandleEditComment)
+	// 修改评分（根据 id 修改评分）
+	e.POST("/api/modify_comment", handler.HandlemodifyComment)
 
 	// 查询一个电影的所有评论（根据电影 id）
-	e.GET("/api/sltcomments/:id", handler.HandlSltCommentsRes)
+	e.GET("/api/movie_comments", handler.HandlMovieCommentsRes)
+
+	// 查询一个用户发表的所有评论
+	e.GET("/api/username_comments", handler.HandlUsernameCommentsRes)
 
 	// e调用方法，开始启动监听下面的端口号
 	e.Logger.Fatal(e.Start("0.0.0.0:1323"))

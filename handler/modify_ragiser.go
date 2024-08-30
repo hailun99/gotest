@@ -15,7 +15,8 @@ type editRagiserReq struct {
 
 // 返回一个相应结果
 type editRagiserRes struct {
-	Success bool `json:"success"`
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 // 定义一个接收参数，并返回结果
@@ -25,19 +26,21 @@ func HandleModifyRagiser(c echo.Context) error {
 	// 绑定请求参数
 	c.Bind(req)
 
+	res := &editRagiserRes{}
+
 	// 更新数据
 	r, err := dbutil.DB.Exec("update users set password = ? where username = ? AND password = ?",
 		req.Password, req.Username, req.Oldpassword)
 	if err != nil {
-		log.Print(err)
-		return err
+		res.Code = 100010
+		res.Msg = err.Error()
+		return c.JSON(200, res)
 	} else {
 		log.Print(r)
 	}
 
-	res := &editRagiserRes{
-		Success: true,
-	}
+	res.Code = 0
+	res.Msg = "ok"
 	//正确返回相应结果
 	return c.JSON(200, res)
 }

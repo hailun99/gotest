@@ -6,7 +6,11 @@ import (
 )
 
 type moviesRes struct {
-	Movies []*Movie `json:"movies"` // 电影列表
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		Movies []*Movie `json:"movies"` // 电影列表
+	} `json:"data"`
 }
 
 // var moviesMap = map[int64]*Movie{
@@ -26,20 +30,24 @@ type moviesRes struct {
 func HandleMovies(c echo.Context) error {
 	res := &moviesRes{}
 
-	rows, err := dbutil.DB.Query("select id, title, description, created from movies")
+	rows, err := dbutil.DB.Query("select id, title, description, created, directo from movies")
 	if err != nil {
-		return err
+		res.Code = 100020
+		res.Msg = err.Error()
+		return c.JSON(200, res)
 	}
 	defer rows.Close() // 推迟最后执行并退出
 
 	// 遍历多条数据库
 	for rows.Next() {
 		mov := &Movie{}
-		err = rows.Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created)
+		err = rows.Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created, &mov.Directo)
 		if err != nil {
-			return err
+			res.Code = 100020
+			res.Msg = err.Error()
+			return c.JSON(200, res)
 		}
-		res.Movies = append(res.Movies, mov)
+		res.Data.Movies = append(res.Data.Movies, mov)
 	}
 
 	// // 遍历Map
@@ -47,5 +55,7 @@ func HandleMovies(c echo.Context) error {
 	// 	res.Movies = append(res.Movies, value)
 	// }
 
+	res.Code = 0
+	res.Msg = "ok"
 	return c.JSON(200, res)
 }

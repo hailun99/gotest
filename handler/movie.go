@@ -13,6 +13,13 @@ type Movie struct {
 	Title       string `json:"title"`       // 电影标题
 	Description string `json:"description"` // 电影介绍
 	Created     int64  `json:"created"`     // 插入时间戳
+	Directo     string `json:"directo"`     //导演
+
+}
+
+type movieRes struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 // 定义一个方法       参数         返回值
@@ -23,13 +30,18 @@ func HandleMovie(c echo.Context) error {
 	// 初始化Movie
 	mov := &Movie{}
 
+	res := &movieRes{}
+
 	// 查询数据库里的信息并赋值
-	err := dbutil.DB.QueryRow("select id, title, description, created from movies where id = ?", id).
-		Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created)
+	err := dbutil.DB.QueryRow("select id, title, description, created, directo from movies where id = ?", id).
+		Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created, &mov.Directo)
 	if err != nil {
-		return err
+		res.Code = 100020
+		res.Msg = err.Error()
+		return c.JSON(200, res)
 	}
 	// 把Map中的id赋值给res
-	res := mov
+	res.Code = 0
+	res.Msg = "ok"
 	return c.JSON(200, res)
 }

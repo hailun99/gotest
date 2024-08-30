@@ -304,7 +304,7 @@ create table users(
   password varchar(100) not null,
   created int
 );
-```
+
 
 CREATE TABLE movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -315,9 +315,137 @@ CREATE TABLE movies (
 
 create table comments(
   id int auto_increment primary key,
-  username varchar(50) not null unique,
+  username varchar(50) not null,
   movieid int not null,
   score int not null,
   comment varchar(200),
   created int
 );
+```
+
+sql增加字段
+```
+alter table comments add column directo varchar(50) not null;
+```
+删除字段
+```
+alter table comments drop directo;
+```
+Directo  string `json:"directo"`
+
+# go操作redis
+创造一个redis客户端
+```
+func RedisInit(addr string) (*redis.Client, error) {
+	reidsdb := redis.NewClient(&redis.Options{
+		Addr:     addr,
+		Password: "",
+		DB:       0,
+		PoolSize: 10,
+	})
+	_, err := redisdb.Ping().Result()
+	if err != nil {
+		return nil, err
+	} else {
+		return reidsdb, nil
+	}
+}
+```
+
+## 字符串类型
+添加
+```
+set key value
+
+mset key value [key value...]增加多条
+```
+
+Del(key)
+```
+_, err = rdb.Del(ctx, "name").Result()
+
+flushdb 删除当前数据库所有kye
+
+fiuhall 删除所有
+
+改
+```
+set key value
+```
+
+查ste(key, value, expiration)
+```
+err := redisdb.Set("key1","hello", 5*time.Second).Err()
+
+get key
+
+keys * 查看所有kye
+```
+
+get(key)
+```
+val, err := rdb.Get(ctx, "name").Result()
+```
+
+
+
+```
+
+## 集合
+添
+```
+err := rdb.SAdd(ctx, "tags", "redis", "go", "database").Err())
+```
+
+删
+```
+srem 集合名称 元素1 元素2.....
+srem user tom jerry
+```
+
+查
+```
+tags, err := rdb.SMembers(ctx, "tags").Result()
+```
+
+有序集合
+ZAdd
+```
+members := []redis.Z{
+{Score: 1.0, Member: "member1"},
+{Score: 2.0, Member: "member2"},
+{Score: 3.0, Member: "member3"},
+
+result := rdb.ZAdd(ctx, "myzset", members...)
+```
+
+## Hash
+添加数据/改
+```
+hest key field value  添加一条
+
+hmest key field value[field value...]
+```
+
+删除数据
+```
+hael key field
+```
+
+查
+```
+hget key field  获取value
+
+hmget key field[fiels...] 获取多个value
+
+hvals key 获取全部value
+
+hkeys key 获取全部field
+
+hgetall key 获取全部field和value
+
+hlen key 查看有几个键值对
+```
+
+
+# Nsq
