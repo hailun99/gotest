@@ -325,7 +325,9 @@ create table comments(
 
 sql增加字段
 ```
-alter table comments add column directo varchar(50) not null;
+alter table movies add column directo varchar(50) not null;
+
+alter table movies add columu performer varchar(200) not null;
 ```
 删除字段
 ```

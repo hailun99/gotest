@@ -14,6 +14,7 @@ type Movie struct {
 	Description string `json:"description"` // 电影介绍
 	Created     int64  `json:"created"`     // 插入时间戳
 	Directo     string `json:"directo"`     //导演
+	Performer   string `json:"performer"`   // 演员
 
 }
 
@@ -33,8 +34,8 @@ func HandleMovie(c echo.Context) error {
 	res := &movieRes{}
 
 	// 查询数据库里的信息并赋值
-	err := dbutil.DB.QueryRow("select id, title, description, created, directo from movies where id = ?", id).
-		Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created, &mov.Directo)
+	err := dbutil.DB.QueryRow("select id, title, description, created, directo, performer from movies where id = ?", id).
+		Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created, &mov.Directo, &mov.Performer)
 	if err != nil {
 		res.Code = 100020
 		res.Msg = err.Error()

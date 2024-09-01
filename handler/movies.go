@@ -30,7 +30,7 @@ type moviesRes struct {
 func HandleMovies(c echo.Context) error {
 	res := &moviesRes{}
 
-	rows, err := dbutil.DB.Query("select id, title, description, created, directo from movies")
+	rows, err := dbutil.DB.Query("select id, title, description, created, directo performer from movies")
 	if err != nil {
 		res.Code = 100020
 		res.Msg = err.Error()
@@ -41,9 +41,9 @@ func HandleMovies(c echo.Context) error {
 	// 遍历多条数据库
 	for rows.Next() {
 		mov := &Movie{}
-		err = rows.Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created, &mov.Directo)
+		err = rows.Scan(&mov.Id, &mov.Title, &mov.Description, &mov.Created, &mov.Directo, &mov.Performer)
 		if err != nil {
-			res.Code = 100020
+			res.Code = 100010
 			res.Msg = err.Error()
 			return c.JSON(200, res)
 		}

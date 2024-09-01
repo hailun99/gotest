@@ -13,6 +13,7 @@ type addMovieReq struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Directo     string `json:"directo"`
+	Performer   string `json:"performer"` // 演员
 }
 
 // 返回一个相应结果
@@ -32,8 +33,8 @@ func HandleAddMovie(c echo.Context) error {
 	res := &addMovieRes{}
 
 	// 向数据库里增加数据
-	r, err := dbutil.DB.Exec("INSERT INTO movies (title, description, directo, created) VALUES (?, ?, ?, ?)",
-		req.Title, req.Description, req.Directo, time.Now().Unix())
+	r, err := dbutil.DB.Exec("INSERT INTO movies (title, description, directo, performer, created) VALUES (?, ?, ?, ?, ?)",
+		req.Title, req.Description, req.Directo, req.Performer, time.Now().Unix())
 	//判断是否正确，正确返回结果,错误返回f
 	if err != nil {
 		res.Code = 100010
