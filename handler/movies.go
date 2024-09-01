@@ -30,7 +30,7 @@ type moviesRes struct {
 func HandleMovies(c echo.Context) error {
 	res := &moviesRes{}
 
-	rows, err := dbutil.DB.Query("select id, title, description, created, directo performer from movies")
+	rows, err := dbutil.DB.Query("select id, title, description, created, directo, performer from movies")
 	if err != nil {
 		res.Code = 100020
 		res.Msg = err.Error()

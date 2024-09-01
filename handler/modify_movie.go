@@ -16,7 +16,8 @@ import (
 type editMovieReq struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
-	Directo     string `json:"directo"` //导演
+	Directo     string `json:"directo"`   //导演
+	Performer   string `json:"performer"` // 演员
 }
 
 // 返回一个相应结果
@@ -36,8 +37,8 @@ func HandleEditMovie(c echo.Context) error {
 	res := &editMovieRes{}
 
 	// 更新数据
-	r, err := dbutil.DB.Exec("update movies set title = ?, description = ?, directo = ? where id = ?",
-		&req.Title, &req.Description, &req.Directo, id)
+	r, err := dbutil.DB.Exec("update movies set title = ?, description = ?, directo = ?, performer = ? where id = ?",
+		&req.Title, &req.Description, &req.Directo, &req.Performer, id)
 	if err != nil {
 		res.Code = 100010
 		res.Msg = err.Error()
