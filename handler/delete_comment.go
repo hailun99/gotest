@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// 定义一个返回结果
 type deleteCommentRes struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
@@ -19,6 +20,7 @@ func HandleDeleteComment(c echo.Context) error {
 
 	res := &deleteCommentRes{}
 
+	// id小于0无法查询
 	if id < 0 {
 		res.Code = 10001
 		res.Msg = "无此id"

@@ -36,7 +36,7 @@ func HandleEditMovie(c echo.Context) error {
 
 	res := &editMovieRes{}
 
-	// 更新数据
+	// 通过id更新movies表里面的数据数据
 	r, err := dbutil.DB.Exec("update movies set title = ?, description = ?, directo = ?, performer = ? where id = ?",
 		&req.Title, &req.Description, &req.Directo, &req.Performer, id)
 	if err != nil {

@@ -27,11 +27,15 @@ func main() {
 	e.POST("/api/ragiser", handler.HanbleRagiser)
 	e.POST("/api/modifypassword", handler.HandleModifyRagiser)
 
-	//
+	// 查询电影列表
 	e.GET("/api/movies", handler.HandleMovies)
+	// 添加电影
 	e.POST("/api/add_movies", handler.HandleAddMovie)
+	// 通过id查询某部电影
 	e.GET("/api/queryRow_movies/:id", handler.HandleMovie)
+	// 通过id修改某部电影
 	e.PUT("/api/modify_movies/:id", handler.HandleEditMovie)
+	// 通过id删除某部电影
 	e.DELETE("/api/movies/:id", handler.HandleDeleteMovie)
 
 	// 添加评论

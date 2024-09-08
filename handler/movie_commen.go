@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// 定义一个请求参数
 type selectCommentsRes struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
@@ -26,7 +27,7 @@ func HandlMovieCommentsRes(c echo.Context) error {
 
 	// 初始化Movie
 	res := &selectCommentsRes{}
-
+	// 通过moviesid进行查询
 	rows, err := dbutil.DB.Query("select username, movieid, score, comment from comments where movieid = ?", movieid)
 	if err != nil {
 		res.Code = 100010
@@ -44,6 +45,7 @@ func HandlMovieCommentsRes(c echo.Context) error {
 			res.Msg = err.Error()
 			return c.JSON(200, res)
 		}
+		// 吧遍历到的数据赋值给Data
 		res.Data.Comments = append(res.Data.Comments, com)
 	}
 

@@ -10,9 +10,10 @@ import (
 
 // 定义一个结构体接收请求参数
 type ragiserReq struct {
-	Username string `json:"username"` // 用户名
-	Password string `json:"password"` // 密码
-
+	Username  string `json:"username"`  // 用户名
+	Password  string `json:"password"`  // 密码
+	Gender    string `json:"gender"`    // 性别
+	Signature string `json:"signature"` // 个人标签
 }
 
 // 定义一个结构体返回响应
@@ -28,8 +29,8 @@ func HanbleRagiser(c echo.Context) error {
 
 	res := &ragiserRes{}
 
-	r, err := dbutil.DB.Exec("INSERT INTO users(username, password, created) VALUES (?, ?, ?)",
-		req.Username, req.Password, time.Now().Unix())
+	r, err := dbutil.DB.Exec("INSERT INTO users(username, password,gender,signature, created) VALUES (?, ?, ?, ?, ?)",
+		req.Username, req.Password, req.Gender, req.Signature, time.Now().Unix())
 	if err != nil {
 		res.Code = 100010
 		res.Msg = err.Error()

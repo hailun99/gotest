@@ -29,7 +29,7 @@ type moviesRes struct {
 // 定义一个接收变量
 func HandleMovies(c echo.Context) error {
 	res := &moviesRes{}
-
+	// 查询movies里的全部数据
 	rows, err := dbutil.DB.Query("select id, title, description, created, directo, performer from movies")
 	if err != nil {
 		res.Code = 100020
@@ -47,6 +47,7 @@ func HandleMovies(c echo.Context) error {
 			res.Msg = err.Error()
 			return c.JSON(200, res)
 		}
+		//
 		res.Data.Movies = append(res.Data.Movies, mov)
 	}
 

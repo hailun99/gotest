@@ -321,14 +321,34 @@ create table comments(
   comment varchar(200),
   created int
 );
-```
 
+<!-- cerate table user(
+  id int auto_increment primary key,
+  nicname varchar(30) not null unique,
+  gender varchar(10) not null,
+  signature varchar(200) not null,
+  created int
+); -->
+```
+performer
 sql增加字段
 ```
 alter table movies add column directo varchar(50) not null;
-
-alter table movies add columu performer varchar(200) not null;
 ```
+
+删除字段
+```
+alter table users drop column nicname;
+```
+
+## 查看表的结构
+```
+DESC 表名;
+DESCRIBE 表名;
+SHOW COLUMNS FROM 表名;
+EXPLAIN 表名;
+```
+
 删除字段
 ```
 alter table comments drop directo;

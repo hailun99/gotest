@@ -27,13 +27,14 @@ func HandlemodifyComment(c echo.Context) error {
 
 	res := &editCommenteRes{}
 
+	// 评分不能大于5且不能小于等于0
 	if req.Score > 5 || req.Score <= 0 {
 		res.Code = 10001
 		res.Msg = "分数不能大于5 或 小于等于0"
 		return c.JSON(200, res)
 	}
 
-	//更新数据
+	// 通过id更新数据
 	r, err := dbutil.DB.Exec("update comments set score = ? where id = ?",
 		req.Score, req.Id)
 	if err != nil {

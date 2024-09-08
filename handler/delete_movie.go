@@ -21,7 +21,7 @@ func HandleDeleteMovie(c echo.Context) error {
 
 	res := &deleteMovieRes{}
 
-	// 删除数据库里的数据
+	// 通过id删除数据库里的数据
 	r, err := dbutil.DB.Exec("delete from movies where id = ?", id)
 	if err != nil {
 		res.Code = 100010

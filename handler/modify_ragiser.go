@@ -11,6 +11,10 @@ type editRagiserReq struct {
 	Username    string `json:"username"`    // 用户名
 	Password    string `json:"password"`    // 密码
 	Oldpassword string `json:"oldpassword"` //旧密码
+	Gender      string `json:"gender"`      // 性别
+	// Oldgender    string `json:"oldgender"`
+	Signature string `json:"signature"` // 个人标签
+	// Oldsignature string `json:"oldsignature"`
 }
 
 // 返回一个相应结果
@@ -29,8 +33,8 @@ func HandleModifyRagiser(c echo.Context) error {
 	res := &editRagiserRes{}
 
 	// 更新数据
-	r, err := dbutil.DB.Exec("update users set password = ? where username = ? AND password = ?",
-		req.Password, req.Username, req.Oldpassword)
+	r, err := dbutil.DB.Exec("update users set password = ?, gender = ?, signature = ? where username = ? AND password = ?",
+		&req.Password, &req.Gender, &req.Signature, &req.Username, &req.Oldpassword)
 	if err != nil {
 		res.Code = 100010
 		res.Msg = err.Error()

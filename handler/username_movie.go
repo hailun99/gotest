@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// 定义一个请求参数
 type Commentsres struct {
 	// Username string `json:"username"`
 	Code int    `json:"code"`
@@ -22,7 +23,7 @@ func HandlUsernameCommentsRes(c echo.Context) error {
 
 	// 初始化Movie
 	res := &Commentsres{}
-
+	// 通过username查询comments里的数据
 	rows, err := dbutil.DB.Query("select username, movieid, score, comment from comments where username = ?", username)
 	if err != nil {
 		res.Code = 100010
