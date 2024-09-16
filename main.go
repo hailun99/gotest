@@ -53,6 +53,9 @@ func main() {
 	// 查询一个用户发表的所有评论
 	e.GET("/api/username_comments", handler.HandlUsernameCommentsRes)
 
+	// 添加电影票
+	e.POST("/api/add_tickek", handler.HandleAddTickek)
+
 	// e调用方法，开始启动监听下面的端口号
 	e.Logger.Fatal(e.Start("0.0.0.0:1323"))
 

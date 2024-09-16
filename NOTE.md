@@ -321,14 +321,22 @@ create table comments(
   comment varchar(200),
   created int
 );
+```
 
-<!-- cerate table user(
+
+```
+create table tickek(
   id int auto_increment primary key,
-  nicname varchar(30) not null unique,
-  gender varchar(10) not null,
-  signature varchar(200) not null,
+  ciname varchar(20) not null unique,
+  movie varchar(10) not null,
+  type varchar(10) not null,
+  seat varchar(30) not null,
+  price varchar(10) not null,
   created int
-); -->
+);
+```
+
+
 ```
 performer
 sql增加字段
