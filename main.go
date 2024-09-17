@@ -56,6 +56,9 @@ func main() {
 	// 添加电影票
 	e.POST("/api/add_tickek", handler.HandleAddTickek)
 
+	//通过id删除电影票
+	e.DELETE("/api/tickek/:id", handler.HandleDeleteTickek)
+
 	// e调用方法，开始启动监听下面的端口号
 	e.Logger.Fatal(e.Start("0.0.0.0:1323"))
 

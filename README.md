@@ -27,6 +27,10 @@ git commit -m "记笔记"
 git push
 ```
 
+```
+git diff
+```
+
 5. 查看当前状态
 
 ```
