@@ -14,10 +14,10 @@ import (
 
 // 定义一个请求参数
 type editMovieReq struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Directo     string `json:"directo"`   //导演
-	Performer   string `json:"performer"` // 演员
+	Title       string `json:"title"`       // 电影标题
+	Description string `json:"description"` // 电影介绍
+	Directo     string `json:"directo"`     //导演
+	Performer   string `json:"performer"`   // 演员
 }
 
 // 返回一个相应结果

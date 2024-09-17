@@ -27,6 +27,7 @@ git commit -m "记笔记"
 git push
 ```
 
+对比差异(增删)
 ```
 git diff
 ```

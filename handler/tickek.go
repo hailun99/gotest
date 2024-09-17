@@ -7,8 +7,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type tickekReq struct {
-	Id      int64  `json:"id"`
+type Tickek struct {
+	Id      int64  `json:"id"`      // 电影id
 	Ciname  string `json:"ciname"`  // 电影院
 	Movie   string `json:"movie"`   // 电影
 	Type    string `json:"type"`    // 类型
@@ -28,12 +28,12 @@ func HandleTickek(c echo.Context) error {
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 
 	// 初始化Movie
-	req := &tickekReq{}
+	req := &Tickek{}
 
 	res := &tickekRes{}
 
 	// 查询数据库里的信息并赋值
-	err := dbutil.DB.QueryRow("select id, ciname, movie, type, seat, price, Created from movies where id = ?", id).
+	err := dbutil.DB.QueryRow("select id, ciname, movie, type, seat, price, Created from tickek where id = ?", id).
 		Scan(&req.Id, &req.Ciname, &req.Movie, &req.Type, &req.Seat, &req.Price, &req.Created)
 	if err != nil {
 		res.Code = 100020
