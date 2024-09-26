@@ -321,10 +321,8 @@ create table comments(
   comment varchar(200),
   created int
 );
-```
 
 
-```
 create table tickek(
   id int auto_increment primary key,
   ciname varchar(20) not null unique,
@@ -337,11 +335,11 @@ create table tickek(
 ```
 
 
-```
-performer
 sql增加字段
 ```
 alter table movies add column directo varchar(50) not null;
+
+alter table tickek add column consumer varchar(50) not null; //添加顾客
 ```
 
 删除字段
@@ -357,11 +355,18 @@ SHOW COLUMNS FROM 表名;
 EXPLAIN 表名;
 ```
 
+删除数据库
+```
+drop database [if exists] 数据库名称;
+```
+
 删除字段
 ```
 alter table comments drop directo;
 ```
-Directo  string `json:"directo"`
+
+
+
 
 # go操作redis
 创造一个redis客户端
@@ -478,4 +483,116 @@ hlen key 查看有几个键值对
 ```
 
 
-# Nsq
+# Redis
+
+## String
+设置名称
+键  - 值
+kye - value
+```
+SET name [名称]
+```
+
+获取值
+```
+GET name
+```
+
+删除值
+```
+DEL name
+```
+
+判断值是否存在
+```
+EXISTS name
+```
+
+查看所有值
+```
+KEYS *
+```
+
+查找me结尾的值
+```
+KEYS *me
+```
+
+删除所有的值
+```
+FLUSHALL
+```
+
+显示中文
+```
+GET name
+```
+
+清空屏幕
+```
+clear
+```
+
+查看过期时间
+```
+TTL name
+```
+
+设置name过期时间为10秒
+```
+EXPIRE name 10
+
+SETEX name 10 牛马
+```
+
+## List
+LPUSH首部添加元素
+```
+LPUSH letter a
+```
+
+获取列表中的元素 -1表示最后一位
+循序是反过来的，从左到右 最后添加的元素在最上面
+```
+LRANGE letter 0 -1
+```
+
+显示删除的元素
+```
+RPOP letter
+```
+
+删除列表中前2个元素
+```
+LPOP letter 2
+```
+
+查看列表中的长度
+```
+LLEN lettter
+```
+
+在尾部删除一个元素
+```
+RPOPLPUSH
+```
+
+LTRIM 删除列表中指定范围以外的元素
+只保留star和stop之间的元素
+```
+LTRIM letter 1 3
+````
+
+
+
+
+
+
+
+
+
+
+
+
+
+

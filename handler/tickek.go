@@ -8,13 +8,14 @@ import (
 )
 
 type Tickek struct {
-	Id      int64  `json:"id"`      // 电影id
-	Ciname  string `json:"ciname"`  // 电影院
-	Movie   string `json:"movie"`   // 电影
-	Type    string `json:"type"`    // 类型
-	Seat    string `json:"seat"`    // 座位
-	Price   string `json:"price"`   // 价格
-	Created string `json:"created"` // 时间戳
+	Id       int64  `json:"id"`       // 顾客id
+	Ciname   string `json:"ciname"`   // 电影院
+	Movie    string `json:"movie"`    // 电影
+	Type     string `json:"type"`     // 类型
+	Seat     string `json:"seat"`     // 座位
+	Price    string `json:"price"`    // 价格
+	Created  string `json:"created"`  // 时间戳
+	Comsumer string `json:"comsumer"` // 顾客
 }
 
 type tickekRes struct {
@@ -33,8 +34,8 @@ func HandleTickek(c echo.Context) error {
 	res := &tickekRes{}
 
 	// 查询数据库里的信息并赋值
-	err := dbutil.DB.QueryRow("select id, ciname, movie, type, seat, price, Created from tickek where id = ?", id).
-		Scan(&req.Id, &req.Ciname, &req.Movie, &req.Type, &req.Seat, &req.Price, &req.Created)
+	err := dbutil.DB.QueryRow("select id, ciname, movie, type, seat, price, Created, comsumer from tickek where id = ?", id).
+		Scan(&req.Id, &req.Ciname, &req.Movie, &req.Type, &req.Seat, &req.Price, &req.Created, &req.Comsumer)
 	if err != nil {
 		res.Code = 100020
 		res.Msg = err.Error()
@@ -43,5 +44,5 @@ func HandleTickek(c echo.Context) error {
 	// 把Map中的id赋值给res
 	res.Code = 0
 	res.Msg = "ok"
-	return c.JSON(200, res)
+	return c.JSON(200, req)
 }

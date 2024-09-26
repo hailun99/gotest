@@ -9,11 +9,12 @@ import (
 )
 
 type addTickekReq struct {
-	Ciname string `json:"ciname"` // 电影院
-	Movie  string `json:"movie"`  // 电影
-	Type   string `json:"type"`   // 类型
-	Seat   string `json:"seat"`   // 座位
-	Price  string `json:"price"`  // 价格
+	Ciname   string `json:"ciname"`   // 电影院
+	Movie    string `json:"movie"`    // 电影
+	Type     string `json:"type"`     // 类型
+	Seat     string `json:"seat"`     // 座位
+	Price    string `json:"price"`    // 价格
+	Comsumer string `json:"comsumer"` // 顾客
 }
 
 // 返回一个相应结果
@@ -33,8 +34,8 @@ func HandleAddTickek(c echo.Context) error {
 	res := &addTickekRes{}
 
 	// 向数据库里增加数据
-	r, err := dbutil.DB.Exec("INSERT INTO tickek (ciname, movie, type, seat, price, created) VALUES (?, ?, ?, ?, ?, ?)",
-		req.Ciname, req.Movie, req.Type, req.Seat, req.Price, time.Now().Unix())
+	r, err := dbutil.DB.Exec("INSERT INTO tickek (ciname, movie, type, seat, price, comsumer, created) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		req.Ciname, req.Movie, req.Type, req.Seat, req.Price, req.Comsumer, time.Now().Unix())
 	//判断是否正确，正确返回结果,错误返回f
 	if err != nil {
 		res.Code = 100010

@@ -17,7 +17,7 @@ type tickeksRes struct {
 func HandleTickeks(c echo.Context) error {
 	res := &tickeksRes{}
 	// 查询movies里的全部数据
-	rows, err := dbutil.DB.Query("select id, ciname, movie, type, seat, price, created from tickek")
+	rows, err := dbutil.DB.Query("select id, ciname, movie, type, seat, price, created, comsumer from tickek")
 	if err != nil {
 		res.Code = 100020
 		res.Msg = err.Error()
@@ -28,7 +28,7 @@ func HandleTickeks(c echo.Context) error {
 	// 遍历多条数据库
 	for rows.Next() {
 		tic := &Tickek{}
-		err = rows.Scan(&tic.Id, &tic.Ciname, &tic.Movie, &tic.Type, &tic.Seat, &tic.Price, &tic.Created)
+		err = rows.Scan(&tic.Ciname, &tic.Movie, &tic.Type, &tic.Seat, &tic.Price, &tic.Created, &tic.Comsumer)
 		if err != nil {
 			res.Code = 100010
 			res.Msg = err.Error()

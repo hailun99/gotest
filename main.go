@@ -62,11 +62,15 @@ func main() {
 	// 通过id修改电影
 	e.POST("/api/modify_tickek/:id", handler.HandleEditTickek)
 
-	// 通过id查看电影票
-	e.GET("/api/tickek", handler.HandleTickek)
+	// 通过顾客id查看电影票
+	e.GET("/api/tickek/:id", handler.HandleTickek)
 
 	//查询电影票
 	e.GET("/api/tickeks", handler.HandleTickeks)
+
+	// //通过用户名查询他的电影票记录
+	// e.GET("/api/recovds_tickek", handler.HandleRecovds)
+	//
 
 	// e调用方法，开始启动监听下面的端口号
 	e.Logger.Fatal(e.Start("0.0.0.0:1323"))

@@ -44,5 +44,5 @@ func HandleMovie(c echo.Context) error {
 	// 把Map中的id赋值给res
 	res.Code = 0
 	res.Msg = "ok"
-	return c.JSON(200, res)
+	return c.JSON(200, mov)
 }
