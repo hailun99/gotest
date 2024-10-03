@@ -676,15 +676,133 @@ HKEYS person
 HLEN person
 ```
 
+## 订阅
+订阅一个频道
+```
+SUBSCRIBE [频道名称]
+```
 
+发布一个频道
+```
+publish [频道名称]  [发送的消息]
+```
 
+## stream流
+* 表示自动生成消息的id
+```
+XADD geekhour * course redis
 
+XADD geekhour 1-0 course doker
+```
 
+查看有多少条信息
+```
+XLEN geekhour
+```
 
+查看内容
+-表示最后一位 +表示开始位
+```
+XRANGE geekhour - +
+```
 
+删除
+```
+XDEL geekhour [id]
+```
 
+删除所有的信息
+0表示所有信息
+```
+XIPIM geekhour MAXLEN 0
+```
 
+读取指定几条数据
+阻塞1000秒
+从0开始
+```
+XREAD COUNT 2 BLOCK 1000 STREAMS geekhour 0
+```
 
+创建消费者组
+```
+XGROUP CREATE geekhour group1 [id]
+```
+
+查看消费者组
+```
+XIFNFO GROUPS geekhour
+```
+
+创建消费者
+```
+XGROUP CREATECONSUMER geekhour group1 consumer1
+```
+
+读取信息
+> 表示读取这个消息中最新的消息
+```
+XREADGROUP GROUP group1 consumer1 COUNT 2 BLOCK 3000 STREAMS geekhour >
+```
+
+## Geospatial
+```
+GEOADD [地理信息名字] [经度纬度] [城市名字]
+
+GEOADD city 116.405385 39.904989 beijing
+```
+
+获取某个地方的位置信息
+```
+GEOPOS city beijing
+```
+
+计算两地的距离
+```
+GEODIST city bejing shanghai
+```
+
+获取范围内的城市
+```
+GEOSEARCH city FROMMEMBER shanghai BYRADIUS 300 KM
+```
+
+## HyperLogLog
+添加/创建
+```
+DFADD course git docker redis
+```
+查看
+```
+PFCOUNT course
+```
+
+合并
+```
+PFMERGE result course course2
+```
+
+## Bitmap
+设置下标
+```
+SETBIT dianzan 0 1
+
+SET dianzan "\xF0"
+```
+查看
+```
+GETBIT dianzan 0\1
+```
+
+统计有多少个1
+```
+BITCOUNT dianzan
+```
+
+查看某个数出现的位置
+```
+BITPOS dainzan 0\1
+```
 
 
 
