@@ -551,8 +551,10 @@ LPUSH首部添加元素
 LPUSH letter a
 ```
 
-获取列表中的元素 -1表示最后一位
+获取列表中的元素 0表示起始位置 -1表示最后一位
 循序是反过来的，从左到右 最后添加的元素在最上面
+
+查看起始位置到最后一位
 ```
 LRANGE letter 0 -1
 ```
@@ -582,6 +584,108 @@ LTRIM 删除列表中指定范围以外的元素
 ```
 LTRIM letter 1 3
 ````
+
+
+## map
+添加/创建
+```
+SADD course Redis
+```
+
+查看
+```
+SMEMBERS course
+```
+
+判断元素是否在集合中
+```
+SISMEMBER course Redis
+```
+
+删除
+```
+SREM course Redis
+```
+
+
+有序集合
+添加/创建
+```
+ZADD result 680 清华 660 北大 650 复旦 640 浙大
+```
+
+查看
+只输出了成员
+```
+ZRANGE result 0 -1
+```
+输出文字与数字
+```
+ZRANGE result 0 -1 WITHSCORES //
+```
+
+查看清华的key
+```
+ZSCORE result 清华
+```
+
+从小到大查看某个排名
+```
+ZRANK result 清华
+```
+
+从大到小查看排名
+```
+ZREVRANK result 清华
+```
+
+删除
+```
+ZREM result value
+```
+
+
+## Hash
+添加/创建
+```
+HSET person naem laoyang
+```
+
+查看键值
+```
+HGETALL person
+```
+
+删除键值对
+```
+HDEL person 键
+```
+
+判断键值对是否存在
+```
+HEXISTS person 值
+```
+
+获取所有键值对
+```
+HKEYS person
+```
+
+获取键值对的数量
+```
+HLEN person
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
