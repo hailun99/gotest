@@ -28,7 +28,7 @@ func HandleTickeks(c echo.Context) error {
 	// 遍历多条数据库
 	for rows.Next() {
 		tic := &Tickek{}
-		err = rows.Scan(&tic.Ciname, &tic.Movie, &tic.Type, &tic.Seat, &tic.Price, &tic.Created, &tic.Comsumer)
+		err = rows.Scan(&tic.Id, &tic.Ciname, &tic.Movie, &tic.Type, &tic.Seat, &tic.Price, &tic.Created, &tic.Comsumer)
 		if err != nil {
 			res.Code = 100010
 			res.Msg = err.Error()

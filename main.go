@@ -48,10 +48,10 @@ func main() {
 	e.POST("/api/modify_comment", handler.HandlemodifyComment)
 
 	// 查询一个电影的所有评论（根据电影 id）
-	e.GET("/api/movie_comments", handler.HandlMovieCommentsRes)
+	e.GET("/api/movie_comments", handler.HandlMovieComments)
 
 	// 查询一个用户发表的所有评论
-	e.GET("/api/username_comments", handler.HandlUsernameCommentsRes)
+	e.GET("/api/username_movie_comments", handler.HandlUsernameCommentsRes)
 
 	// 添加电影票
 	e.POST("/api/add_tickek", handler.HandleAddTickek)

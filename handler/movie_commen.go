@@ -21,7 +21,7 @@ type selectCommentsRes struct {
 	// Comment string `josn:"comment"`
 }
 
-func HandlMovieCommentsRes(c echo.Context) error {
+func HandlMovieComments(c echo.Context) error {
 	//用一个匿名函数来接收id, 一个长度为10容量为64的变量
 	movieid, _ := strconv.ParseInt(c.QueryParam("movieid"), 10, 64)
 

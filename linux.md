@@ -38,8 +38,26 @@ yum install ntp ntpdate -y
 ssh-keygen -t rsa -C "xxx@xx.com"
 ```
 
+查看网卡
+```
+ifconfg
+```
 
+虚拟网卡
+```
+loopback
+```
 
+# 命令远程管理工具
+```
+Putty
+SecureCRT
+```
+
+# 退出系统命令
+```
+exit或logout
+```
 
 
 

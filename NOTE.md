@@ -198,73 +198,6 @@ Rplldack
 drop
 ```
 
-# GO操作Redis
-
-## String类型
-```
-err := client.Set(ctx, k).Result // 设置键
-
-value, err := client.Get(key).Result() // 获取key
-
-err := client.MGet(ctx, k...) // 批量查询key的值
-
-client.MSet(ctx, values) // 批量设置key的值
-
-client.Del(ctx, k/...) // 删除单个或多个key
-
-client.Expire(ctx, k, t) // 设置key的过期时间
-
-val, err := client.Incr(ctx, "key").Result() // Incr函数每次加一
-valBy, err := client.IncrBy(ctx, "key", 2).Result() // IncrBy函数，可以指定每次递增多少
-valFloat, err := client.IncrByFloat(ctx, "key1", 2.2).Result() // IncrByFloat函数，可以指定每次递增多少，跟IncrBy的区别是累加的是浮点数
-
-val, err := client.Decr(ctx, "key").Result() // Decr函数每次减一
-valBy, err := client.DecrBy(ctx, "key", 2).Result() // DecrBy函数，可以指定每次递减多少
-```
-
-## hash
-```
-client.HSet(hashKey, "name", "叶子")  // 存储
-client.HSet(hashKey, "age", 18)
-
-hashGet, _ := client.HGet(hashKey, "name").Result() // 获取某个属性
-
-hashGetAll, _ := client.HGetAll(hashKey).Result() // 获取它的全部属性
-```
-
-## 集合
-```
-client.SAdd(setKey, "set1") // 往集合里添加数据
-
-setList, _ := client.SMembers(setKey).Result() // 获取集合的所有的元素
-
-client.SRem(setKey, "set1") // 删除集合里的set1
-
-setFirst, _ := client.SPop(setKey).Result() // 移除并返回set的一个随机元素,因为set是无序的
-```
-
-## zset 有序集合
-```
-zsetKey := "go2zset"  
-ranking := []*redis.Z{  
-  &redis.Z{Score: 100.0, Member: "钟南山"},  
-  &redis.Z{Score: 80.0, Member: "林医生"},  
-  &redis.Z{Score: 70.0, Member: "王医生"},  
-  &redis.Z{Score: 75.0, Member: "张医生"},  
-  &redis.Z{Score: 59.0, Member: "叶医生"},  
-}  
-client.ZAdd(zsetKey, ranking...)  // 往zset里加入集合数据，数据是[]*redis.Z类型，里面包含Score和Member2个属性
- 
-newScore, err := client.ZIncrBy(zsetKey, 5.0, "钟南山").Result()  // 给钟南山加上5分，返回钟南山的最新热度分值
-
-fmt.Println("钟南山加5分后的最新分数", newScore)  
-  
-zsetList2, _ := client.ZRevRangeWithScores(zsetKey, 0, 1).Result()  // 获取前2名热度的医生，前2名，所以索引是从0到1
-
-fmt.Println("zset前2名热度的医生", zsetList2)
-```
-
-
 # NSQ
 nsq_stat
 ```
@@ -369,6 +302,65 @@ alter table comments drop directo;
 
 
 # go操作redis
+# GO操作Redis
+
+## String类型
+```
+err := client.Set(ctx, k).Result // 设置键
+
+value, err := client.Get(key).Result() // 获取key
+
+err := client.MGet(ctx, k...) // 批量查询key的值
+
+client.MSet(ctx, values) // 批量设置key的值
+
+client.Del(ctx, k/...) // 删除单个或多个key
+
+client.Expire(ctx, k, t) // 设置key的过期时间
+
+val, err := client.Incr(ctx, "key").Result() // Incr函数每次加一
+valBy, err := client.IncrBy(ctx, "key", 2).Result() // IncrBy函数，可以指定每次递增多少
+valFloat, err := client.IncrByFloat(ctx, "key1", 2.2).Result() // IncrByFloat函数，可以指定每次递增多少，跟IncrBy的区别是累加的是浮点数
+
+val, err := client.Decr(ctx, "key").Result() // Decr函数每次减一
+valBy, err := client.DecrBy(ctx, "key", 2).Result() // DecrBy函数，可以指定每次递减多少
+```
+
+
+
+## 集合
+```
+client.SAdd(setKey, "set1") // 往集合里添加数据
+
+setList, _ := client.SMembers(setKey).Result() // 获取集合的所有的元素
+
+client.SRem(setKey, "set1") // 删除集合里的set1
+
+setFirst, _ := client.SPop(setKey).Result() // 移除并返回set的一个随机元素,因为set是无序的
+```
+
+## zset 有序集合
+```
+zsetKey := "go2zset"  
+ranking := []*redis.Z{  
+  &redis.Z{Score: 100.0, Member: "钟南山"},  
+  &redis.Z{Score: 80.0, Member: "林医生"},  
+  &redis.Z{Score: 70.0, Member: "王医生"},  
+  &redis.Z{Score: 75.0, Member: "张医生"},  
+  &redis.Z{Score: 59.0, Member: "叶医生"},  
+}  
+client.ZAdd(zsetKey, ranking...)  // 往zset里加入集合数据，数据是[]*redis.Z类型，里面包含Score和Member2个属性
+ 
+newScore, err := client.ZIncrBy(zsetKey, 5.0, "钟南山").Result()  // 给钟南山加上5分，返回钟南山的最新热度分值
+
+fmt.Println("钟南山加5分后的最新分数", newScore)  
+  
+zsetList2, _ := client.ZRevRangeWithScores(zsetKey, 0, 1).Result()  // 获取前2名热度的医生，前2名，所以索引是从0到1
+
+fmt.Println("zset前2名热度的医生", zsetList2)
+```
+
+
 创造一个redis客户端
 ```
 func RedisInit(addr string) (*redis.Client, error) {
@@ -481,11 +473,18 @@ hgetall key 获取全部field和value
 
 hlen key 查看有几个键值对
 ```
+client.HSet(hashKey, "name", "叶子")  // 存储
+client.HSet(hashKey, "age", 18)
+
+hashGet, _ := client.HGet(hashKey, "name").Result() // 获取某个属性
+
+hashGetAll, _ := client.HGetAll(hashKey).Result() // 获取它的全部属性
+```
 
 
 # Redis
 
-## String
+## SET
 设置名称
 键  - 值
 kye - value
