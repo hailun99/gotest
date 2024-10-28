@@ -786,6 +786,14 @@ err := db.Get(&?，?,?)
 err := db.Select(&?,?)
 ```
 
+### 添加字段
+```
+alter table 表名 add column 字段 字段类型;
+
+alter table users add column VIP VARCHAR(6);
+```
+
+
 # GO操作Redis
 ### 准备Redis环境
 ```

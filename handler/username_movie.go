@@ -24,7 +24,7 @@ func HandlUsernameCommentsRes(c echo.Context) error {
 	// 初始化Movie
 	res := &Commentsres{}
 	// 通过username查询comments里的数据
-	rows, err := dbutil.DB.Query("select username, movieid, score, comment from comments where username = ?", username)
+	rows, err := dbutil.DB.Query("select username, movieid, score, commentfrom comments where username = ?", username)
 	if err != nil {
 		res.Code = 100010
 		res.Msg = err.Error()
