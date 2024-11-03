@@ -793,6 +793,18 @@ alter table 表名 add column 字段 字段类型;
 alter table users add column VIP VARCHAR(6);
 ```
 
+### 修改字段名
+```
+alter table 表名 change 旧字段名 新字段名 新字段类型;
+
+alter table users change VIP vip VARCHAR(6);
+```
+
+### 删除字段
+```
+altbr table users drop VIP;
+```
+
 
 # GO操作Redis
 ### 准备Redis环境
