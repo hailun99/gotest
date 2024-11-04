@@ -246,5 +246,30 @@ hset huser1 name tom
 hmset huser2 name marry sex female
 ```
 
+type
+```
+type huser2
+```
+
+获取某个字段值
+```
+hget huser2 name
+```
+
+获取多个字段值
+```
+hmget huser2 name sex
+```
+
+获取所有值
+```
+hvals huser2
+```
+
+获取所有字段包括值
+```
+hgetall huser2
+```
+
 
 
