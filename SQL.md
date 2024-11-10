@@ -199,7 +199,7 @@ get user2
 mget user2 user3
 ```
 
-删除键
+### 删除键
 ```
 del user1
 ```
@@ -270,6 +270,94 @@ hvals huser2
 ```
 hgetall huser2
 ```
+
+删除字段
+```
+hdel huser2 sex
+```
+
+## list
+### 添加
+列表左边添加值
+```
+lpush luser1 aa bb cc
+```
+
+列表右边添加值
+```
+rpush luser1 dd
+```
+
+从值前/后插入值
+```
+linsert luser1 before cc 11
+
+linsert luser1 after cc 22
+```
+
+### 获取(0表示开始值，-1表示最后一个值)
+```
+lrange luser1 0 -1
+```
+
+### 修改
+```
+lset luser1 1 ww
+```
+
+## 删除值
+从右侧(末尾)删除(一个)
+```
+lrem luser2 -1 h1
+```
+
+从左侧(开头)删除(下面全部)
+```
+lrem luser2 0 h1
+```
+
+## 集合set(不允许有重复值,只能添加与删)
+添加值
+```
+sadd suser1 aa bb cc
+```
+
+获取值
+```
+smembers suser1
+```
+
+删除值
+```
+srem suser1 aa
+```
+
+## zset(不允许有重复值,只能添加与删,分数可以为负数)
+添加值(通过分数从大倒小排序)
+```
+zadd zuser1 1 aa 3 dd 6 cc 2 ff
+```
+
+获取值
+```
+zrange zuser1 0 -1
+```
+
+获取值和分数
+```
+zrange zuser1 0 -1 withscores
+```
+
+通过分数获取值
+```
+zrangebyscore zuser1 1 6
+```
+
+通过值获得分数
+```
+zscore zuser1 cc
+```
+
 
 
 

@@ -59,5 +59,37 @@ SecureCRT
 exit或logout
 ```
 
+# 文件处理命令: ls
+ls 选项[-ald] [文件或目录]
+```
+-a 显示所有文件,包括隐藏文件
+-l 详细信息显示
+-d 查看目录属性
+```
+
+文件类型
+```
+d 目录directory
+- 二进制文件
+l 软链接文件link
+r-read读、w-write写、x-execute执行
+rwx       r-x        r-x
+所有者u   所有组g     其他人o
+user      group      oyhers
+onwer  
+```
+
+文件处理命令
+```
+cd   change directory 切换目录
+pwd  print working directory 显示当前所有目录
+touch 创建文件
+mkdir 创建目录
+cp -R[源文件或目录][目的目录]  复制文件或目录
+ctrl+c 终止命令
+mv [源文件或目录][目的目录] 移动文件、更名
+rm -r[文件或目录] 删除目录(文件或目录要为空)
+cat[文件名] 显示文件内容
+```
 
 
