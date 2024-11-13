@@ -40,31 +40,23 @@ func main() {
 
 	// 添加评论
 	e.POST("/api/add_comment", handler.HanbleComments)
-
 	// 删除评论（根据评论id）
 	e.DELETE("/api/comment/:id", handler.HandleDeleteComment)
-
 	// 修改评分（根据 id 修改评分）
 	e.POST("/api/modify_comment", handler.HandlemodifyComment)
-
 	// 查询一个电影的所有评论（根据电影 id）
 	e.GET("/api/movie_comments", handler.HandlMovieComments)
-
 	// 查询一个用户发表的所有评论
 	e.GET("/api/username_movie_comments", handler.HandlUsernameCommentsRes)
 
 	// 添加电影票
 	e.POST("/api/add_tickek", handler.HandleAddTickek)
-
 	//通过id删除电影票
 	e.DELETE("/api/tickek/:id", handler.HandleDeleteTickek)
-
 	// 通过id修改电影
 	e.POST("/api/modify_tickek/:id", handler.HandleEditTickek)
-
 	// 通过顾客id查看电影票
 	e.GET("/api/tickek/:id", handler.HandleTickek)
-
 	//查询电影票
 	e.GET("/api/tickeks", handler.HandleTickeks)
 

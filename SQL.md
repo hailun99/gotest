@@ -149,6 +149,11 @@ redis-cli shutdown
 kill redis-pid
 ```
 
+监控
+```
+monitor
+```
+
 ## 切换数据库
 数据库没有名称，默认为16个，0-15
 选择编号为1的库数据库
