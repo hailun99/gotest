@@ -620,6 +620,11 @@ ACID:
 create database gotest;
 ```
 
+查看数据库
+```
+SHOW DATABASES;
+```
+
 ### 切换到数据库
 ```
 use gotest;
@@ -1257,7 +1262,7 @@ func getValueFromRedis(key, defaultValue string) (string, error) {
 
 ### zset示例
 ```
-func zsetDemo() {
+func zsetDemo() 
 	// key
 	zsetKey := "language_rank"
 	// value

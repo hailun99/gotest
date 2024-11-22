@@ -363,6 +363,45 @@ zrangebyscore zuser1 1 6
 zscore zuser1 cc
 ```
 
+# MySQL
+
+## 库
+创建数据库
+```
+create database test;
+```
+
+删除数据库
+```
+drop database test; --直接删除数据库，不检查是否存在
+
+drop database if exists test; 数据库存在才执行删除操作
+```
+
+选择数据库
+```
+use database_name;
+```
+
+查看所有库
+```
+show databases;
+```
+
+## 表
+查看表
+```
+show tables;
+```
+
+创建表格
+```
+create table qin(
+    -> id int auto_increment primary key,
+    -> user varchar(10) not null,
+    -> sex varchar(10) not null
+    -> );
+```
 
 
 
