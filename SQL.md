@@ -388,6 +388,16 @@ use database_name;
 show databases;
 ```
 
+查看数据库字符集
+```
+show create database test1;
+```
+
+修改数据库的字符集
+```
+alter database test1 character set gbk;
+```
+
 ## 表
 查看表
 ```
