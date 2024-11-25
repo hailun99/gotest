@@ -2023,3 +2023,5 @@ mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl;
 $ mysqlimport -u root -p --local mytbl dump.txt
 ```
 
+
+
