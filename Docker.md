@@ -2,28 +2,6 @@
 ```
 https://gitee.com/wanfeng789/docker-hub
 ```
-
-下载镜像
-```
-docker pull redis
-```
-
-运行
-```
-docker run redis
-```
-
-制作镜像
-```
-docker build xxx
-```
-
-推送镜像
-```
-docker push xxx
-```
-
-
 # 安装Docker
 关闭防火墙
 ```
@@ -72,45 +50,10 @@ systemctl restart network
 ping -c 4 www.baidu.com
 ```
 
-yum源替换
-
-```sh
-#7.无法使用yum解决方案
-#查看防火墙状态
-systemctl status firewalld.service
-#如果是运行状态，执行命令关闭防火墙并永久禁用
-systemctl stop firewalld.service & systemctl disable firewalld.service
-#还是无法正常使用yum源，大概率就是yum源的问题，更换阿里和清华的镜像
-#打开CentOS-Base.repo
-vim /etc/yum.repos.d/CentOS-Base.repo
-#将CentOS-Base.repo里的内容全部替换为下面部分
-```
-
 # 不成功去查看
 ```
 https://www.cnblogs.com/kohler21/p/18331060
 ```
-
-## 启动docker
-```
-systemctl start docker
-```
-
-开机自动启动
-```
-systemctl enable docker
-```
-
-查看状态
-```
-sudo systemctl status docker
-```
-
-查看进程
-```
-ps -ef | grep docker
-```
-
 查看版本
 ```
 docker version
@@ -118,88 +61,19 @@ docker version
 docker -v  简洁版
 ```
 
-## 设置镜像
-```
-tee /etc/docker/daemon.json
-
-{
-  "registry-mirrors": ["https://iblvsy56.mirror.aliyuncs.com"]
-}
-EOF
-
-systemctl daemon-reload  重新加载系统配置
-
-systemctl restart docker  重启docker服务
-```
-
 # Docker镜像管理和定制
-
-
-
-
-
-修改镜像名称
-```
-docker tag [要改镜像] [新名称]
-docker tag docker.1ms.run/nginx:latest docker.1ms.run/nginx:test
-```
-
-
-通过id删除
-```
-docker rmi 11
-```
-
-删除仓库名为ubuntu的镜像
-```
-docker rim $(docker images -q ubuntu)
-```
-
-删除本地所有镜像
-```
-docker rim $(docker images -q)
-```
-
-导出生成tar包
-```
-docker save -o nginx.tar docker.1ms.run/nginx:latest
-```
-
-将tar文件包导入
-```
-nginx.tar
-```
-
-上传的镜像仓库
-```
-docker push docker.1ms.run/nginx:latest
-```
 
 创建容器网络
 ```
 docker network create my-nework
 ```
 
-
-## 构建私有库
-使用官方Registry镜像创建私有仓库容器
-```
-docker run -d -p 5000:5000 --name registry registry:2
-```
-
-添加仓库地址
-```
-{
-  "insecure-registries" : ["your-private-registry-ip:5000"]
-}
-```
-
-重启docker服务
-```
-sudo systemctl restart docker
-```
-
 # Docker命令
+命令帮助
+```
+docker --help
+```
+
 删除旧版本docke
 ```
 sudo yum remove docker \
@@ -255,10 +129,11 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
 EOF
 ```
 
-重启docker进程与docker
+设置镜像
 ```
-sudo systemctl daemon-reload
-sudo systemctl restart docker
+systemctl daemon-reload  重新加载系统配置
+
+systemctl restart docker  重启docker服务
 ```
 
 ## 官网镜像源网站
@@ -292,6 +167,7 @@ docker images
 删除镜像
 ```
 docker rmi [选项] [镜像名称]
+docker rim $(docker images -q) 删除本地所有镜像
 
 -f 强制删除
 --no-prune 
@@ -372,7 +248,7 @@ cat index.html
 exit
 ```
 
-## 保存镜像
+## 提交镜像
 提交
 ```
 docker commit -m"update index.html" mynginx  mynginx:v1.0
@@ -380,4 +256,33 @@ docker commit -m"update index.html" mynginx  mynginx:v1.0
 -c 有哪些改变的页表
 -m 此次提交的信息
 -p 打包期间暂停运行
+```
+
+保存
+```
+docker save -o mynginx.tar mynginx:v1.0
+-o 打包成文件
+```
+
+加载
+```
+docker ioad -i mynginx.tar
+```
+
+## 分享社区
+登录
+```
+docker login
+```
+
+改名
+```
+docker tag mynginx:v1.0 [doncker用户]/mynginx:latcst(v1.0)
+```
+
+推送镜像
+```
+docker push [doncker用户]/mynginx:v1.0
+
+docker push [doncker用户]/mynginx:latcst
 ```
