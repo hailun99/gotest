@@ -50,10 +50,6 @@ systemctl restart network
 ping -c 4 www.baidu.com
 ```
 
-# 不成功去查看
-```
-https://www.cnblogs.com/kohler21/p/18331060
-```
 查看版本
 ```
 docker version
@@ -168,6 +164,7 @@ docker images
 ```
 docker rmi [选项] [镜像名称]
 docker rim $(docker images -q) 删除本地所有镜像
+docker rm -f $(docker ps -aq) 删除搜索的所有镜像
 
 -f 强制删除
 --no-prune 
@@ -285,4 +282,28 @@ docker tag mynginx:v1.0 [doncker用户]/mynginx:latcst(v1.0)
 docker push [doncker用户]/mynginx:v1.0
 
 docker push [doncker用户]/mynginx:latcst
+```
+
+
+## 存储 - 目录挂载
+下载官方镜像
+```
+ocker run -d -p 80:80 --name app01 nginx
+```
+
+进入容器
+```
+docker exec -it 66bb bash
+```
+
+修改文件
+```
+cd /usr/share/nginx/html/
+ls
+echo 1111 > index.html
+```
+
+目录挂载
+```
+docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html --name app01 nginx
 ```
