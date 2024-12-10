@@ -308,7 +308,7 @@ echo 1111 > index.html
 docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html --name app01 nginx
 ```
 
-### 存储 - 卷映射
+## 存储 - 卷映射
 ```
 docker run -d -p 99:80 -v /app/nghtml:/usr/share/nginx/html -v ngconf:/etc/nginx --name app03 nginx
 ```
@@ -347,4 +347,44 @@ docker volume create haha
 查看卷的详情
 ```
 docker volume inspecot ngconf
+```
+
+## Docker网络
+查看容器里的细节
+```
+docker container inspect app1
+
+docker inspect app2
+```
+
+### 访问别的机器 法1
+进入app1
+```
+docker exec -it bash
+```
+
+ip地址访问app2
+```
+curl http://172.17.0.3:80
+```
+
+### 访问别的机器 法2
+创建网络
+```
+docker network create mynet
+```
+
+查看网络
+```
+docker network ls
+```
+
+进入app1
+```
+docker exec -it app1 bash
+```
+
+访问app2
+```
+curl http://app2:80
 ```
