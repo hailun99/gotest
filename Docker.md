@@ -57,13 +57,6 @@ docker version
 docker -v  简洁版
 ```
 
-# Docker镜像管理和定制
-
-创建容器网络
-```
-docker network create my-nework
-```
-
 # Docker命令
 命令帮助
 ```
@@ -388,3 +381,50 @@ docker exec -it app1 bash
 ```
 curl http://app2:80
 ```
+
+## redis主从同步集群
+创建主节点
+```
+mkdir /app/rd1
+```
+
+授权
+```
+chmod -R 777 rd1
+```
+
+配置master
+```
+docker run -d -p 6379:6379 \
+ -v /app/rd1:/bitnami/redis/data \
+ -e REDIS_REPLICATION_MODE=master \
+ -e REDIS_PASSWORD=123456 \
+ --network mynet --name redis01 \
+ bitnami/redis
+```
+
+创建从节点
+```
+mkdir /app/rd2
+```
+
+授权
+```
+chmod -R 777 rd1
+```
+
+配置slave
+```
+docker run -d -p 6380:6379 \
+ -v /app/rd2:/bitnami/redis/data \
+ -e REDIS_REPLICATION_MODE=slave \
+ -e REDIS_MASTER_HOST=redis01 \
+ -e REDIS_MASTER_PORT_NUMBER=6379 \
+ -e REDIS_MASTER_PASSWORD=123456 \
+ -e REDIS_PASSWORD=123456 \
+ --network mynet --name redis02 \
+ bitnami/redis
+```
+
+
+
