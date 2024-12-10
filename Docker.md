@@ -307,3 +307,44 @@ echo 1111 > index.html
 ```
 docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html --name app01 nginx
 ```
+
+### 存储 - 卷映射
+```
+docker run -d -p 99:80 -v /app/nghtml:/usr/share/nginx/html -v ngconf:/etc/nginx --name app03 nginx
+```
+
+存储位置
+```
+cd /var/lib/docker/volumes/ngconf/_data/
+```
+
+修改文件内容
+```
+vi nginx.conf 
+```
+
+进入容器
+```
+docker exec -it app03 bash
+```
+
+查看修改内容
+```
+cd /etc/nginx/
+cat nginx.conf 
+```
+
+查看所有的卷
+```
+docker volume ls
+```
+
+创建卷
+```
+docker volume create haha
+```
+
+查看卷的详情
+```
+docker volume inspecot ngconf
+```
