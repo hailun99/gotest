@@ -429,13 +429,28 @@ docker run -d -p 6380:6379 \
  bitnami/redis
 ```
 
-启动mysql
+## 启动mysql
 ```
 docker run -d -p 3306:3306 \
 -v /app/myconf:/etc/mysql/conf.d \
 -v /app/mydata:/var/lib/mysql \
 -e MYSQL_ROOT_PASSWORD=123456 \
 mysql:8.0.37-debian
+```
+
+进入mysql容器
+```
+docker exec -it peaceful_driscoll bash
+```
+
+登录mysql
+```
+mysql -u root -p
+```
+
+定位容器位置
+```
+whereis mysql
 ```
 
 ## 命令式安装
