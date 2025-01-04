@@ -44,14 +44,14 @@ var arr = []{1,2,3}
 c := append(a,4,5,6)
 ```
 
-copy
+复制
 ```
 copy(arr)
 ```
 
 遍历
 ```
- for index, value := range slice 
+for index, value := range slice 
 ```
 
 ## Map
@@ -193,42 +193,6 @@ Commit
 Rplldack
 ```
 
-##
-```
-drop
-```
-
-# NSQ
-nsq_stat
-```
-用于获取指定topic，channel下系统信息
-```
-
-nsq_tail
-```
-用于将指定topic，channel中的信息打印到控制台
-```
-
-nsq_to_file
-```
-用于将指定topic，channel中的信息导出到文件
-```
-
-nsq_to_http
-```
-用于将指定topic，channel中的信息发送到http服务器
-```
-
-nsq_to_nsq
-```
-用于将指定topic，channel中的信息发送到其他http服务器
-```
-
-to_nsq
-```
-用于将控制台信息发送到指定的topic
-```
-
 创建唯一数据库
 ```
 create table users(
@@ -299,9 +263,36 @@ alter table comments drop directo;
 ```
 
 
+# NSQ
+nsq_stat
+```
+用于获取指定topic，channel下系统信息
+```
 
+nsq_tail
+```
+用于将指定topic，channel中的信息打印到控制台
+```
 
-# go操作redis
+nsq_to_file
+```
+用于将指定topic，channel中的信息导出到文件
+```
+
+nsq_to_http
+```
+用于将指定topic，channel中的信息发送到http服务器
+```
+
+nsq_to_nsq
+```
+用于将指定topic，channel中的信息发送到其他http服务器
+```
+
+to_nsq
+```
+用于将控制台信息发送到指定的topic
+```
 # GO操作Redis
 
 ## String类型
@@ -472,7 +463,7 @@ hkeys key 获取全部field
 hgetall key 获取全部field和value
 
 hlen key 查看有几个键值对
-```
+
 client.HSet(hashKey, "name", "叶子")  // 存储
 client.HSet(hashKey, "age", 18)
 
@@ -485,6 +476,7 @@ hashGetAll, _ := client.HGetAll(hashKey).Result() // 获取它的全部属性
 # Redis
 
 ## SET
+
 设置名称
 键  - 值
 kye - value

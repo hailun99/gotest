@@ -3,6 +3,11 @@
 https://gitee.com/wanfeng789/docker-hub
 ```
 # 安装Docker
+查看是否安装
+```
+yum list installed | grep docker
+```
+
 关闭防火墙
 ```
 systemctl stop firewalld  
@@ -66,18 +71,23 @@ docker --help
 删除旧版本docke
 ```
 sudo yum remove docker \
->                   docker-client \
->                   docker-client-latest \
->                   docker-common \
->                   docker-latest \
->                   docker-latest-logrotate \
->                   docker-logrotate \
->                   docker-engine
+                   docker-client \
+                   docker-client-latest \
+                   docker-common \
+                   docker-latest \
+                   docker-latest-logrotate \
+                   docker-logrotate \
+                   docker-engine
 ```
 
 配置docker下载源
 ```
 sudo yum install -y yum-utils
+```
+
+无法下载搜索
+```
+https://www.cnblogs.com/kohler21/p/18331060
 ```
 
 安装Docker引擎

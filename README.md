@@ -147,6 +147,24 @@ a = [3][2]int{
 
 ```
 
+### 多维数组遍历
+法一:
+```
+for i := 0;i < len(arr);i++{
+    for j := 0;j < len(arr[i]);j++{
+        fmt.Print(arr[i][j],"\t")
+    }
+    fmt.Println()
+}
+
+法二
+for Key,Value := range arr {
+    for k,v := range value {
+        fmt.Printf("arr[%v][%v]=%v\t",Key,k,v)
+    }
+}
+```
+
 ## 切片
 
 ### 定义一个切片
@@ -239,14 +257,57 @@ func a(a string, b ...int)
 func a(b ...int, a string)
 ```
 
-### 匿名函数
+### 匿名函数 recover捕抓错误
 ```
-func main{a := func(){
+func main{
+    defer func(){
 	fmt.Println("匿名函数")
-}
-	a() //调用
+}() //调用
 }
 ```
+
+### recover捕抓错误
+```
+func main(){
+    test()
+    fmt.Println("----------")
+}
+func test(){
+    defer func(){
+        err := recover()
+        if err != nil
+            fmt.Println("错误已捕获")
+            fmt.Println("err是: ", err)
+}() //调用
+munl := 1 
+}
+```
+
+### 自定义错误
+```
+func main(){
+    test()
+    if err != nil{
+         fmt.Println("自定义错误: ", err)
+         panic(err) // 接收到错误信息自动退出
+    }
+    fmt.Println("----------")
+}
+func test() (err error){
+    num1 := 10
+    num2 p:= 0
+    if num2 == 0 {
+        // 抛出自定义错误
+        return errors.New("除数不能为0 ")
+    }else{ 
+        result := num1 / num2
+        fmt.Println(result)
+        return nil
+    }
+}
+```
+
+
 
 ### 闭包
 ```
@@ -267,6 +328,7 @@ func main() {
   fmt.Println(f(2))
 }
 ```
+
 
 ### defer(推迟)
 ```
@@ -523,7 +585,25 @@ func (t *Test) method9(x, y int) (z int, err error) {
 
 ### 创建映射
 ```
-map[KeyType]ValueType
+var a map[int]string
+a = make(map[int]sting,10) // map存放10个键值对
+
+b := make(map[int]sting)
+b[11111] = 张三"
+b[22222] = 李四"
+
+c := map[int]sting{
+    11111 : "张三",
+    22222 : "李四"
+}
+```
+
+加深难度
+```
+a := make(map[string]map[int]string)
+a["班级1"] = make(map[int]string,3)
+a["班级1"][11111] = 张三"
+a["班级1"][22222] = 李四"
 ```
 
 ### 遍历
@@ -533,6 +613,10 @@ myColors := map[string]string{
 
 for key, value := range myColors {
     fmt.Printf("Key: %s  Value: %s\n", key, value)
+}
+
+for k, v := range b {
+    fmt.Printf("key为: %v value为%v", k, v)
 }
 ```
 
@@ -573,96 +657,6 @@ ch := make(chan int)
 通道缓冲区
 ch := make(chan int, 100)
 ```
-
-# MySQL
-
-## Mysql知识点
-```
-DDL:操作数据库的
-DML：表的增删改查
-DCL:用户及权限
-```
-
-### 存储引擎
-```
-MySQL支持插件式的存储引擎.
-常见的存储引擎:MylSAM和lnnoDB。
-```
-
-### MyLSAM:
-```
-1.查询速度快
-2.只支持表锁
-3.不支持事务
-```
-
-### lnnoDB
-```
-1.整体速度快
-2.支持表锁和行锁
-3.支持事务
-```
-
-### 事务
-```
-把多个SQL操作当成一个整体
-
-事务的特点:
-ACID:
-    1.原子性:事务要么成功要么失败,没有中间状态.
-    2.一致性:数据的完整性没有被破坏
-    3.隔离性：事务之间是相互隔离的.事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）
-    4.持久性:事务操作的结果是不会丢失的.
-```
-
-## 创建数据库
-```
-create database gotest;
-```
-
-查看数据库
-```
-SHOW DATABASES;
-```
-
-### 切换到数据库
-```
-use gotest;
-```
-
-### 查看数据库下的表
-```
-show tables;
-```
-
-### 创建一个表
-```
-CREATE TABLE movies (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(50) NOT NULL,
-    description VARCHAR(100) NOT NULL,
-    created INT
-);
-```
-
-### 插入数据
-```
-insert into user(id,title) values(1,哈哈哈哈)
-```
-
-### 查询表的所有数据
-
-```
-select * from movies;
-```
-
-### 单行查询
-```
-select title from user where id=1;
-
-select id,title,description from user where id=1; 
-```
-
 
 # GO操作MySQL
 

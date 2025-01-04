@@ -7,7 +7,7 @@ import (
 	"github.com/hailun99/gotest/dbutil"
 	"github.com/labstack/echo/v4"
 )
-
+// 定义一个电影参数
 type addTickekReq struct {
 	Ciname   string `json:"ciname"`   // 电影院
 	Movie    string `json:"movie"`    // 电影
