@@ -720,7 +720,7 @@ for rows.Next() {}
 
 ### 插入数据
 ```
-sqlStr := ` insert ino user(id, title) values(?,?)`
+sqlStr := ` insert into user(id, title) values(?,?)`
 
 stmt, err := db.Prepare(sqlStr)
 

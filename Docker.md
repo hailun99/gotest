@@ -294,7 +294,7 @@ docker push [doncker用户]/mynginx:latcst
 ## 存储 - 目录挂载
 下载官方镜像
 ```
-ocker run -d -p 80:80 --name app01 nginx
+docker run -d -p 80:80 --name app01 nginx
 ```
 
 进入容器
@@ -450,7 +450,7 @@ mysql:8.0.37-debian
 
 进入mysql容器
 ```
-docker exec -it peaceful_driscoll bash
+docker exec -it 58aa2291e84a /bin/bash
 ```
 
 登录mysql
@@ -462,6 +462,23 @@ mysql -u root -p
 ```
 whereis mysql
 ```
+
+## 操作redis
+下载redis
+```
+docker pull redis
+```
+
+查看镜像
+```
+docker images
+```
+
+启动redis
+```
+docker run --name myredis -p 6379:6379 -d redis
+```
+
 
 ## 命令式安装
 #创建网络
