@@ -395,18 +395,25 @@ docker exec -it app1 bash
 curl http://app2:80
 ```
 
+
+## 操作redis
+下载redis
+```
+docker pull redis
+```
+
+查看镜像
+```
+docker images
+```
+
+启动redis
+```
+docker run --name myredis -p 6379:6379 -d redis
+```
+
 ## redis主从同步集群
-创建主节点
-```
-mkdir /app/rd1
-```
-
-授权
-```
-chmod -R 777 rd1
-```
-
-配置master
+配置主节点master
 ```
 docker run -d -p 6379:6379 \
  -v /app/rd1:/bitnami/redis/data \
@@ -416,17 +423,7 @@ docker run -d -p 6379:6379 \
  bitnami/redis
 ```
 
-创建从节点
-```
-mkdir /app/rd2
-```
-
-授权
-```
-chmod -R 777 rd1
-```
-
-配置slave
+配置从节点slave
 ```
 docker run -d -p 6380:6379 \
  -v /app/rd2:/bitnami/redis/data \
@@ -463,21 +460,6 @@ mysql -u root -p
 whereis mysql
 ```
 
-## 操作redis
-下载redis
-```
-docker pull redis
-```
-
-查看镜像
-```
-docker images
-```
-
-启动redis
-```
-docker run --name myredis -p 6379:6379 -d redis
-```
 
 
 ## 命令式安装
