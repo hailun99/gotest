@@ -1,3 +1,4 @@
+# 错误提示
 找不到执行文件
 ```
 Command not found
@@ -7,7 +8,7 @@ Command not found
 ```
 No such file or directory
 ```
-
+# 常用命令
 关闭防火墙
 ```
 systemctl stop firewalld.service
@@ -248,7 +249,7 @@ L 移至屏幕下端
 ```
 
 ```
-: set un 设置行号
+: set number 设置行号
 :set nonu 取消行号
 gg 到第一行
 G 到最后一行
@@ -284,11 +285,11 @@ u 取消上一步操作
 
 ## 搜索和替换命令
 ```
-/stp  向前搜索指定字符串
+/link  向前搜索指定字符串stp
       搜索时忽略大小写 :set ic
       关闭忽略大小写 :set noic
 n 搜索指定字符串的下一个出现位置
-;%s/stp/new/g 全文替换指定字符串 g 强制替换 
+:%s/stp/new/g 全文替换指定字符串 g 强制替换 
 :n1,n2s/stp/new/g  c 在一定范围内替换指定字符串  c 确认是否替换
 ```
 
@@ -306,17 +307,160 @@ n 搜索指定字符串的下一个出现位置
 ```
 :r /etc/... 导入某个文件
 :! 在Vi中执行命令
-:r !data 把当前时间导入系统
+:r !date 把当前时间导入系统
 ```
-## 定义快捷键
+## 定义快捷键   在~/.vimrc目录下编辑
 Map 快捷键 触发命令
 制作快捷键 ctrl+c+p  p可换作如何字母
 ```
-map ctrl+p I#<ESC> 第一一个快捷键p,在第一行加入#号并保留编辑模式
-map ctrl+b 0x 删除行首第一个字符
+:map ctrl+P I#<ESC> 自作一个快捷键p,在第一行加入#号并保留编辑模式
+:map ctrl+B 0x 删除行首第一个字符
+:unmap ctrl+c+P 取消快捷键P
 4,8s/^/#/g 4到8行全部注释
 4,8s/^#//g 行首的#号去掉
 :1,5s/^/\/\//g 行首用//进行注释,使用转义符
 
 :ab qin qincy@qq.com 替换,打出qin回车自动生成qincy@qq.com
+:nuab qincy@qq.com 取消对其定义
 ```
+
+# 引导流程
+## 固件设置
+### 查看软件时间
+```
+date
+```
+
+查看使用方法
+```
+man date
+```
+
+修改软件时间
+```
+date 021617022025.30
+```
+
+### 查看硬件时间
+```
+hwclock
+```
+
+查看使用方法
+```
+hwclock --help
+man hwclock
+```
+
+修改硬件时间
+```
+hwclock --set --date="02/16/2025 17:07:05"
+```
+
+## inittab
+查看当前允许级别
+```
+runlevel
+```
+
+切换级别
+```
+init[012345Ss](0-6级别)
+```
+
+### 指定运行级别，可以多个
+```
+run-levels
+```
+
+### 指定状态
+```
+action
+```
+
+### 指定要运行的脚本/命令
+```
+process
+```
+
+修改脚本名称
+```
+mv S10network s10network
+```
+
+启动/结束脚本命令
+```
+/etc/cr.d/init.d/sshd 回车参看其使用方法
+/etc/cr.d/init.d/sshd start(stop)
+```
+
+
+## 查看设置自启动命令
+```
+ln -s
+
+man chkconfig
+
+man ntsysv
+```
+
+查看内核启动信息
+```
+dmesg
+
+dmesg | grep rtho
+```
+
+日志信息存放位置
+```
+ls /var/log
+```
+
+## grep
+查看开头没有#的数据
+```
+grep -v "^#" /etc/inittab | more 
+```
+
+查看服务(日志)信息
+```
+grep shhd /var/log/messages
+
+grep syslog /var/log/messages
+```
+
+## GRUB(软连接文件)
+查看存放目录
+```
+ls /boot/grub
+```
+
+```
+default 3 设置启动时间为s3秒
+
+timeout 3 设置缺省等待时间为3秒
+
+splashimage 定义GURB界面图片
+
+hiddenmenu 设置隐藏菜单
+
+title 定义菜单项名称
+
+root 设置GRUB的根设备即内核所在的分区
+
+kernel 定义内核所在位置
+
+initrd 命令加载镜像文件
+```
+
+### 命令
+功能键
+```
+e: 编辑当前的启动菜单项
+c: 进入GRUB的命令行方式
+b: 启动当前的菜单项
+d:删除当前行
+ESC:返回GRUB启动菜单界面,取消对当前菜单项所做的任何修改
+```
+
+
