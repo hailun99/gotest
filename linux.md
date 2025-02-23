@@ -416,6 +416,16 @@ dmesg | grep rtho
 ls /var/log
 ```
 
+### initdefault
+```
+1 单用户模式
+2 3 字符界面多用户模式
+5 xWindo图形多用户模式
+0 关机
+6 重启
+4 预留的
+```
+
 ## grep
 查看开头没有#的数据
 ```
@@ -453,7 +463,7 @@ kernel 定义内核所在位置
 initrd 命令加载镜像文件
 ```
 
-### 命令
+### GRUB命令
 功能键
 ```
 e: 编辑当前的启动菜单项
@@ -462,5 +472,101 @@ b: 启动当前的菜单项
 d:删除当前行
 ESC:返回GRUB启动菜单界面,取消对当前菜单项所做的任何修改
 ```
+设置GRUB密码
+```
+grub-md5-crypt
+```
+
+# 软件包管理 
+## RPM包管理
+卸载软件包
+```
+rpm -e 软件包
+rpm -e --nodeps 软件包 //强制卸载
+```
+
+安装软件包
+```
+rpm -ivh 软件包
+rpm -ivh --excludedocs 软件包 //不安装软件包中的文档文件
+rpm -vih --test 软件包 //测试安装
+rpm -ivh --replacepkgs 软件包 //覆盖安装
+rpm -ivh --replacefiles 软件包 //覆盖安装
+rmp -Uvh 软件包 //升级软件包
+```
+
+查询
+```
+rpm -q 软件包 
+rpm -qa grep  软件包  //查询所有的软件包
+```
+
+挂载光盘
+```
+mkdir /mnt/cdrom
+mount /dev/cdrom /mnt/cdrom
+```
+
+## yum命令
+安装软件包
+```
+yum install sudo
+```
+
+检测升级
+```
+yum check-update // 检测所有软件包
+yum check-update sudo
+```
+
+升级
+```
+yum update sudo
+```
+
+软件包查询
+```
+rpm -q sudo
+yum list sudo
+
+yum list | grep sudo
+```
+
+软件包信息
+```
+yum info sudo
+```
+
+卸载
+```
+yum remove sudo
+```
+
+帮助
+```
+yum -help
+man yum
+```
+
+查询选项
+```
+-a //查询所有已安装的软件包
+-f //查询文件所属软件包
+-p //查询软件包
+-i //查询软件包信息
+-l //显示软件包中的文件列表
+-d //显示被标注为文档的文件列表
+-c //显示被标注为配置文件的文件列表
+```
 
 
+RPM查询
+```
+rpm -qf 查询文件隶属的软件包
+rpm -qi //查看已安装软件包的信息
+rpm -qip sudo //查看未安装软件包信息
+rpm -ql //查看已安装软件包是干什么的
+rpm -qlp sudo //查看未安装软件包是做什么的
+rpm -qd //查看软件包帮助文档
+rmp -qc //查看软件包设置文件
+```
