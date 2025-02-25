@@ -499,12 +499,37 @@ rmp -Uvh 软件包 //升级软件包
 ```
 rpm -q 软件包 
 rpm -qa grep  软件包  //查询所有的软件包
+rpm -qa | grep vim //查询vim相关软件包
 ```
 
 挂载光盘
 ```
 mkdir /mnt/cdrom
 mount /dev/cdrom /mnt/cdrom
+```
+
+## RPM查询
+```
+rpm -qf //查询文件隶属的软件包
+rpm -qi //查看已安装软件包的信息
+rpm -qip sudo //查看未安装软件包信息
+rpm -ql //查看已安装软件包是干什么的
+rpm -qlp sudo //查看未安装软件包是做什么的
+rpm -qd sudo //查看软件包帮助文档
+rmp -qc sudo/ /查看软件包设置文件
+```
+
+校验
+rpm -V sudo
+```
+5 //文件的md5校验值
+S //文件大小
+L //链接文件
+T //文件的创键时间
+D //设备文件
+U //文件的用户
+G //文件的用户组
+M //文件权限
 ```
 
 ## yum命令
@@ -560,13 +585,8 @@ man yum
 ```
 
 
-RPM查询
-```
-rpm -qf 查询文件隶属的软件包
-rpm -qi //查看已安装软件包的信息
-rpm -qip sudo //查看未安装软件包信息
-rpm -ql //查看已安装软件包是干什么的
-rpm -qlp sudo //查看未安装软件包是做什么的
-rpm -qd //查看软件包帮助文档
-rmp -qc //查看软件包设置文件
-```
+
+
+
+
+
