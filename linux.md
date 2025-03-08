@@ -237,91 +237,91 @@ O 在光标上插入文本
 ## 定位命令
 方向键
 ```
-h 左移动一个字符
-j 下移动一行
-k 上移动一行
-l 右移动一个字符
-$ 移动行尾
-0 移动行首
-H 移至屏幕上端
-M 移至屏幕中央
-L 移至屏幕下端
+h // 左移动一个字符
+j // 下移动一行
+k // 上移动一行
+l // 右移动一个字符
+$ // 移动行尾
+0 // 移动行首
+H // 移至屏幕上端
+M // 移至屏幕中央
+L // 移至屏幕下端
 ```
 
 ```
-: set number 设置行号
-:set nonu 取消行号
-gg 到第一行
-G 到最后一行
-nG 到第n行
-:n 到第n行
+: set number // 设置行号
+:set nonu // 取消行号
+gg // 到第一行
+G // 到最后一行
+nG // 到第n行
+:n // 到第n行
 ```
 
 ## 删除命令
 ```
-x 删除光标所在处字符
-nx 删除光标所在处后n个字符
-dd 删除光标所在行, ndd删除n行
-dG 删除光标所在行到末尾的内容
-D 删除从光标所在处到行尾
-:n2,n2d 删除n1行到到n2行的指定范围
+x // 删除光标所在处字符
+nx // 删除光标所在处后n个字符
+dd // 删除光标所在行, ndd删除n行
+dG // 删除光标所在行到末尾的内容
+D // 删除从光标所在处到行尾
+:n2,n2d // 删除n1行到到n2行的指定范围
 ```
 
 ## 复制和剪切命令
 ```
-yy 、Y 复制当前行
-nyy 、ny 复制当前以下n行
-dd 剪切当前行
-ndd 剪切当前行一下n行
-p 、P 粘贴在当前光标所在行下或行上
+yy 、Y // 复制当前行
+nyy 、ny // 复制当前以下n行
+dd // 剪切当前行
+ndd // 剪切当前行一下n行
+p 、P // 粘贴在当前光标所在行下或行上
 ```
 
 ## 替换和取消
 ```
-r 取消光标所在处字符
-R 从光标所在处开始替换字符,按Esc结束
-u 取消上一步操作
+r // 取消光标所在处字符
+R // 从光标所在处开始替换字符,按Esc结束
+u // 取消上一步操作
 ```
 
 ## 搜索和替换命令
 ```
-/link  向前搜索指定字符串stp
-      搜索时忽略大小写 :set ic
-      关闭忽略大小写 :set noic
-n 搜索指定字符串的下一个出现位置
-:%s/stp/new/g 全文替换指定字符串 g 强制替换 
-:n1,n2s/stp/new/g  c 在一定范围内替换指定字符串  c 确认是否替换
+/link  // 向前搜索指定字符串stp
+      // 搜索时忽略大小写 :set ic
+      // 关闭忽略大小写 :set noic
+n // 搜索指定字符串的下一个出现位置
+:%s/stp/new/g // 全文替换指定字符串 g 强制替换 
+:n1,n2s/stp/new/g \c  // 在一定范围内替换指定字符串  c 确认是否替换
 ```
 
 ## 保存提出
 ```
 :wq  = ZZ
-:wq!  强制提出(条件:管理员或者文件所有者)
-:q! 不保存退出
-:w 保存
-:w /root/... 保存到某个位置
+:wq!  // 强制提出(条件:管理员或者文件所有者)
+:q! // 不保存退出
+:w // 保存
+:w /root/... // 保存到某个位置
 ```
 
 
 ## 
 ```
-:r /etc/... 导入某个文件
-:! 在Vi中执行命令
-:r !date 把当前时间导入系统
+:r /etc/...  // 导入某个文件
+:! // 在Vi中执行命令
+:r !date // 把当前时间导入系统
 ```
 ## 定义快捷键   在~/.vimrc目录下编辑
 Map 快捷键 触发命令
 制作快捷键 ctrl+c+p  p可换作如何字母
 ```
-:map ctrl+P I#<ESC> 自作一个快捷键p,在第一行加入#号并保留编辑模式
-:map ctrl+B 0x 删除行首第一个字符
-:unmap ctrl+c+P 取消快捷键P
-4,8s/^/#/g 4到8行全部注释
-4,8s/^#//g 行首的#号去掉
-:1,5s/^/\/\//g 行首用//进行注释,使用转义符
+:map ctrl+P I#<ESC> // 自作一个快捷键p,在第一行加入#号并保留编辑模式
+:map ctrl+B 0x // 删除行首第一个字符
+:unmap ctrl+c+P // 取消快捷键P
+4,8s/^/#/g // 4到8行全部注释
+4,8s/^#//g // 行首的#号去掉
+:1,5s/^/\/\//g // 行首用//进行注释,使用转义符
 
-:ab qin qincy@qq.com 替换,打出qin回车自动生成qincy@qq.com
-:nuab qincy@qq.com 取消对其定义
+:ab qin qincy@qq.com // 替换,打出qin回车自动生成qincy@qq.com
+:nuab qincy@qq.com // 取消对其定义
 ```
 
 # 引导流程
@@ -390,7 +390,7 @@ mv S10network s10network
 
 启动/结束脚本命令
 ```
-/etc/cr.d/init.d/sshd 回车参看其使用方法
+/etc/cr.d/init.d/sshd // 回车参看其使用方法
 /etc/cr.d/init.d/sshd start(stop)
 ```
 
@@ -418,12 +418,12 @@ ls /var/log
 
 ### initdefault
 ```
-1 单用户模式
-2 3 字符界面多用户模式
-5 xWindo图形多用户模式
-0 关机
-6 重启
-4 预留的
+1 // 单用户模式
+2 3 // 字符界面多用户模式
+5 // xWindo图形多用户模式
+0 // 关机
+6 // 重启
+4 // 预留的
 ```
 
 ## grep
@@ -446,31 +446,31 @@ ls /boot/grub
 ```
 
 ```
-default 3 设置启动时间为s3秒
+default 3 // 设置启动时间为s3秒
 
-timeout 3 设置缺省等待时间为3秒
+timeout 3 // 设置缺省等待时间为3秒
 
-splashimage 定义GURB界面图片
+splashimage // 定义GURB界面图片
 
-hiddenmenu 设置隐藏菜单
+hiddenmenu // 设置隐藏菜单
 
-title 定义菜单项名称
+title // 定义菜单项名称
 
-root 设置GRUB的根设备即内核所在的分区
+root // 设置GRUB的根设备即内核所在的分区
 
-kernel 定义内核所在位置
+kernel // 定义内核所在位置
 
-initrd 命令加载镜像文件
+initrd // 命令加载镜像文件
 ```
 
 ### GRUB命令
 功能键
 ```
-e: 编辑当前的启动菜单项
-c: 进入GRUB的命令行方式
-b: 启动当前的菜单项
-d:删除当前行
-ESC:返回GRUB启动菜单界面,取消对当前菜单项所做的任何修改
+e: // 编辑当前的启动菜单项
+c: // 进入GRUB的命令行方式
+b: // 启动当前的菜单项
+d:// 删除当前行
+ESC: // 返回GRUB启动菜单界面,取消对当前菜单项所做的任何修改
 ```
 设置GRUB密码
 ```
@@ -584,9 +584,129 @@ man yum
 -c //显示被标注为配置文件的文件列表
 ```
 
+## 源代码包安装
+解压包
+```
+tar -zxvf sudo-1.8.9p5.tar.gz
+```
+
+## APT包管理
+```
+apt-cache search //搜索软件包
+apt-cache show //查看软件包信息
+apt-get install (reinstall、-f) //安装软件包
+apt-get remove (autoremove、-purge)//卸载软件包
+apt-get update //更新软件包列表
+apt-get upgrade //升级软件包
+```
 
 
+# Liunx用户管理
+## 配置文件
 
+### 用户信息文件/etc/passwd文件格式
+```
+root:x:0:0:root:/root:/bin/bash
+用户名:密码位:UID:GID:描述信息：宿主目录:shell
 
+用户名 // 用户登录系统时使用的用户名
+密码 // 密码位
+UID // 用户标识号
+GID // 缺省组标识号
+注释性描述 //例如存放用户全名等信息
+宿住目录 // 拥护登录系统后的缺省目录
+命令解释器 //用户使用的Shell,默认为bash
+```
+### 快速添加新用户
+```
+sueradd // 添加用户
+passwd // 修改密码
+```
+### 退出当前用户
+```
+exit
+```
 
+### 生成一个加密密码
+```
+echon "12345" | mad5sum
+```
+### etc 文件
+```
+密码文件etc/shadow文件格式
+root:$6$GtDEJN14P6he8VqH$SL/uHvSTEfMGwvqE6QUZwIuUpA3KBBWGONejeif9sbqehy39DMu9QbM/eeQnMNMTgZe80YguHO49pmt6D2rFL/::0:99999:7:::
+用户名:加密密码:最后一次修改密码时间:最小时间间隔:最大时间间隔:警告时间:失效时间:标志
 
+/etc/group // 用户组文件
+/etc/gshadow // 用户密码文件
+/etc/login.defs  /etc/default/useradd // 用户配置文件:js文件
+/etc/skel // 新用户信息文件
+/etc/motd  /etc/issue // 登录信息 
+```
+
+## steUID的定义
+将touch命令授权setUID权限
+```
+chmod g+s // 添加setUID权限
+chmo g-s // 删除setUID权限
+chnod u+S // 添加setGID权限
+chnod u-S // 删除setGID权限
+chmod o+t // 添加setTTY权限
+chmod o-t // 删除setTTY权限
+```
+
+### 查找SetUId程序
+```
+find / -perm -4000 -o -perm -2000
+```
+
+## etc/group文件格式
+```
+man etc/group // 查找gruop文件
+```
+
+### 组的组成部分
+```
+sys::3:root,bin,adm
+组名:组密码位:GID:组成员
+```
+
+## 添加用户
+useradd 设置选项 用户名 -D 查看缺省参数
+```
+u: // UID
+g: //缺省组所属用户UID
+G: //指定用户所属多个组
+d: // 宿主目录
+s: // 命令解释器
+c: // 描述信息
+e: 指定用户失效时间
+suermod -G sys 用户名 // 把用户添加到组中
+```
+
+### 
+```
+
+```
+
+# 获取命令帮助
+```
+help 内置命令 // 使用help命令查看指定的Shell内置命令的使用方法
+命令名 --help // 使用命令名后加--help查看命令的用法摘要和参数列表
+whatis 命令名 // 使用whatis命令获取指定的简要功能描述
+man 命令名 // 使用man命令查看指定的手册 (按Q键退出)
+info/pinfo 命令名 // 使用info或pinfo命令查看指定的GNU项目文档
+man -k <关键字>/apropos <关键字> // 列出所有与 <关键字>匹配的手册页
+```
+# shell
+字符
+```
+* //匹配任意字串
+? //匹配任意字符
+/ //代表根目录或作为路径间隔符使用
+\ //转义字符
+\<Enter> //续行符
+$ //变换值位置
+| //管道
+& //后台执行
+```

@@ -7,13 +7,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// 定义一个结构体接收请求参数
+// 定义一个loginReq收请求参数
 type loginReq struct {
 	Username string `json:"username"` // 用户名
 	Password string `json:"password"` // 密码
 }
 
-// 定义一个结构体返回响应结果
+// 定义一个loginRes返回响应结果
 type loginRes struct {
 	Token string `json:"token"`
 }

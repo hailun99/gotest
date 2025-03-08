@@ -22,8 +22,9 @@ func main() {
 	e := echo.New()
 
 	e.Static("/", "static")
-
+	// 查看登录
 	e.POST("/api/login", handler.HandleLogin)
+
 	e.POST("/api/ragiser", handler.HanbleRagiser)
 	e.POST("/api/modifypassword", handler.HandleModifyRagiser)
 
