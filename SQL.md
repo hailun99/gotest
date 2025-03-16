@@ -413,8 +413,36 @@ create table qin(
     -> );
 ```
 
-## 查看表结构
+### 删除表
+```
+drop table users;
+```
+
+### 查看表结构
 ```
 DESC 表名;
 ```
 
+## 在表中添加字段
+```
+alter table users add gende varchar(10);
+alter table users add signature varchar(30);
+alter table users add vip varchar(10);
+alter table users add created timestamp default current_timestamp;
+```
+
+## 删除字段
+```
+alter table users drop created;
+```
+
+## 修改字段名
+```
+alter table users change gende gender varchar(5);
+```
+
+delete from users where id = 1; // 删除指定数据
+delete from users; // 清空表，仅删除数据，不删除表结构
+
+
+insert into users(username,password,gender,'singnature,vip) values('李四','123456','男','                          man','Svip');

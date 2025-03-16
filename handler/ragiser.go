@@ -14,7 +14,7 @@ type ragiserReq struct {
 	Password  string `json:"password"`  // 密码
 	Gender    string `json:"gender"`    // 性别
 	Signature string `json:"signature"` // 个人标签
-	Vip string`json:"vip"` // 会员
+	Vip       string `json:"vip"`       // 会员
 }
 
 // 定义一个结构体返回响应

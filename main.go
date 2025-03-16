@@ -24,8 +24,9 @@ func main() {
 	e.Static("/", "static")
 	// 查看登录
 	e.POST("/api/login", handler.HandleLogin)
-
+	// 添加用户
 	e.POST("/api/ragiser", handler.HanbleRagiser)
+	// 修改用户密码
 	e.POST("/api/modifypassword", handler.HandleModifyRagiser)
 
 	// 查询电影列表
