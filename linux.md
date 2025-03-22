@@ -84,83 +84,169 @@ user      group      oyhers
 onwer  
 ```
 
-
-## 软硬链接文件
+## 文件处理命令
 ```
-ln -s [文件名] 软连接
+cd   // change directory 切换目录
+pwd  // print working directory 显示当前所有目录
+touch // 创建文件
+ctrl+c // 终止命令
+```
+
+### mkdri [参数] 目录
+```
+mkdir test // 创建目录
+mkdri -p test/subdir2 // 创建子目录
+```
+
+### rmdir  文件要为空
+```
+rmdir tset // 删除目录
+rmdir -p test/subdir2
+rm -rf test // 强制删除目录及目录下所有文件
+```
+
+### touch
+```
+touch test.txt // 创建空文件
+```
+
+### cp
+```
+cp /root/test.txt /home/bbb // 复制文件到别的目录
+\cp -r /home/bbb /opt/ // 强制覆盖文件
+-a // 复制
+-f // 先删除在复制
+-i // 文件已存在，会提示
+-R // 递归复制
+-u // 有差异时才会被复制
+```
+
+### rm [参数] 文件名或目录名
+```
+rm -rf /home/bbb // 删除目录及目录下所有文件
+-f // 删除文件或目录，不提提示用户
+-R //递归删除目录，即字目录
+```
+
+### mv  移动文件、更名
+```
+mv cat.txt pig.txt // 重命名
+mv pig.txt /root/ // 移动文件
+mv pig.txt /root/cow.txt // 移动并重命名文件
+mv bbb/ /home/ // 移动目录
+```
+
+### cat [参数] 文件名  // 显示文件内容
+```
+cat -n /etc/profile // 显示文件内容，并显示行号
+cat -n /etc/profile | more // 显示文件内容，并显示行号，并分页显示
+-b // 对输出内容中的非空行标注行号
+-n // 对输出内容中的所有行标注行号
+cat file1 file2 > file3 // 如果file3文件按存在，覆盖file3文件原有内容
+cat file1 file2 >> file3 // 如果file3文件按存在，将1、2文件内容附加到file3
+```
+
+### more [文件名]   分页显示文件内容
+```
+    (空格)或f  // 显示下一页
+    (Enter)    // 显示下一行
+    q或Q       // 退出
+    = // 输出当前的行号
+```
+
+### less
+```
+less [文件名] // 分页显示文件内容
+/字串 // 查找字串n:向下查找; N:向上查找
+```
+
+### echo 
+```
+echo "hello,world" // 输出hello,world
+echo $PATH // 输出PATH环境变量
+echo $HOSTNAEM // 输出环境变量
+echo $HOSTNAME // 输出环境变量
+```
+
+### head
+```
+head -5 [文件名] // 查看文件的前几行
+     -5 // 显示文件的前5行
+     -f // 动态显示文件内容
+```
+
+### tail
+```
+tail 5 [文件名] // 查看文件的后几行
+     -f // 将恐动态显示文件内容
+```
+
+> 和 >>
+```
+> // 写入/覆盖文件内容
+>> // 追加内容到文件
+echo "hello,world" > [文件名] // 追加内容到文件
+ls -l /home > /home/info.txt // 将ls -l /home的输出写入到/home/info.txt
+cal >> /home/mycal // 将cal的输出追加到/home/mycal
+```
+
+## ln 软链接文件
+```
+ln -s /root/  /home/myroot // 创建软链接
 ls [文件名] 硬链接 不能跨文件系统 拷贝同步更新
 ls -i i节点通过数字找文件,在任何数据里都有数字
 ```
 
-
-## 文件处理命令
+## history
 ```
-cd   change directory 切换目录
-pwd  print working directory 显示当前所有目录
-touch 创建文件
-ctrl+c 终止命令
+history  // 查看历史命令
+history 10 // 查看近10条历史命令
+!371 // 执行第371条命令
 ```
 
-cat [参数] 文件名  显示文件内容
+## date
 ```
--b 对输出内容中的非空行标注行号
--n 对输出内容中的所有行标注行号
-cat file1 file2 > file3 如果file3文件按存在，覆盖file3文件原有内容
-cat file1 file2 >> file3 如果file3文件按存在，将1、2文件内容附加到file3
-```
-
-more/less [文件名]   分页显示文件内容
-```
-    (空格)或f  显示下一页
-    (Enter)    显示下一行
-    q或Q       退出
+date // 查看当前时间
+date +%Y // 查看当前年份
+date +%m // 查看当前月份
+date +%d // 查看当前日期
+date +%Y-%m-%d%H:%M:%S // 查看当前年月日时分秒
+date -s "2020-01-01 00:00:00" // 设置当前时间
 ```
 
-head
+### cal
 ```
-head -5 [文件名] 查看文件的前几行
-     -5 显示文件的前5行
-     -f 动态显示文件内容
-```
-
-tail
-```
-tail 5 [文件名] 查看文件的后几行
-     -f 动态显示文件内容
+cal // 显示当前月份的日历
+cal 2020 // 显示2020年的日历
 ```
 
-mkdri [参数] 目录
+# 查找类
+## find
 ```
-mkdir test 创建目录
-mkdri -p test/subdir2 创建子目录
-```
-
-rmdir  文件要为空
-```
-rmdir tset 删除目录
-rmdir -p test/subdir2
+find /home -name info.txt // 查找/home目录下所有文件名包含info.txt的文件
+find /opt -user mycal // 查找mycal用户所有文件
+find / -size  +200M // 查找大于200M的文件
+ls -ln // 显示文件权限
 ```
 
-cp
+## locate
 ```
--a 复制
--f 先删除在复制
--i 文件已存在，会提示
--R 递归复制
--u 有差异时才会被复制
+sudo yum install mlocate // 安装
+updatedb // 更新数据库
+locate hello.txt // 查找hello.txt
 ```
 
-mv [源文件或目录] [目的目录] 移动文件、更名
+## which
 ```
-mv mpt /usr/test 移动文件
-mv /sur/tset/mpt /tt 移动，修改文件名字
+which ls // 查找ls命令在什么位置
 ```
 
-rm [参数] 文件名或目录名
+## grep 过滤查找
 ```
--i 删除文件或目录，不提示用户
--f 删除文件或目录，提示用户
--R 递归删除目录，即字目录
+cat /home/hello.txt | grep -n "yes" // 查找hello.txt文件中包含yes的行
+grep -n "yes" /home/hello.txtn
+-i // 忽略大小写
+
 ```
 
 # 权限管理命令
@@ -223,7 +309,7 @@ whereis ls 帮助信息，帮助文件所存放的信息
 find [搜索路径] [搜寻关键字]
 ```
 
-# vim命令
+# vim/vi命令
 ## 插入命令
 ```
 a 在光标后附加文本
@@ -285,6 +371,7 @@ u // 取消上一步操作
 
 ## 搜索和替换命令
 ```
+输入20 在输入shift+g // 
 /link  // 向前搜索指定字符串stp
       // 搜索时忽略大小写 :set ic
       // 关闭忽略大小写 :set noic
@@ -302,6 +389,15 @@ n // 搜索指定字符串的下一个出现位置
 :w /root/... // 保存到某个位置
 ```
 
+## 关机&重启
+```
+shutdown -h now // 立刻进行关机
+shutdown -r 1 // "hello 1分钟后关机了"
+shutdown -r now // 立刻进行重启
+halt now // 关机
+reboot now // 立刻进行重启
+sync // 把内存的数据同步到磁盘
+```
 
 ## 
 ```
@@ -357,17 +453,6 @@ man hwclock
 hwclock --set --date="02/16/2025 17:07:05"
 ```
 
-## inittab
-查看当前允许级别
-```
-runlevel
-```
-
-切换级别
-```
-init[012345Ss](0-6级别)
-```
-
 ### 指定运行级别，可以多个
 ```
 run-levels
@@ -414,16 +499,6 @@ dmesg | grep rtho
 日志信息存放位置
 ```
 ls /var/log
-```
-
-### initdefault
-```
-1 // 单用户模式
-2 3 // 字符界面多用户模式
-5 // xWindo图形多用户模式
-0 // 关机
-6 // 重启
-4 // 预留的
 ```
 
 ## grep
@@ -519,7 +594,7 @@ rpm -qd sudo //查看软件包帮助文档
 rmp -qc sudo/ /查看软件包设置文件
 ```
 
-校验
+## 校验
 rpm -V sudo
 ```
 5 //文件的md5校验值
@@ -600,10 +675,13 @@ apt-get update //更新软件包列表
 apt-get upgrade //升级软件包
 ```
 
-
 # Liunx用户管理
 
 ## 账户管理
+```
+logout // 退出当前用户
+```
+
 ### 添加新的用户
 ```
 useradd 选项 用户名
@@ -616,13 +694,51 @@ useradd 选项 用户名
 -u // uid 指定用户UID
 ```
 
-
-删除账户
+### 删除用户
 ```
-userdel 用户名 // 删除用户
--r 删除主目录 
+userdel wangwu // 删除用户,保留家目录
+userdle -r 张三 // 删除用户,及主目录
+find // 查找用户文件手动删除
 ```
 
+## 清屏
+```
+clear // 清屏
+```
+
+## 添加用户
+```
+passwd wangwu // 添加用户
+passwd -d /home/test king // 创建用户的指定目录
+```
+useradd 设置选项 用户名 -D 查看缺省参数
+```
+u: // UID
+g: //缺省组所属用户UID
+G: //指定用户所属多个组
+d: // 宿主目录
+s: // 命令解释器
+c: // 描述信息
+e: 指定用户失效时间
+suermod -G sys 用户名 // 把用户添加到组中
+gpasswd -a 用户名 组名 // 给用户组添加成员
+```
+
+### 显示目录所在位置
+```
+pwd
+```
+
+### 退出
+```
+logout // 退出当前用户
+exit // 退出当前用户
+```
+
+### 查看当前用户/登录用户
+```
+who ma i
+```
 
 ## 配置文件
 
@@ -639,23 +755,13 @@ GID // 缺省组标识号
 宿住目录 // 拥护登录系统后的缺省目录
 命令解释器 //用户使用的Shell,默认为bash
 ```
-### 快速添加新用户
-```
-sueradd // 添加用户
-passwd // 修改密码
-```
-### 退出当前用户
-```
-exit
-```
 
 ### 生成一个加密密码
 ```
 echon "12345" | mad5sum
 ```
-### etc 文件
+### etc/shadow文件格式
 ```
-密码文件etc/shadow文件格式
 root:$6$GtDEJN14P6he8VqH$SL/uHvSTEfMGwvqE6QUZwIuUpA3KBBWGONejeif9sbqehy39DMu9QbM/eeQnMNMTgZe80YguHO49pmt6D2rFL/::0:99999:7:::
 用户名:加密密码:最后一次修改密码时间:最小时间间隔:最大时间间隔:警告时间:失效时间:标志
 
@@ -664,6 +770,11 @@ root:$6$GtDEJN14P6he8VqH$SL/uHvSTEfMGwvqE6QUZwIuUpA3KBBWGONejeif9sbqehy39DMu9QbM
 /etc/login.defs  /etc/default/useradd // 用户配置文件:js文件
 /etc/skel // 新用户信息文件
 /etc/motd  /etc/issue // 登录信息 
+```
+
+## etc/group文件格式
+```
+vi etc/group // 查找gruop文件
 ```
 
 ## steUID的定义
@@ -682,29 +793,35 @@ chmod o-t // 删除setTTY权限
 find / -perm -4000 -o -perm -2000
 ```
 
-## etc/group文件格式
-```
-man etc/group // 查找gruop文件
-```
-
 ### 组的组成部分
 ```
 sys::3:root,bin,adm
 组名:组密码位:GID:组成员
 ```
 
-## 添加用户
-useradd 设置选项 用户名 -D 查看缺省参数
+## 用户组
 ```
-u: // UID
-g: //缺省组所属用户UID
-G: //指定用户所属多个组
-d: // 宿主目录
-s: // 命令解释器
-c: // 描述信息
-e: 指定用户失效时间
-suermod -G sys 用户名 // 把用户添加到组中
-gpasswd -a 用户名 组名 // 给用户组添加成员
+groupadd wudang // 添加用户组
+```
+
+### 查看用户组id
+```
+id wzj // 查看用户组id
+```
+
+### 删除组
+```
+groupdel wudang // 删除组
+```
+
+### 增加用户时直接加上组
+```
+useradd -g wudang zwj // 添加用户到wudang组
+```
+
+### 修改用户组
+```
+usermod -g mojiao zwj // 修改用户组
 ```
 
 ## 用户组管理命令
@@ -731,10 +848,43 @@ passwd -S // 查看用户密码状态
 who/w // 查看当前登录用户信息
 ```
 
-删除用户
+
+## 运行级别
 ```
-userdle -r 用户名 // 删除用户
-find // 查找用户文件手动删除
+0 // 关机
+1 // 单用户模式
+2 // 多用户状态没有网络模式
+3 // 多用户状态有网络模式
+4 // 系统未使用保留用户
+5 // xWindo图形多用户模式
+6 // 重启
+```
+
+### 切换级别
+```
+init 3 // 切换到运行级别3
+```
+
+### 查看当前运行级别
+```
+systemctl get-default // 查看当前运行级别
+```
+
+# 找回root密码步骤
+```
+init=/bin/sh
+快捷键 Ctrl+x 回车
+mount -o remount,rw / 
+passwd
+输入密码 root
+touch /.autorelabel
+exec /sbin/init
+```
+
+# 帮助指令
+```
+man [命令或配置文件] // 查看帮助
+help // 查看帮助
 ```
 
 ### chage
