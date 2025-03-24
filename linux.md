@@ -70,20 +70,6 @@ ls 选项[-ald] [文件或目录]
 -d 查看目录属性
 ```
 
-
-## 文件类型
-```
-d 目录directory
-- 二进制文件
-l 软链接文件link
-r-read读、w-write写、x-execute执行
-rwx       r-x        r-x      7   5   5
-r = 4     w = 2      x = 1
-所有者u   所有组g     其他人o
-user      group      oyhers
-onwer  
-```
-
 ## 文件处理命令
 ```
 cd   // change directory 切换目录
@@ -101,7 +87,7 @@ mkdri -p test/subdir2 // 创建子目录
 ### rmdir  文件要为空
 ```
 rmdir tset // 删除目录
-rmdir -p test/subdir2
+rmdir -p test/subdir2 // 强制删除目录及目录下所有文件
 rm -rf test // 强制删除目录及目录下所有文件
 ```
 
@@ -148,10 +134,10 @@ cat file1 file2 >> file3 // 如果file3文件按存在，将1、2文件内容附
 
 ### more [文件名]   分页显示文件内容
 ```
-    (空格)或f  // 显示下一页
-    (Enter)    // 显示下一行
-    q或Q       // 退出
-    = // 输出当前的行号
+(空格)或f  // 显示下一页
+(Enter)    // 显示下一行
+q或Q       // 退出
+= // 输出当前的行号
 ```
 
 ### less
@@ -181,7 +167,7 @@ tail 5 [文件名] // 查看文件的后几行
      -f // 将恐动态显示文件内容
 ```
 
-> 和 >>
+### > 和 >>
 ```
 > // 写入/覆盖文件内容
 >> // 追加内容到文件
@@ -202,22 +188,6 @@ ls -i i节点通过数字找文件,在任何数据里都有数字
 history  // 查看历史命令
 history 10 // 查看近10条历史命令
 !371 // 执行第371条命令
-```
-
-## date
-```
-date // 查看当前时间
-date +%Y // 查看当前年份
-date +%m // 查看当前月份
-date +%d // 查看当前日期
-date +%Y-%m-%d%H:%M:%S // 查看当前年月日时分秒
-date -s "2020-01-01 00:00:00" // 设置当前时间
-```
-
-### cal
-```
-cal // 显示当前月份的日历
-cal 2020 // 显示2020年的日历
 ```
 
 # 查找类
@@ -246,67 +216,32 @@ which ls // 查找ls命令在什么位置
 cat /home/hello.txt | grep -n "yes" // 查找hello.txt文件中包含yes的行
 grep -n "yes" /home/hello.txtn
 -i // 忽略大小写
-
+grep -v "^#" /etc/inittab | more // 查看inittab文件中没有#的行
+grep shhd /var/log/messages // 查看sshd服务信息
 ```
 
-# 权限管理命令
+# 压缩解压
+## gzip
 ```
-文件
-r -cat、more、head、tail
-w -echo、vi
-x -命令、脚本
-目录
-r -ls
-w -touch、mkdir、rm
-x-cd
+gzip /home/hello.txt // 压缩hello.txt
 ```
 
-## 改变权限
+## zip/unzip
 ```
-chmod u + x [文件名] 添加权限
-chmod o - r [文件名] 减去权限
-chmod g = rx [文件名] 修改权限
-chmod 641(rw- -wx --x) 修改权限
+zip -r myhome.zip /home // 压缩myhome.zip
 ```
 
-## 添加用户
+## tar
 ```
-useradd 用户名
-passwd 用户名
-```
-
-
-## 切换用户名
-```
-su - 用户名
-```
-
-## 改变所有者
-```
-chown 用户
-```
-
-## 改变所有组
-```
-chgrp 组名(adm)(系统里自带的)
-```
-
-## 查看文件权限
-```
-umask 掩码值(777-掩码值)
-umask -S
-```
-
-## 文件搜索命令
-显示系统命令所在目录
-```
-which ls 别名信息
-whereis ls 帮助信息，帮助文件所存放的信息
-```
-
-查找文件目录
-```
-find [搜索路径] [搜寻关键字]
+tar -zcvf pc.tar.gz /home/cat.txt /home/pig.txt // 压缩pc.tar.gz
+tar -zcvf myhome.tar.gz /home/ // 压缩myhome.tar.gz
+tar -zxvf pc.tar.gz // 解压pc.tar.gz
+tar -zxvf /home/myhome.tar.gz -C /opt/tmp2 // 解压myhome.tar.gz
+-c // 产生.tar压缩文件
+-v // 显示压缩过程
+-f // 指定压缩文件名
+-z // 打包同时压缩
+-x // 解压
 ```
 
 # vim/vi命令
@@ -424,17 +359,23 @@ Map 快捷键 触发命令
 ## 固件设置
 ### 查看软件时间
 ```
-date
-```
-
-查看使用方法
-```
-man date
+date // 查看当前时间
+date +%Y // 查看当前年份
+date +%m // 查看当前月份
+date +%d // 查看当前日期
+date +%Y-%m-%d%H:%M:%S // 查看当前年月日时分秒
+date -s "2020-01-01 00:00:00" // 设置当前时间
 ```
 
 修改软件时间
 ```
 date 021617022025.30
+```
+
+### cal
+```
+cal // 显示当前月份的日历
+cal 2020 // 显示2020年的日历
 ```
 
 ### 查看硬件时间
@@ -479,7 +420,6 @@ mv S10network s10network
 /etc/cr.d/init.d/sshd start(stop)
 ```
 
-
 ## 查看设置自启动命令
 ```
 ln -s
@@ -499,19 +439,6 @@ dmesg | grep rtho
 日志信息存放位置
 ```
 ls /var/log
-```
-
-## grep
-查看开头没有#的数据
-```
-grep -v "^#" /etc/inittab | more 
-```
-
-查看服务(日志)信息
-```
-grep shhd /var/log/messages
-
-grep syslog /var/log/messages
 ```
 
 ## GRUB(软连接文件)
@@ -608,23 +535,23 @@ M //文件权限
 ```
 
 ## yum命令
-安装软件包
+### 安装软件包
 ```
 yum install sudo
 ```
 
-检测升级
+### 检测升级
 ```
 yum check-update // 检测所有软件包
 yum check-update sudo
 ```
 
-升级
+### 升级
 ```
-yum update sudo
+yum update sudo // 升级sudo
 ```
 
-软件包查询
+### 软件包查询
 ```
 rpm -q sudo
 yum list sudo
@@ -632,23 +559,23 @@ yum list sudo
 yum list | grep sudo
 ```
 
-软件包信息
+### 软件包信息
 ```
 yum info sudo
 ```
 
-卸载
+### 卸载
 ```
 yum remove sudo
 ```
 
-帮助
+### 帮助
 ```
 yum -help
 man yum
 ```
 
-查询选项
+### 查询选项
 ```
 -a //查询所有已安装的软件包
 -f //查询文件所属软件包
@@ -657,12 +584,6 @@ man yum
 -l //显示软件包中的文件列表
 -d //显示被标注为文档的文件列表
 -c //显示被标注为配置文件的文件列表
-```
-
-## 源代码包安装
-解压包
-```
-tar -zxvf sudo-1.8.9p5.tar.gz
 ```
 
 ## APT包管理
@@ -708,7 +629,7 @@ clear // 清屏
 
 ## 添加用户
 ```
-passwd wangwu // 添加用户
+<!-- passwd wangwu // 添加用户 -->
 passwd -d /home/test king // 创建用户的指定目录
 ```
 useradd 设置选项 用户名 -D 查看缺省参数
@@ -898,17 +819,11 @@ help // 查看帮助
 -W // 密码过期前多少天发送邮件警告
 ```
 
-### shadow
-```
-
-```
-
 ## 批量添加用户
 ```
 newusers // 批量添加用户
 pwunconv // 批量删除用户
 chpasswd // 导入密码文件
-
 pwconv // 将密码写入shadow文件
 ```
 
@@ -922,6 +837,253 @@ man 命令名 // 使用man命令查看指定的手册 (按Q键退出)
 info/pinfo 命令名 // 使用info或pinfo命令查看指定的GNU项目文档
 man -k <关键字>/apropos <关键字> // 列出所有与 <关键字>匹配的手册页
 ```
+
+# 所属组
+## 文件 / 目录 所有组
+### 查看文件所属组
+```
+ls -ahl l //查看文件所属组
+```
+
+### 修改文件所属组
+```
+chown tom apple.txt // 修改文件所属组
+```
+
+### 组的创建
+```
+groupadd monster // 创建组
+useradd -g monster fox // 添加用户到组
+id fox // 查看用户所属组
+```
+
+### chgrp
+```
+chgrp fruit orang.txt // 修改文件所属组
+```
+
+## 其他组
+### 改变用户所在组
+```
+usermod -g wudang zwj // 改变所有组
+usermod -d 目录 用户名 // 改变用户登录地初始目录
+```
+
+# 权限管理命令
+```
+-rwxrwxrwx  1 root root  718 12月 11 20:43 compose.yaml // 文件权限
+d // 目录文件
+- // 普通文件
+l // 链接文件
+c // 字符设备文件,鼠标键盘
+b // 块设备文件,硬盘等
+第一组rwx: 文件拥有者的权限是读写和执行
+第二组rwx: 所有组的用户拥有读写和执行权限
+第三组rwx: 其他用户拥有读写和执行权限
+1 // 文件:硬链接数或 目录:子目录数
+root // 用户
+root // 组
+718 // 文件大小
+12月 11 20:43 // 文件修改时间
+compose.yaml // 文件名
+```
+
+## 文件类型
+```
+r-read读、w-write写、x-execute执行
+rwx       r-x        r-x 
+ 7         5          5
+r = 4     w = 2      x = 1
+所有者u   所有组g     其他人o
+user      group      oyhers
+onwer  
+```
+
+### 权限
+```
+文件
+r -cat、more、head、tail
+w -echo、vi
+x -命令、脚本
+目录
+r -ls
+w -touch、mkdir、rm
+x-cd
+```
+
+## 改变权限
+```
+u:所有者 g:所有组 o:其他用户 a:所有用户
+chmod u-x,g+w apple.txt // 减去权限/添加权限
+chmod u=rwx,g=rx,o=rx apple.txt // 修改权限
+chmod a+r apple.txt // 添加权限
+chmod 641(rw- -wx --x) // 修改权限
+chmod 751 /home/info.txt  // 修改权限
+```
+
+## 修改文件所有者
+```
+chown tom /home/info.txt // 修改文件所有者
+chown -R tom /home/test //目录下的所有文件和目录的所有者都修改成tom
+```
+
+## 修改文件/目录所在组
+```
+chgrp shaoli /home/info.txt // 修改文件/目录所在组
+chgrp -R shaoli /home/test // 修改目录下所有文件和目录的组
+```
+
+## 查看文件权限
+```
+umask 掩码值(777-掩码值)
+umask -S
+```
+
+## 文件搜索命令
+显示系统命令所在目录
+```
+which ls 别名信息
+whereis ls 帮助信息，帮助文件所存放的信息
+```
+
+查找文件目录
+```
+find [搜索路径] [搜寻关键字]
+```
+
+# crond 任务调度
+```
+crontab -e // 编辑crontab定时任务
+crontab -l // 查看crontab任务
+crontab -r // 删除当前用户所有的crontab任务
+service crond start // 启动crond服务
+*/1 * * * * ls -l /etc/ > /tmp/test.txt
+0 0 1,15 * * // 每月1号和15号执行 
+35 8 * * 1 // 周一的8:35执行
+第一个* // 表示分钟 0-59
+第二个* // 表示小时 0-23
+第三个* // 表示日期 1-31
+第四个* // 表示月份 1-12
+第五个* // 表示星期 0-7(0和7都表示星期天)
+```
+
+## 编写crontab定时任务
+```
+vim ym.txt
+data >> /tmp/ym.txt
+cal >> /tmp/ym.txt 
+chmod u+x my.sh // 添加权限
+./my.sh // 执行
+crontab -e // 编辑crontab定时任务
+1 * * * * /home/ym.sh // 1分钟执行
+0 2 * * * mysqldump -u root -p123456 testdb > /tmp/ym.sql // 备份数据库
+```
+
+# at 定时任务
+```
+ps -ef | grep atd // 查看atd服务
+-m // 邮件通知
+-I // atq别名
+-d // atrm别名
+-v // 显示任务将被执行时间
+-c // 打印任务的内容到标准输出
+-V // 显示版本信息
+-q <列队> // 列出队列
+-f <文件> // 从文件中读取任务
+-t <时间参数> // 指定执行时间
+Ctrl+d // 按两下退出
+at 5pm + 2 days   /bin/ls /home // 两天后下午五点执行/bin/ls /home
+atq // 查看系统中没有执行的任务
+at 5pm tomorrow // 明天下午五点执行
+at now + 2 minutes // 2分钟后执行
+at 24.03.2025 18:00 // 2025年3月24日18:00执行
+atrm 4 // 删除第四个任务
+```
+
+# 磁盘管理
+```
+lablk // 查看磁盘信息
+lablk -f // 显示磁盘分区信息
+```
+
+虚拟机添加硬盘
+```
+fdisk /dev/sdb // 创建硬盘
+m  // 显示命令列表
+p // 显示磁盘分区信息
+n // 新建分区
+d // 删除分区
+w // 写入并退出
+```
+## 挂载
+```
+mkfs -t ext4 /dev/sdb1 // 格式化
+mkdir newdisk // 创建目录
+mount /dev/sdb1 /newdisk/ // 挂载
+umount /dev/sdb1 // 卸载挂载
+vim /etc/fstab // 配置挂载文件
+/dev/sdb1   /newdisk   xfs  defaults   0 0 // 自动挂载
+mount -a // 即可生效挂载的文件
+```
+
+## 查看磁盘使用情况
+```
+du -h // 显示磁盘使用情况
+-s // 显示当前目录下文件大小
+-h // 带计量单位
+-a // 显示所有文件
+--max-depth=1 // 只显示当前目录下文件大小
+-c // 显示总大小
+du -h --max-depth=1 /opt // 显示opt目录下文件大小
+```
+
+## 食用命令 
+```
+ls -l /opt | grep "^-" | wc -l // 显示opt目录下文件数量
+ls -lR /opt | grep "^b" | wc -l // 显示opt目录下块设备数量
+ls -l /opt | grep "^d" | wc -l // 显示opt目录下目录数量
+tree /opt // 显示目录树结构
+```
+
+# 网络配置
+```
+yum install net-tools // 安装ifconfig
+ifconfig // 查看网络信息
+ipconfig // Windows查看网络信息
+```
+
+## 指定设置ip
+```
+vim /etc/sysconfig/network-scripts/ifcfg-ens33 // 配置网络环境文件
+BOOTPROTO="static" // 静态ip
+ONBOOT="yes" // 启动
+IPADDR=192.168.1.100 // ip
+GATEWAY=192.168.1.1 // 网关
+DNS1 = 114.114.114.114 // 域名解析器
+reboot // 重启
+service network restart // 重启网络服务
+```
+
+# 主机和hosts映射
+```
+vim /etc/hostname // 修改主机名
+```
+
+## Windows
+```
+C:\Windows\System32\drivers\etc\hosts // 修改hosts文件
+192.168.1.100 hspedu100 // 映射主机名
+ping hspedu100 // ping测试
+```
+
+## Linux
+```
+vim /etc/hosts // 修改hosts文件
+192.168.1.100 hspedu100 // 映射主机名
+ping hspedu100 // ping测试
+```
+
+
 # shell
 字符
 ```
