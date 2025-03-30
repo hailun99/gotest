@@ -229,6 +229,7 @@ gzip /home/hello.txt // 压缩hello.txt
 ## zip/unzip
 ```
 zip -r myhome.zip /home // 压缩myhome.zip
+unzip myhome.zip // 解压myhome.zip
 ```
 
 ## tar
@@ -972,7 +973,7 @@ service crond start // 启动crond服务
 vim ym.txt
 data >> /tmp/ym.txt
 cal >> /tmp/ym.txt 
-chmod u+x my.sh // 添加权限
+chmod u+x my.sh // 添加执行权限
 ./my.sh // 执行
 crontab -e // 编辑crontab定时任务
 1 * * * * /home/ym.sh // 1分钟执行
@@ -1083,6 +1084,85 @@ vim /etc/hosts // 修改hosts文件
 ping hspedu100 // ping测试
 ```
 
+## 机制分析
+```
+ipconfig /displaydns // DNS域名解析缓存
+ipconfig /flushdns // 清除DNS缓存 
+```
+
+# 安装tomcat
+```
+mkdir /opt/tomcat // 创建目录
+tar -xvf apache-tomcat-11.0.5.tar.gz // 解压
+cd apache-tomcat-11.0.5/bin // 进入bin目录
+firewall-cmd --permanent --add-port=8080/tcp // 添加端口
+firewall-cmd --reload // 重启防火墙
+firewall-cmd --query-port=8080/tcp // 查看端口
+./startup.sh // 启动
+```
+
+
+# 进程管理
+## 显示进程
+```
+ps // 显示进程
+ps -aux // 显示所有进程
+ps -aux | grep sshd // 显示sshd进程
+```
+
+## 进程解析
+```
+USER // 进程执行用户
+PID // 进程ID
+%CPU // 进程占用CPU百分比
+%MEM // 进程占用内存百分比
+VSZ // 进程占用虚拟内存
+RSS // 进程占用物理内存
+TTY // 进程执行终端
+STAT // 进程状态
+S // 休眠状态
+s // 表示该进程是会话的先导进程
+-N 表示进程拥有比普通优先级更低的优先级
+r // runnable可运行状态
+D // 短期等待
+Z // 僵尸进程
+T // 被进程或者被停止
+START // 进程启动时间
+TIME // 进程运行时间
+COMMAND // 进程命令
+```
+
+## 父子进程
+```
+ps -ef | grep sshd // 显示sshd进程
+```
+
+## 终止进程
+```
+kill 11421 // 杀死进程
+/bin/systemctl start sshd.service // 启动sshd服务
+killall gedit // 杀死gedit进程及下面的所有子进程
+kill -9 11421 // 强制杀死进程
+```
+
+## 查看进程树
+```
+yum install psmisc // 安装ps
+pstree // 查看进程树
+-p  // 显示进程号(pid)
+-u // 显示进程用户
+```
+
+# 安装mysql
+```
+mkdir /opt/mysql // 创建目录
+tar -xvf mysql-8.0.13-linux-glibc2.12-x86_64.tar.xz // 解压
+yum -y install wget // 安装wget
+wget http://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm // 下载mysql源文件包
+yum -y install mysql80-community-release-el9-1.noarch.rpm // 安装mysql源
+```
+
+
 
 # shell
 字符
@@ -1096,3 +1176,319 @@ $ //变换值位置
 | //管道
 & //后台执行
 ```
+
+## 变量
+```
+A=100 // 定义变量
+echo A=$A // 输出变量
+echo "A=$A" // 输出变量
+unset A // 删除变量
+choe "A=$A" // 输出为空
+reaonly B=2 // 静态只读变量，不可删除
+choe "B=$B"
+A= `date` // 输出当前时间
+A =$(date) // 输出当前时间
+```
+
+## 设置环境变量
+```
+expott PATH=$PATH:/usr/local/bin // 设置环境变量
+source /etc/profile // 使环境变量生效
+```
+
+## 位置参数
+```
+#!/bin/bash
+echo "$0 $1 $2" // 输出参数
+echo "所有的参数=$" // 所有参数
+echo "$@" // 所有参数
+echo "参数地个数=$#" // 参数个数
+./myshell.sh 100 200
+```
+
+## 预定义变量
+```
+#!/bin/bash
+echo "当前进程id=$$" // 当前进程id
+/root/shcode/myshell.sh & // 后台执行
+echo "最后一个后台方式地进程id=$!" // 最后一个后台方式地进程id
+echo "执行地结果是=$?" // 执行地结果
+```
+
+## 运算符
+```
+RES1=$(((2+3)*4)) 
+echo "res1=$RES1"
+"$((运算符))" // 运算符
+
+RES2=$[(2+3)*4]
+echo "res2=$RES2"
+"$[]" // 运算符
+
+TEMP=`expr 2 + 3`
+RES3=`expr $TEMP \* 4`
+echo "temp=$TEMP"
+echo "res3=$RES3"
+expr m -n // 匹配字符串
+expr \*, /, % // 运算符乘,除，取余  
+
+SUM=$[$1+$2] 
+echo "sum=$SUM"  
+./oper.sh 20 30 // 运行方式
+```
+
+## 条件判断
+### 字符串比较
+```
+= // 等于
+if [ "ok" = "ok" ] // 判断,if为开始，在中括号里要有空格
+then // then为开始
+        echo "equal" // 输出
+fi // fi 为结束
+```
+
+### 整数比较
+```
+-lt // 小于
+-le // 小于等于
+-gt // 大于
+-ge // 大于等于
+-eq // 等于
+-ne // 不等于
+
+if [ 23 -ge 22 ] // 判断，在中括号里要有空格
+then // then为开始
+        echo "大于" // 输出
+fi // fi 为结束
+```
+
+### 按照文件权限进行判断
+```
+-r // 判断文件是否可读
+-w // 判断文件是否可写
+-x // 判断文件是否可执行
+```
+
+### 按照文件类型进行判断
+```
+-f // 文件存在并且是一个常规的文件
+-e // 文件存在
+-d // 文件存在并是一个目录
+
+if [ -f /root/shcode/aaa.ttt ] // 判断文件是否存在，在中括号里要有空格
+then // then为开始
+        echo "存在" // 输出
+fi // fi 为结束
+```
+
+### 真假判断
+```
+[ hspEdu ] // 返回true
+[] // 返回false
+```
+
+## 流程控制
+### if语句
+基本语法
+```
+if [ 条件判断式 ]
+then
+代码
+fi
+```
+
+多分支
+```
+if [ 条件判断式 ]
+then
+代码
+elif[条件判断式]
+then
+代码
+fi
+```
+案例
+```
+if [ $1 -ge 60 ]
+then    
+        echo "及格了"
+elif [ $1 -lt 60 ]
+then    
+        echo "不及格"
+fi      
+./ifCase.sh 70 // 输入70,显示及格
+./ifCase.sh  50 // 输入50,显示不及格
+```
+
+### case语句
+```
+case $变量名 in
+"值1" )
+如果变量等于1,测执行程序1
+;;
+"值2" )
+如果变量等于2,测执行程序2
+;;
+...
+*）
+如果变量的值都不是以上的值,测执行此程序
+;;
+esac
+```
+案例
+```
+#案例: 参数为1时 , 输出 "周一" , 是2时 , 就输出 "周二" , 其他情况属输出 "other"
+case $1 in
+"1")    
+echo "周一"
+;;
+"2")
+echo "周二"
+;;
+*)
+echo "other..."
+;;
+esac
+./testCase.sh 1 // 输出周一
+./testCase.sh 2 // 输出周二
+./testCase.sh 3 // 输出other...
+```
+
+### for循环
+基本语法1
+```
+for 变量 in 变量1 变量2 变量3
+do
+程序/代码
+done
+```
+案例
+```
+#案例: 打印命令行输入的参数 [这里看一下$* 和 $@ 的区别]
+# "$*"
+for i in "$*"
+do
+        echo "num is $i"
+done
+
+#使用 "$@"
+echo "================================="
+for j in "$@"
+do
+        echo "num is $j"
+done
+./testFor.sh 1 2 3 // 输出num is 1 num is 2 num is 3
+```
+
+基本语法2
+```
+for ((初始值;循环控制条件;变量变化))
+do
+程序/代码
+done
+```
+案例
+```
+#案例1: 从1加到100的值输出显示,如何把 100 做成一个变量
+#定义一个变量 SUM
+SUM=0
+for(( i=1; i<=100; i++ )) // 把100改为$1
+do
+#写上你的业务代码
+        SUM=$[$SUM+$i]
+done
+echo "总和SUM=$SUM"
+./testFor2.sh // 输出总和SUM=5050
+./testFor2.sh 100 // 输出总和SUM=5050
+```
+
+### while循环
+基本语法
+```
+while [ 条件判断式 ]
+do
+程序/代码
+done
+```
+案例
+```
+#案例: 从命令行输入-个数n,统一从 1+.. + n 的值是多少
+SUM=0
+i=0
+while [ $i -le $1 ]
+do
+        SUM=$[$SUM+$1]
+        #i自增
+        i=$[$i+1]
+done
+echo "执行结果=$SUM"
+./testWhile.sh 10 // 输出执行结果=55
+```
+
+### read读取控制台输入
+基本语法
+```
+read(选项)(参数)
+-p // 指定读取时的提示符
+-t // 指定读取的等待时间
+```
+案例
+```
+#案例: 读取控制台输入一个NUM1值
+read -p "请输入一个数NUM1=" NUM1 // 输出提示符
+echo "你输入的NUM1=$NUM1"
+#案例: 读取控制台输入一个NUM2值, 在10秒内输入
+read -t 10 -p "请输入一个数NUM2=" NUM2 // 输出提示符,10秒内输入
+echo "你输入的NUM2=$NUM2"
+./testRead.sh 
+```
+
+### 函数
+#### 系统函数
+basename基本语法
+```
+basename [pathname] [suffix]  // 返回pathname的最后一个目录或文件名
+basename [string] [suffix]  // 返回string的最后一个目录或文件名
+suffix // 去掉后缀
+basename /home/myshell.sh .sh // 输出myshell
+
+dirname 绝对路径 
+dirname /home/aaa/bbb/oper.sh // 输出/home/aaa/bbb
+```
+
+### 自定义函数
+基本语法
+```
+[function] funname[()]
+{
+     Action;
+     [return int;]
+}
+调用直接写函数名:funname [值]
+```
+案例
+```
+#案例 计算输入两个参数和(动态的获取), getSum
+
+#定义函数
+function getSum() {
+
+        SUM=$[$n1+$n2]
+        echo "和时=$SUM"
+
+}
+#输入两个值
+read -p "输入一个数n1=" n1""
+read -p "输入一个数n2=" n2""
+#调用自定义函数
+getSum $n1 $n2
+./testFun.sh // 输出
+```
+
+
+
+
+
+
+
+
