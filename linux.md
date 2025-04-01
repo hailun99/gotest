@@ -1160,8 +1160,32 @@ tar -xvf mysql-8.0.13-linux-glibc2.12-x86_64.tar.xz // 解压
 yum -y install wget // 安装wget
 wget http://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm // 下载mysql源文件包
 yum -y install mysql80-community-release-el9-1.noarch.rpm // 安装mysql源
-```
+yum install mysql-community-server -y // 安装mysql
+systemctl start mysqld // 启动mysql
+systemctl enable mysqld // 设置mysql服务自启动
+grep 'temporary password' /var/log/mysqld.log // 查看临时密码
+alter user 'root'@'localhost' identified by 'Itcast@2022'; // 修改临时root密码
+FLUSH PRIVILEGES; // 刷新权限
 
+groupadd mysql // 创建mysql组
+useradd -r -g mysql mysql // 创建mysql用户
+groups mysql // 查看mysql用户组
+chown -R mysql /user/local/mysql
+chown -R mysql /usr/local/mysql8.0.18 // 修改mysql目录所有者
+chgrp -R mysql /usr/local/mysql8.0.18 // 修改mysql目录所有者
+mkdir -p /data/mysql // 创建目录存储mysql数据
+sudo chown -R mysql:mysql /data/mysql // 修改data/mysql目录所有者
+sudo chmod 755 /data/mysql // 修改data/mysql目录权限
+mysql –uroot -p // 登录mysql
+
+```
+## 遇到错误(错误：GPG 检查失)
+```
+rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 // 添加GPG密钥
+cd /etc/yum.conf // 修改yum源
+gpgcheck=0 // # 将 gpgcheck 设置为 0
+yum install mysql-community-server --nogpgcheck // 在某些情况下，可以在安装命令中添加--nogpgcheck选项以跳过GPG检查
+```
 
 
 # shell
@@ -1485,10 +1509,181 @@ getSum $n1 $n2
 ./testFun.sh // 输出
 ```
 
+# 案例
+```
+#!/bin/bash
+#备份目录
+BACKUP=/data/backup/db
+#当前时间
+DATETIME=$(date +%Y-%m-%d_%H%N%S)
+echo $DATETIME
+#数据库的地址
+HOST=localhost
+#数据库的用户名
+DB_USER=root
+#数据库密码
+DB_PW=Itcast@2022
+#备份的数据库名
+DATABASE=hspedu
+
+#创建备份目录，如果不存在就创建
+[ ! -d "${BACKUP}/${DATETIME}" ] && mkdir -p "${BACKUP}/${DATETIME}"
+
+#备份数据库
+mysqldump -u${DB_USER} -p${DB_PW} --host=${HOST} -q -R --databases ${DATABASE} | gzip > ${BACKUP}/${DATETIME}/$DATETIME.sql.gz
+
+#将文件处理成 tar.gz
+cd ${BACKUP}
+tar -zcvf $DATETIME.tar.gz ${DATETIME}
+#删除对应的备份目录
+rm -rf ${BACKUP}/${DATETIME}
+
+#删除10天前的备份文件
+find ${BACKUP} -atime +10 -mane "*.tar.gz" ecxe rm -rf {} \;
+echo "备份数据结束${DATABASE} 成功-"
+```
+
+```
+cd /usr/sbin // 跳转到指定目录
+vim mysql_db_backup.sh // 备份mysql数据库
+chmod u+x mysql_db_backup.sh /// 设置权限
+./mysql_db_backup.sh // 执行
+gunzip 2025-04-01_1295119312101.sql.gz // 解压
+```
+
+## 定时任务
+```
+crontab -e // 编辑定时任务
+30 2 * * * /usr/sbin/mysql_db_backup.sh // 定时任务
+crontab -l // 查看定时任务
+```
 
 
 
+# Ubuntu
+下载ubuntu
+```
+https://cn.ubuntu.com/download/desktop // 下载网站
+```
+
+## ubuntu的root
+```
+sudo passwd // 设置root密码
+fdisk -l // 查看硬盘
+exit // 退出root
+```
+
+## ubuntu下开发python
+### 查看安装
+```
+python3 // (查看)运行python3
+```
+### 第一个python文件
+```
+vi hello.py
+print("hello world")
+```
+
+## apt介绍
+### Ubuntu软件操作相关命令
+```
+sudo apt-get update // 更新源*
+sudo apt-get install package // 安装包*
+usdo apt-get remove package // 删除包*
+
+sudo apt-cache search package //搜索软件包
+sudo apt-cache show package // 获取包的相关选项，如说明，大小，版本*
+sudo apt-get install package --reinstall // 重新安装包
+
+sudo apt-get -finstall // 修复安装
+sudo apt-get remove package --purge // 删除包及配置文件
+sudo apt-get build -dep package // 安装相关的编译文件
+
+sudo apt-get upgrade // 更新已安装的包
+sudo apt-get dist-upgrade // 升级系统
+sudo apt-cache depends package // 了解使用该包依赖那些包
+sudo apt-cache rdepends package // 查看使用该包被哪些包依赖
+sudo apt-get source package // 下载包的源码*
+```
+
+### 查看其镜像
+```
+cat /etc/apt/sources.list/ubuntu.sources // 显示ubuntu.sources文件内容
+```
+
+### 查看镜像源
+```
+https://mirrors.tuna.tsinghua.edu.cn/ // 清华镜像源
+```
+
+### 备份文件
+```
+sudo cp /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.bak
+```
+
+echo '' > /etc/apt/sources.list.d/ubuntu.sources // 清空文件
+vi /etc/apt/sources.list.d/ubuntu.sources // 添加内容
+sudo apt-get update // 更新源
 
 
+### Ubuntu安装vim
+```
+sudo apt-get install vim // 安装vim
+sudo apt-cache show vim // 查看vim的选项
+sudo apt-get remove vim // 删除vim
+```
+
+### Ubuntu安装ssh
+```
+sudo apt-get install openssh-server // 安装ssh
+service ssh start // 启动ssh
+systemctl ssh start // 启动ssh
+netstat -anp | more // 查看端口
+ifconfig // 查看ip
+```
 
 
+# liunx日志文件管理
+时间 主机 服务 描述
+系统常用日志
+```
+/var/log/ // 日志存放位置
+/var/log/cron // 记录系统定时任务相关的日志
+/var/log/lasllog // 记录系统中所有用户最后一次的登录时间的日志。二进制文件，需要用lastlog命令查看
+/var/log/mailog // 记录邮件相关的日志
+/var/log/message // 重要信息日志，如果系统出现问题首先检测该日志
+/var/log/secure // 记录系统安全相关的日志,涉及账号密码的的程序都会记录
+/var/log/ulmp // 记录当前登录的用户信息，需要使用w、who、users 命令查看
+```
+
+## 自定义日志
+```
+vim /etc/rsyslog.conf // 编辑日志文件
+#添加自定义的日志
+*.*                                                     /var/log/hsp.log
+> /var/log/hsp.log // 输出到日志文件
+reboot // 重启
+cd /var/log/ // 切换日志目录
+cat hsp.log | grep sshd // 查看日志
+```
+
+## 日志轮替
+```
+weekly // 一周
+rotate 4 // 轮替4次
+create // 创建日志文件，在日志轮替后
+dateext // 使用日期作日志轮替后缀
+include /etc/logrotate.d
+/var/log/wtmp {
+        monthly // 每月对日志文件进行一次轮替
+        create 0664 root utmp // 创建日志文件，权限为664，用户为root，组为utmp
+        minsize 1M // 大于1M时进行轮替,否则时间达到一个月，也进不来日志转储
+        rotate 1 // 仅保留一个日志备份
+}
+/var/log/btmp {
+        missingok // 如果日志不存在,则忽略该日志警告信息
+        monthly
+        create 0664 root utmp
+        rotate 1
+}
+```
