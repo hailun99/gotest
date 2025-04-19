@@ -8,20 +8,26 @@ Command not found
 ```
 No such file or directory
 ```
-# 常用命令
-关闭防火墙
+
+# systemctl命令
 ```
-systemctl stop firewalld.service
+systemctl 命令 服务名
+start // 启动服务
+stop // 停止服务
+status // 查看服务状态
+enable // 开启开机自启
+disable // 关闭开机自启
+NetworkManager // 主机网络服务
+network // 副网络服务
+firewalld // 防火墙服务
+sshd,ssh服务 // 远程登录
 ```
 
-查看防火墙状态
+## 防火墙
 ```
-systemctl status firewalld.service
-```
-
-开启防火墙
-```
-systemctl start firewalld.service
+systemctl stop firewalld.service // 关闭防火墙
+systemctl status firewalld.service // 查看防火墙状态
+systemctl start firewalld.service // 开启防火墙
 ```
 
 查看是否安装NTP
@@ -1090,17 +1096,6 @@ ipconfig /displaydns // DNS域名解析缓存
 ipconfig /flushdns // 清除DNS缓存 
 ```
 
-# 安装tomcat
-```
-mkdir /opt/tomcat // 创建目录
-tar -xvf apache-tomcat-11.0.5.tar.gz // 解压
-cd apache-tomcat-11.0.5/bin // 进入bin目录
-firewall-cmd --permanent --add-port=8080/tcp // 添加端口
-firewall-cmd --reload // 重启防火墙
-firewall-cmd --query-port=8080/tcp // 查看端口
-./startup.sh // 启动
-```
-
 
 # 进程管理
 ## 显示进程
@@ -1110,26 +1105,59 @@ ps -aux // 显示所有进程
 ps -aux | grep sshd // 显示sshd进程
 ```
 
-## 进程解析
+## top进程解析
 ```
-USER // 进程执行用户
+top // 显示进程
+-P // 只显示某个进程的信息
+-d // 显示间隔时间，默认五秒
+-c // 显示产生进程的完整命令,默认是进程名
+-n // 指定刷新次数,top -n 3 显示3次
+-b // 以非交互非全屏模式运行
+-i // 不显示任何闲置(idle)或无用(zombie)的进程
+-u // 查找特定用户的进程
+```
+
+```
 PID // 进程ID
+USER // 进程执行用户
+PR // 进程优先级,越小越大
+NI // 进程优先级
+VIRT // 进程占用虚拟内存
+RES // 进程占用物理内存
+SHR // 进程使用的共享内存
 %CPU // 进程占用CPU百分比
 %MEM // 进程占用内存百分比
+S // 进程状态 (S休眠，R运行，Z僵尸进程,N负优先级,I休闲状态)
 VSZ // 进程占用虚拟内存
 RSS // 进程占用物理内存
 TTY // 进程执行终端
 STAT // 进程状态
-S // 休眠状态
 s // 表示该进程是会话的先导进程
 -N 表示进程拥有比普通优先级更低的优先级
 r // runnable可运行状态
 D // 短期等待
-Z // 僵尸进程
 T // 被进程或者被停止
 START // 进程启动时间
 TIME // 进程运行时间
 COMMAND // 进程命令
+```
+
+## df命令
+```
+df [-h] // 查看磁盘使用情况
+```
+
+## iostat
+```
+iostat -d 2 3 // 查看磁盘IO,刷新间隔，刷新时间
+-x // 显示所有磁盘
+```
+
+## sar 命令
+```
+sar -n DEV 2 3 // 查看IO,刷新间隔，刷新时间
+-n // 查看网络,DEV表示查看网络接口
+
 ```
 
 ## 父子进程
@@ -1153,13 +1181,150 @@ pstree // 查看进程树
 -u // 显示进程用户
 ```
 
+# 下载wget
+```
+使用 curl 下载阿里云的 CentOS 镜像源配置文件：
+sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+
+若系统中没有安装 curl，你可以尝试通过 yum 的本地缓存来安装
+sudo yum --disablerepo=base install curl
+
+在完成镜像源配置文件的下载之后，你还需要清理并重建 yum 缓存：
+sudo yum clean all
+sudo yum makecache
+
+sudo yum install wget // 安装wget
+```
+
+# 安装jdk
+```
+rpm -qa | grep java // 查看jdk
+yum install java-1.8.0-openjdk.x86_64 // 安装jdk
+tar -xvf jdk-8u181-linux-x64.tar.gz // 解压
+mv jdk1.8.0_181 /opt/jdk // 移动
+vim /etc/profile // 配置环境变量
+export JAVA_HOME=/usr/local/java/jdk1.8
+export PATH=$JAVA_HOME/bin:$PATH
+source /etc/profile // 刷新
+java -version // 查看jdk版本
+```
+
+# 在CentOS7安装tomcat
+```
+cp -r jdk-11.0.26 /usr/local/jdk // 复制jdk到指定目录
+
+vi /etc/profile // 配置环境变量
+jdk配置环境
+export JAVA_HOME=/usr/local/jdk
+export PATH=$PATH:$JAVA_HOME/bin
+
+source /etc/profile // 刷新
+java -version // 查看jdk版本
+
+解压tomcat，移动文件
+tar -xzf apache-tomcat-10.1.7.tar.gz  -C /usr/local/
+mv /usr/local/apache-tomcat-10.1.7/ /usr/local/tomcat
+
+3.设置环境变量
+在/etc/profile追加以下两行，再激活变量source /etc/profile
+export TOM_HOME=/usr/local/tomcat
+export PATH=$PATH:$TOM_HOME/bin
+
+
+下载阿里云镜像源配置文件
+sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+
+
+
+
+mkdir /opt/tomcat // 创建目录
+tar -xvf apache-tomcat-11.0.5.tar.gz // 解压
+mv /opt/tomcat  /export/server/Tomcat // 移动并重命名文件
+cd  /export/server/ // 切换目录
+
+配置启动Tomcat时自动生成tomcat.pid文件，此文件保存的是运行Tomcat时的进程号。
+vi /export/server/tomcat/bin/catalina.sh // 修改catalina.sh文件
+添加以下内容
+CATALINA_PID=$CATALINA_BASE/tomcat.pid // 添加pid文件
+```
+
+
+# 安装Sqark
+```
+tar -zxvf spark-3.3.0-bin-hadoop3.tgz -C /export/servers // 解压
+mv spark-3.3.0-bin-hadoop3/ spark-3.3.0 // 重命名文件
+// 运行并指定端口
+./spark-shell --conf spark.driver.bindAddress=127.0.0.1 --conf spark.driver.port=4040
+```
+
+
+
+# 安装mysql
+```
+步骤 1：检查已安装的MySQL包
+bash
+复制
+rpm -qa | grep mysql
+查看输出中是否存在与冲突相关的包（如mysql-community-client-plugins或其他高版本包）。
+
+步骤 2：卸载冲突的包
+如果存在高版本或冲突的包（如MySQL 8.0插件），使用以下命令卸载：
+
+bash
+复制
+sudo yum remove mysql-community-client-plugins mysql-community-client mysql-community-server
+注意：这会移除所有依赖的MySQL组件。如果只想卸载特定包，请调整命令。
+
+步骤 3：配置MySQL 5.7仓库
+确保系统已启用MySQL 5.7仓库。创建或编辑文件：
+
+bash
+复制
+sudo vi /etc/yum.repos.d/mysql-community.repo
+添加以下内容（调整baseurl若需要其他镜像）：
+
+ini
+复制
+[mysql57-community]
+name=MySQL 5.7 Community Server
+baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/7/x86_64
+enabled=1
+gpgcheck=0  # 如需GPG验证，设为1并导入密钥
+步骤 4：清理缓存并安装
+bash
+复制
+sudo yum clean all
+sudo yum makecache
+sudo yum install mysql-community-client-5.7.44 mysql-community-server-5.7.44
+或直接安装最新5.7版本：
+
+bash
+复制
+sudo yum install mysql-community-client mysql-community-server
+替代方案：强制卸载并本地安装（谨慎使用）
+若依赖问题顽固，强制卸载后手动安装：
+
+bash
+复制
+sudo rpm -e --nodeps mysql-community-client-plugins
+sudo yum localinstall mysql-community-client-5.7.44-1.el7.x86_64.rpm mysql-community-server-5.7.44-1.el7.x86_64.rpm
+验证安装
+bash
+复制
+mysql --version
+systemctl start mysqld
+systemctl status mysqld
+关键点：确保所有MySQL组件版本一致，避免混合安装不同大版本（如5.7与8.0）。
+```
+
 # 安装mysql
 ```
 mkdir /opt/mysql // 创建目录
 tar -xvf mysql-8.0.13-linux-glibc2.12-x86_64.tar.xz // 解压
 yum -y install wget // 安装wget
-wget http://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm // 下载mysql源文件包
-yum -y install mysql80-community-release-el9-1.noarch.rpm // 安装mysql源
+下载并安装 MySQL Yum 仓库配置文件5.7
+wget https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+yum localinstall mysql80-community-release-el7-5.noarch.rpm
 yum install mysql-community-server -y // 安装mysql
 systemctl start mysqld // 启动mysql
 systemctl enable mysqld // 设置mysql服务自启动
@@ -1177,8 +1342,26 @@ mkdir -p /data/mysql // 创建目录存储mysql数据
 sudo chown -R mysql:mysql /data/mysql // 修改data/mysql目录所有者
 sudo chmod 755 /data/mysql // 修改data/mysql目录权限
 mysql –uroot -p // 登录mysql
+quit // 退出
 
+. 忽略 GPG 检查（不推荐，仅作为临时解决方案）
+yum --nogpgcheck install mysql-community-icu-data-files-8.0.41-1.el7.x86_64
 ```
+
+# spark
+下载MySQL GPG 公钥
+```
+# 移除旧的 MySQL GPG 公钥
+sudo rm -f /etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2022
+
+# 重新导入 MySQL GPG 公钥
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+
+# 重新安装 MySQL 软件包
+sudo yum install mysql-community-server
+```
+
+
 ## 遇到错误(错误：GPG 检查失)
 ```
 rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 // 添加GPG密钥
@@ -1187,8 +1370,153 @@ gpgcheck=0 // # 将 gpgcheck 设置为 0
 yum install mysql-community-server --nogpgcheck // 在某些情况下，可以在安装命令中添加--nogpgcheck选项以跳过GPG检查
 ```
 
+# RabbitMQ
+## 密钥
+```
+wget https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+rpm --import rabbitmq-release-signing-key.asc
+```
+## 配置文件
+```
+# In /etc/yum.repos.d/rabbitmq.repo
+
+##
+## Zero dependency Erlang RPM
+##
+
+[modern-erlang]
+name=modern-erlang-el9
+# Use a set of mirrors maintained by the RabbitMQ core team.
+# The mirrors have significantly higher bandwidth quotas.
+baseurl=https://yum1.rabbitmq.com/erlang/el/9/$basearch
+        https://yum2.rabbitmq.com/erlang/el/9/$basearch
+repo_gpgcheck=1
+enabled=1
+gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-erlang.E495BB49CC4BBE5B.key
+gpgcheck=1
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+pkg_gpgcheck=1
+autorefresh=1
+type=rpm-md
+
+[modern-erlang-noarch]
+name=modern-erlang-el9-noarch
+# Use a set of mirrors maintained by the RabbitMQ core team.
+# The mirrors have significantly higher bandwidth quotas.
+baseurl=https://yum1.rabbitmq.com/erlang/el/9/noarch
+        https://yum2.rabbitmq.com/erlang/el/9/noarch
+repo_gpgcheck=1
+enabled=1
+gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-erlang.E495BB49CC4BBE5B.key
+       https://github.com/rabbitmq/signing-keys/releases/download/3.0/rabbitmq-release-signing-key.asc
+gpgcheck=1
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+pkg_gpgcheck=1
+autorefresh=1
+type=rpm-md
+
+[modern-erlang-source]
+name=modern-erlang-el9-source
+# Use a set of mirrors maintained by the RabbitMQ core team.
+# The mirrors have significantly higher bandwidth quotas.
+baseurl=https://yum1.rabbitmq.com/erlang/el/9/SRPMS
+        https://yum2.rabbitmq.com/erlang/el/9/SRPMS
+repo_gpgcheck=1
+enabled=1
+gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-erlang.E495BB49CC4BBE5B.key
+       https://github.com/rabbitmq/signing-keys/releases/download/3.0/rabbitmq-release-signing-key.asc
+gpgcheck=1
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+pkg_gpgcheck=1
+autorefresh=1
+
+
+##
+## RabbitMQ Server
+##
+
+[rabbitmq-el9]
+name=rabbitmq-el9
+baseurl=https://yum2.rabbitmq.com/rabbitmq/el/9/$basearch
+        https://yum1.rabbitmq.com/rabbitmq/el/9/$basearch
+repo_gpgcheck=1
+enabled=1
+# Cloudsmith's repository key and RabbitMQ package signing key
+gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-server.9F4587F226208342.key
+       https://github.com/rabbitmq/signing-keys/releases/download/3.0/rabbitmq-release-signing-key.asc
+gpgcheck=1
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+pkg_gpgcheck=1
+autorefresh=1
+type=rpm-md
+
+[rabbitmq-el9-noarch]
+name=rabbitmq-el9-noarch
+baseurl=https://yum2.rabbitmq.com/rabbitmq/el/9/noarch
+        https://yum1.rabbitmq.com/rabbitmq/el/9/noarch
+repo_gpgcheck=1
+enabled=1
+# Cloudsmith's repository key and RabbitMQ package signing key
+gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-server.9F4587F226208342.key
+       https://github.com/rabbitmq/signing-keys/releases/download/3.0/rabbitmq-release-signing-key.asc
+gpgcheck=1
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+pkg_gpgcheck=1
+autorefresh=1
+type=rpm-md
+
+[rabbitmq-el9-source]
+name=rabbitmq-el9-source
+baseurl=https://yum2.rabbitmq.com/rabbitmq/el/9/SRPMS
+        https://yum1.rabbitmq.com/rabbitmq/el/9/SRPMS
+repo_gpgcheck=1
+enabled=1
+gpgkey=https://github.com/rabbitmq/signing-keys/releases/download/3.0/cloudsmith.rabbitmq-server.9F4587F226208342.key
+gpgcheck=0
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+pkg_gpgcheck=1
+autorefresh=1
+type=rpm-md
+```
+
+yum install -y erlang rabbitmq-server
+systemctl enable rabbitmq-server // 设置rabbitmq自启动
+systemctl status rabbitmq-server
+
+
+
+
+
+
+
+
+## 配置放行规则
+```
+方式1:关闭防火墙
+systemctl stop firewalld // 关闭防火墙
+systemctl disable firewalld // 取消防火墙自启动
+
+方式2:放行端口
+firewall-cmd --permanent --add-port=80/tcp // 添加端口
+firewall-cmd --reload // 重启防火墙
+```
 
 # shell
+dG // 清空文件文件夹里面的内容
+
+
 字符
 ```
 * //匹配任意字串
@@ -1642,6 +1970,11 @@ netstat -anp | more // 查看端口
 ifconfig // 查看ip
 ```
 
+## Ubuntu安装mysql 5.7
+```
+
+
+```
 
 # liunx日志文件管理
 时间 主机 服务 描述
@@ -1668,6 +2001,25 @@ cat hsp.log | grep sshd // 查看日志
 ```
 
 ## 日志轮替
+### 参数说明
+```
+daily // 日志的轮替周期是每天
+weekly // 日志的轮替周期是周
+monthly // 日志的轮替周期是月
+rotate 数字 // 保留的日志文件的个数.0指定没有备份
+create 0664 root utmp // 创建日志文件，权限为664，用户为root，组为utmp
+mail address // 发送日志轮替的邮件地址
+missingok // 如果日志不存在,则忽略该日志警告信息
+notifempty // 如果日志为空，则不轮替
+minsize 1M // 大于1M时进行轮替,否则时间达到，也进不来日志转储
+size // 日志只有大于指定大小才能进行日志轮替,而不是按照时间轮替
+dateext // 使用日期作日志轮替后缀、
+sharedscripts // 在此关键字之后的脚本只执行一次
+prerotate/endscript // 日志轮替前执行的脚本
+postrotate/endscript // 日志轮替后执行的脚本
+```
+
+### 日志轮替配置文件
 ```
 weekly // 一周
 rotate 4 // 轮替4次
@@ -1687,3 +2039,85 @@ include /etc/logrotate.d
         rotate 1
 }
 ```
+
+## 查看内存日志
+```
+journalctl // 查看全部
+journalctl -n3 // 查看最新3条
+journalctl --since 19:00 --until 20:00 // 查看19:00到20:00之间的日志
+journalctl -p err // 查看错误日志
+journalctl -o verbose // 查看详细日志
+journalctl_PID=1245 _Comm=sshd // 查看1245进程的日志
+或者 journalctl | grep sshd
+```
+
+
+# 定制linux(未完成)
+```
+lsblk // 查看硬盘
+fdisk /dev/sdb // 操作硬盘
+mkfs.ext4 /dev/sdb1 // 格式化
+mkfs.ext4 /dev/sdb2 // 格式化
+mkdir - p /mnt/boot /mnt/sysroot // 创建目录
+mount /dev/sdb1 /mnt/sysroot // 挂载
+grub2-install --root- directory=/mnt /dev/sdb // 安装grub 
+hexdump -C - n 512 /dev/sdb // 查看硬盘信息
+cp -rf /boot/* /mnt/boot/ // 复制文件
+cd /mnt/boot/grub2 // 切换目录
+``` 
+
+
+# 备份与恢复
+```
+yum -y install restore // 安装restore
+```
+## dump 
+```
+dump [-cu] [-123456789] [-f<备份文件名>] [-T<日期>] [目录或文件系统]
+dump []-wW
+-c // 创建新的文档文件,并将由一个或多个文件参数所指定的内容写入归档文件开头
+-0123456789 // 指定备份等级
+-f<备份后文件名> // 指定备份文件名
+-j //调用bzlib库压缩备份文件,也就是备份后的文件压缩bz2格式,让文件更小
+-T <日期> // 指定备份日期
+-u // 备份完毕后,在/etc/dumpdares中记录备份的文件系统,层级,日期与时间等
+-t // 显示备份文件系统,层级,日期与时间等
+-W // 显示备份的文件及其最后一次备份的层级,日期与时间等
+-w // 与-W类似,但仅显示需要备份的文件
+```
+
+
+# webmin安装配置
+```
+http://download.webmin.com/download/yum/ // 下载地址
+```
+
+# scp命令
+scp [-r] 参数1 参数2
+-r // 用于复制文件夹使用，如果复制文件夹，必须使用-r
+参数1 // 本地路径 或 远程目标路径
+参数2 // 远程目标路径 或 本地路径
+
+远程复制
+scp jdk-8u451-linux-x64.tar.gz root@node2:/root/ 
+
+复制到本地
+scp node2:/root/jdk-8u451-linux-x64.tar.gz .
+
+移动文件
+mv jdk-8u451-linux-x64.tar.gz test/
+
+复制test文件夹到node2
+scp -r test node2:`pwd` //`pwd` 复制的同名的目录中
+
+$PWD // 当前目录
+scp -r test node2:$PWD // 取当前环境变量$PWD的值
+
+
+
+
+
+
+
+
+

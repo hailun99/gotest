@@ -365,28 +365,179 @@ zscore zuser1 cc
 
 # MySQL
 
-## 库
-创建数据库
+## DDL
+### 查看所有库
 ```
+show databases;
+```
+
+### 查询当前数据库
+```
+select database();
+```
+
+### 创建数据库
+```
+create darabase [if not exists] 数据库名 [default character set 字符集] [collate 字符集排序规则];
+
 create database test;
 ```
 
-删除数据库
+### 删除数据库
 ```
+drop database [if exists] 数据库名;
+
 drop database test; --直接删除数据库，不检查是否存在
 
 drop database if exists test; 数据库存在才执行删除操作
 ```
 
-选择数据库
+### 选择数据库
 ```
 use database_name;
 ```
 
-查看所有库
+## SQL
+### 插入数据
 ```
-show databases;
+insert into 表名 (字段1,字段2,字段3...) values (值1,值2,值3...); // 给指定字段插入数据
+insert  into user(id, name, age) value (1,'张三',18);
+
+insert into 表名 values (值1,值2,值3...); // 给所有字段插入数据
+insert into user value (2,'李四',21);
+
+insert into 表名(字段1,字段2...) values (值1,值2...)，(值1,值2...)，(值1,值2...); // 给指定字段插入多条数据
+insert into 表名 values (值1,值2...), (值1,值2...), (值1,值2...); // 给所有字段插入多条数据
+insert into user value (3,'王五',17), (4,'赵六',34);
 ```
+
+### 更新
+```
+update 表名 set 字段名 = 值 where 条件; // 更新指定数据
+update user set name = '张亮' where id = 1;
+```
+
+### 删除
+```
+delete from 表名 where 条件; // 删除指定数据
+delete from user where id = 2;
+delete from user; // 清空表，仅删除数据，不删除表结构
+```
+
+## DQL
+```
+select 字段列表 from 表名列表 where 条件列表 group by 分组字段列表 having 分组后条件列表 order by 排序字段列表 limit 分页参数;
+```
+
+### 基本查询
+```
+1.查询多个字段
+select 字段1, 字段2, 字段3... from 表名; 
+select * from emp;
+select name,workno,age from emp;
+
+2.设置别名
+select 字段1 [as 别名], 字段2 [as 别名]... from 表名;
+select name as '姓名' from emp;
+
+3.去重
+select distinct 字段列表 from 表名;
+select distinct name '姓名' from emp;
+```
+
+### 条件查询
+```
+1.语法
+select 字段列表 from 表名 where 条件列表;
+
+2.条件
+> // 大于
+>= // 大于等于
+< // 小于
+<= // 小于等于
+= // 等于
+<> 或 != // 不等于
+between ... and ... // 区间查询
+in (值1,值2,值3...) // 在指定的值中
+like 占位符 // 模糊查询(' _ '查询单个字符，' % '查询多个字符)
+is null // 为空
+and 或 && // 并且
+or 或 || // 或者
+not 或 ! // 非
+
+SELECT * FROM emp WHERE name like '__'; // 查询姓名为两个字符的
+SELECT * FROM emp WHERE id like '%5'; // 查询id以5结尾的
+```
+
+### 聚合函数
+```
+count // 统计数量
+max // 最大值
+min // 最小值
+avg // 平均值
+sum // 求和
+
+语法
+select 函数名(字段名) from 表名;
+select count(id) FROM emp;
+select sum(age) from emp where gender ='男';
+```
+
+### 分组查询
+```
+where 与 having区别 
+执行时间不同:where 是分组之前进行过滤，不满足where条件，不参与分组;而having是分组之后对结果进行过滤
+判断条件不同: where 不能对聚合函数进行判断，而having可以
+1.语法
+select 字段列表 from 表名 [where 条件] group by 分组字段 [having 分组后条件];
+
+select gender, count(*) from emp group by gender; // 统计区分男女员工数量
+
+查询年龄小于30的，根据工作地址进行分组，获取员工大于等于3的工作地址
+select workaddress, count(*) address_count from emp where age < 30 group by workaddress having address_count >= 3;
+```
+
+### 排序查询
+```
+1.语法
+select 字段列表 from 表名 order by 字段1 排序方式1,字段2 排序方式2; 
+
+排序方式
+ASC // 升序(默认)
+DESC // 降序
+```
+
+### 分页查询
+```
+1 语法
+select 字段列表 from 表名 limit 起始索引,查询记录数;
+select * from emp limit 0,10; // 查询第一页10条记录
+
+```
+
+## DCL
+### 用户管理
+```
+1.查询用户
+usr mysql;
+select * from user;
+
+2.创建用户 (% 表示所有主机)
+create user '用户名@'主机名' identified by '密码';
+create user 'qin'@'%' identified by '123456';
+create user 'qin'@'localhost' identified by '123456';
+
+3.修改用户密码
+alter user '用户名@'主机名' identified with mysql_native_password by '新密码';
+alter user 'qin'@'%' identified with mysql_native_password by '1234';
+
+4.删除用户
+drop user '用户名@'主机名;
+drop user 'qin'@'%';
+```
+
+
+
 
 查看数据库字符集
 ```
@@ -446,3 +597,5 @@ delete from users; // 清空表，仅删除数据，不删除表结构
 
 
 insert into users(username,password,gender,'singnature,vip) values('李四','123456','男','                          man','Svip');
+
+
