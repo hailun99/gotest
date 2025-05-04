@@ -1498,10 +1498,6 @@ systemctl status rabbitmq-server
 
 
 
-
-
-
-
 ## 配置放行规则
 ```
 方式1:关闭防火墙
@@ -2112,6 +2108,443 @@ scp -r test node2:`pwd` //`pwd` 复制的同名的目录中
 
 $PWD // 当前目录
 scp -r test node2:$PWD // 取当前环境变量$PWD的值
+
+
+# Hadoop
+```
+创建Hadoop用户
+adduser hadoop
+
+设置密码
+passwd hadoop
+123
+
+编辑
+vi /etc/sudoers
+添加
+hadoop  ALL=(ALL)       ALL
+
+在opt/ 目录下创建文件夹
+sudo mkdir -p /opt/module
+sudo mkdir -p /opt/software
+
+修改文件的所有者
+sudo chown hadoop:hadoop /opt/module/ /opt/software
+```
+
+## 配置ip
+```
+使用hadoop账号登录
+hadoop
+123
+
+编辑node1的网卡配置文件
+sudo vi /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE="Ethernet"
+PROXY_METHOD="none"
+BROWSER_ONLY="no"
+BOOTPROTO="static"
+DEFROUTE="yes"
+IPV4_FAILURE_FATAL="no"
+IPV6INIT="yes"
+IPV6_AUTOCONF="yes"
+IPV6_DEFROUTE="yes"
+IPV6_FAILURE_FATAL="no"
+IPV6_ADDR_GEN_MODE="stable-privacy"
+NAME="ens33"
+UUID="4e895ccd-c869-4e7a-87a6-9232880805f8"
+DEVICE="ens33"
+ONBOOT="yes"
+IPADDR="192.168.66.181"
+NETMASK="255.255.255.0"
+GATEWAY="192.168.66.2"
+DNS1="192.168.66.2"
+
+
+编辑node2的网卡配置文件
+vim /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE="Ethernet"
+PROXY_METHOD="none"
+BROWSER_ONLY="no"
+BOOTPROTO="static"
+DEFROUTE="yes"
+IPV4_FAILURE_FATAL="no"
+IPV6INIT="yes"
+IPV6_AUTOCONF="yes"
+IPV6_DEFROUTE="yes"
+IPV6_FAILURE_FATAL="no"
+IPV6_ADDR_GEN_MODE="stable-privacy"
+NAME="ens33"
+UUID="4e895ccd-c869-5e7a-87a6-9232880805f9"
+DEVICE="ens33"
+ONBOOT="yes"
+IPADDR="192.168.66.182"
+NETMASK="255.255.255.0"
+GATEWAY="192.168.66.2"
+DNS1="192.168.66.2"
+
+
+编辑node3的网卡配置文件
+vim /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE="Ethernet"
+PROXY_METHOD="none"
+BROWSER_ONLY="no"
+BOOTPROTO="static"
+DEFROUTE="yes"
+IPV4_FAILURE_FATAL="no"
+IPV6INIT="yes"
+IPV6_AUTOCONF="yes"
+IPV6_DEFROUTE="yes"
+IPV6_FAILURE_FATAL="no"
+IPV6_ADDR_GEN_MODE="stable-privacy"
+NAME="ens33"
+UUID="4e895ccd-c869-6e7a-87a6-9232880805f9"
+DEVICE="ens33"
+ONBOOT="yes"
+IPADDR="192.168.66.183"
+NETMASK="255.255.255.0"
+GATEWAY="192.168.66.2"
+DNS1="192.168.66.2"
+
+重启网卡
+sudo service network restart
+
+更新系统
+sudo yum -y update
+
+安装net-tools.x86_64
+sudo yum install -y net-tools.x86_64
+
+查看ip
+
+关闭防火墙
+sudo systemctl stop firewalld
+
+查看防火墙状态
+sudo systemctl status firewalld
+
+永久关闭防火墙
+sudo systemctl disable firewalld
+```
+
+## 免密操作
+```
+生成密钥
+ssh-keygen -t rsa
+
+将生成密钥写入公钥文件
+cd .ssh
+cp id_rsa.pub authorized_keys
+
+在每台机器上执行:完成免密登录
+ssh-copy-id hadoop1
+ssh-copy-id hadoop2
+ssh-copy-id hadoop3
+```
+
+## 下载vim
+```
+sudo yum install vim -y
+```
+
+## 修改主机名
+```
+sudo vi /etc/hostsname
+
+hadoop1
+```
+
+## 修改ip和映射
+```
+sudo vi /etc/hosts
+
+192.168.66.181 hadoop1
+192.168.66.182 hadoop2
+192.168.66.183 hadoop3
+
+检测是否连通
+ping 192.168.66.182
+
+ping hadoop2
+```
+
+## 安装jdk
+```
+查看是否安装有jdk
+rpm -aq | grep java
+
+使用Xftp 上传jdk到hadoop1
+cd /opt/software
+
+解压jdk
+tar -zxvf jdk-8u212-linux-x64.tar.gz -C /opt/module/
+
+配置环境变量
+sudo vim /etc/profile
+
+export JAVA_HOME=/opt/module/jdk1.8.0_212
+export PATH=$PATH:$JAVA_HOME/bin
+
+刷新环境变量
+source /etc/profile
+
+查看jdk版本
+java -version
+```
+
+## 安装hadoop
+```
+使用Xftp 上传hadoop到hadoop1
+cd /opt/software
+
+解压hadoop
+tar -zxvf hadoop-3.1.3.tar.gz -C /opt/module/
+
+配置环境变量
+sudo vim /etc/profile
+
+export HADOOP_HOME=/opt/module/hadoop-3.1.3
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+
+刷新环境变量
+source /etc/profile
+
+查看hadoop版本
+hadoop version
+```
+
+## hadoop单机模式
+```
+切换到hadoop-3.2.1目录下
+cd /opt/module/hadoop-3.2.1/
+
+创建input文件夹
+mkdir input
+
+将hadoop的xml配置文件复制到input
+cp etc/hadoop/*.xml inpu
+
+执行share目录下的mapreduce程序
+bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar grep input output 'dfs[a-z.]+'
+
+查看输出
+cat output/*
+显示不出来,原因这个jar包是老师编写的，在我主机上没有内容所以无
+
+
+案例
+创建 文件
+mkdir wordinput
+
+cd wordinput/
+
+编辑文件
+vim wc.txt 
+hello world
+hello hadoop
+hello mapreduce
+
+切换目录
+cd /opt/module/hadoop-3.1.3/
+
+hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.3.jar wordcount wordinput wordoutput 
+
+显示内容
+cat wordoutput/* 
+```
+
+## 伪分布式运行模式搭建
+### 启动HDFS并运行MapReduce程序
+```
+cd /opt/module/hadoop-3.1.3/etc/hadoop/
+
+配置hadoop-env.sh文件
+vim hadoop-env.sh
+
+添加内容
+export JAVA_HOME=/opt/module/jdk1.8.0_212
+
+配置：core-site.xml
+vi core-site.xml
+
+添加内容
+<!-- 指定HDFS中NameNode的地址 -->
+     <property>
+         <name>fs.defaultFS</name>
+         <value>hdfs://hadoop1:9000</value>
+     </property>
+
+     <!-- 指定hadoop运行时产生文件的存储目录 -->
+     <property>
+         <name>hadoop.tmp.dir</name>
+         <value>/opt/module/hadoop-3.1.3/tmp</value>
+     </property>
+
+
+配置：hdfs-site.xml
+vim hdfs-site.xml
+
+添加
+ <property>
+       <name>dfs.namenode.secondary.http-address</name>
+       <value>hadoop1:50090</value>
+   </property>
+
+   <!-- 指定HDFS副本的数量 -->
+   <property>
+       <name>dfs.replication</name>
+       <value>1</value>
+   </property>
+
+   <!--表示本地磁盘目录，是存储fsimage文件的地方 -->
+   <property>
+       <name>dfs.namenode.name.dir</name>
+       <value>file:///opt/module/hadoop-3.1.3/hdfs/name</value>
+       <final>true</final>
+   <property>
+       <name>dfs.datanode.data.dir</name>
+       <value>file:///opt/module/hadoop-3.1.3/hdfs/data</value>
+       <final>true</final>
+   </property>
+   <property>
+       <name>dfs.webhdfs.enabled</name>
+       <value>true</value>
+   </property>
+   <property>
+       <name>dfs.permissions.enabled</name>
+       <value>false</value>
+   </property>
+
+
+配置：workers
+vim workers
+
+修改为
+hadoop1
+```
+
+### YARN上运行MapReduce 程序
+```
+编辑yarn-env.sh文件
+cd /opt/module/hadoop-3.2.1/etc/hadoop/
+vim yarn-env.sh
+
+添加dk
+export JAVA_HOME=/opt/module/jdk1.8.0_212
+
+配置yarn-site.xml
+vim yarn-site.xml
+
+添加:
+<!-- Site specific YARN configuration properties -->
+   <!-- reducer获取数据的方式 -->
+   <property>
+       <name>yarn.nodemanager.aux-services</name>
+       <value>mapreduce_shuffle</value>
+   </property>
+
+   <!-- 指定YARN的ResourceManager的地址 -->
+   <property>
+       <name>yarn.resourcemanager.address</name>
+       <value>hadoop1:8032</value>
+   </property>
+   <property>
+       <name>yarn.resourcemanager.scheduler.address</name>
+       <value>hadoop1:8030</value>
+   </property>
+
+   <!-- 日志聚集功能使能 -->
+   <property>
+       <name>yarn.log-aggregation-enable</name>
+       <value>true</value>
+   </property>
+   <property>
+       <name>yarn.resourcemanager.resource-tracker.address</name>
+       <value>hadoop1:8031</value>
+   </property>
+   <property>
+       <name>yarn.resourcemanager.admin.address</name>
+       <value>hadoop1:8033</value>
+   </property>
+   <property>
+       <name>yarn.resourcemanager.webapp.address</name>
+       <value>hadoop1:8088</value>
+   </property>
+
+   <property>
+        <name>yarn.nodemanager.hostname</name>
+        <value>hadoop1</value>
+   </property>
+   <property>
+          <name>yarn.nodemanager.webapp.address</name>
+          <value>hadoop1:8042</value>
+   </property>
+
+
+配置：mapred-env.sh
+vim mapred-env.sh
+
+添加
+export JAVA_HOME=/opt/module/jdk1.8.0_212
+
+配置：mapred-site.xml
+vim mapred-site.xml
+
+添加:
+<!-- 指定mr运行在yarn上 -->
+   <property>
+       <name>mapreduce.framework.name</name>
+       <value>yarn</value>
+   </property>
+
+   <!--配置历史服务器 -->
+   <property>
+       <name>mapreduce.jobhistory.address</name>
+       <value>hadoop1:10020</value>
+   </property>
+   <property>
+       <name>mapreduce.jobhistory.webapp.address</name>
+       <value>hadoop1:19888</value>
+   </property>
+   <property>
+       <name>mapreduce.application.classpath</name>
+       <value>
+           /opt/module/hadoop-3.1.3/etc/hadoop,
+           /opt/module/hadoop-3.1.3/share/hadoop/common/*,
+           /opt/module/hadoop-3.1.3/share/hadoop/common/lib/*,
+           /opt/module/hadoop-3.1.3/share/hadoop/hdfs/*,
+           /opt/module/hadoop-3.1.3/share/hadoop/hdfs/lib/*,
+           /opt/module/hadoop-3.1.3/share/hadoop/mapreduce/*,
+           /opt/module/hadoop-3.1.3/share/hadoop/mapreduce/lib/*,
+           /opt/module/hadoop-3.1.3/share/hadoop/yarn/*,
+           /opt/module/hadoop-3.1.3/share/hadoop/yarn/lib/*
+       </value>
+   </property>
+```
+
+## 伪分布式启动集群
+### 格式化NameNode
+```
+cd /opt/module/hadoop-3.1.3/
+hadoop namenode -format
+
+成功的话，会看到 “successfully formatted” 的提示。
+```
+
+### 使用hadoop分别启动HDFS和YARN
+```
+start-dfs.sh
+
+```
+
+
+
+
+
+
 
 
 

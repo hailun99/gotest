@@ -409,6 +409,8 @@ insert into user value (2,'李四',21);
 insert into 表名(字段1,字段2...) values (值1,值2...)，(值1,值2...)，(值1,值2...); // 给指定字段插入多条数据
 insert into 表名 values (值1,值2...), (值1,值2...), (值1,值2...); // 给所有字段插入多条数据
 insert into user value (3,'王五',17), (4,'赵六',34);
+
+alter table  emp add column idcard  char(18) after entrydata;
 ```
 
 ### 更新
@@ -536,7 +538,17 @@ drop user '用户名@'主机名;
 drop user 'qin'@'%';
 ```
 
-
+## 函数
+### 字符串函数
+```
+concat(字段1,字段2,字段3...) // 字符串拼接
+lower(字段) // 字符串转小写
+upper(字段) // 字符串转大写
+lpad(字段,长度,'填充字符') // 左填充,字符串填充
+rpad(字段,长度,'填充字符') // 右填充,字符串填充
+trim(字段) // 去除字符串两端的空格
+substring(字段,起始位置,长度)
+```
 
 
 查看数据库字符集

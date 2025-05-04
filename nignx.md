@@ -339,7 +339,7 @@ hostnamectl set-hostname node3
 hostname
 
 
-修改node2的网卡配置
+修改node3的网卡配置
 vim /etc/sysconfig/network-scripts/ifcfg-ens33
 
 TYPE="Ethernet"
@@ -431,6 +431,7 @@ java -version
 关闭每台机器的防火墙
 systemctl stop firewalld // 关闭防火墙
 systemctl disable firewalld // 设置禁止启动
+systemctl status firewalld // 查看状态
 
 
 修改每台机器的selinux配置文件
@@ -638,6 +639,9 @@ export YARN_NODEMANAGER_USER=root
 export YARN_PROXYSERVER_USER=root
 
 
+
+
+
 编辑core-site.xml文件
 vim core-site.xml 
 
@@ -746,7 +750,7 @@ vim mapred-site.xml
 </configuration> 
 
 
-编辑yarn-env.sh文件
+## 编辑yarn-env.sh文件
 vim yarn-env.sh 
 
 export JAVA_HOME=/export/server/jdk
@@ -759,7 +763,7 @@ export HADOOP_LOG_DIR=$HADOOP_HOME/logs/hdfs
 
 
 
-编辑yarn-site.xml文件
+## 编辑yarn-site.xml文件
 vim yarn-site.xml
 
 <property>
@@ -888,8 +892,7 @@ yarn-daemon.sh stop proxyserver // 关闭代理服务
 http://192.168.66.181:9870 // 验证HDFS
 
 http://192.168.66.181:8088 // 验证YARM 
-
-
+s
 验证
 
 vim test.txt // 创建文件
@@ -904,6 +907,124 @@ vim words.txt // 创建文件
 hadoop fs -put words.txt /words.txt 
 
 hadoop jar /export/server/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.3.0.jar wordcount -Dmapred.job.queue.name=root.root /words.txt /output 
+
+
+编辑 ~/.bash_profile 文件：
+vi ~/.bash_profile
+export HADOOP_CONF_DIR=/export/server/hadoop/conf
+export HADOOP_LOG_DIR=/export/server/hadoop/etc//hadoop/logs
+
+刷新环境变量
+source ~/.bash_profile
+
+
+
+
+
+
+# 修改文件
+vim capacity-scheduler.xml
+源文件
+<property>
+    <name>yarn.scheduler.capacity.root.queues</name>
+    <value>default</value>
+    <description>
+      The queues at the this level (root is the root queue).
+    </description>
+  </property>
+
+
+
+# 安装HBase
+Hbase官方下载地址: http://archive.apache.org/dist/hbase
+
+解压
+tar -zxvf hbase-2.3.5-bin.tar.gz -C /export/server/
+
+创建软连接
+ln -s /export/server/hbase-2.3.5 /export/server/hbase
+
+编辑配置文件
+cd /export/server/hbase/conf
+vim hbase-env.sh
+export JAVA_HOME=/export/server/jdk
+export HBASE_MANAGES_ZK=false
+export HBASE_DISABLE_HADOOP_ClASSPATH_LOOKUP="true"
+
+vim hbase-site.xml
+
+<configuration>
+    <!-- HBase数据在HDFS中的存放的路径 -->
+    <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://node1:8020/hbase</value>
+    </property>
+    <!-- HBase的运行模式，false是单机模式，true是分布式模式，若为false,Hbase和Zookeeper会运行在同一个JVM里面 -->
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+    <!-- ZooKeeper的地址 -->
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>node1,node2,node3</value>
+    </property>
+    <!-- ZooKeeper快照的存储位置 -->
+    <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>/export/server/apache-zookeeper-3.5.9-bin/data</value>
+    </property>
+    <!-- V2.1版本，在分布式情况下，设置为false -->
+    <property>
+        <name>hbase.unsafe.stream.capability.enforce</name>
+        <value>false</value>
+    </property>
+</configuration> 
+
+
+vim regionservers
+
+node1
+node2
+node3
+
+将hbase-2.3.5文件复制到node2，node3节点
+scp -r hbase-2.3.5 node2:`pwd`/
+scp -r hbase-2.3.5 node3:`pwd`/
+
+在node2，node3节点上构建软链接
+ln -s /export/server/hbase-2.3.5 /export/server/hbase
+
+编辑环境变量
+vim /etc/profile
+
+export HBASE_HOME=/export/server/hbase
+export PATH=$PATH:$HBASE_HOME/bin
+
+刷新环境变量
+source /etc/profile
+
+
+启动hbase
+start-hbase.sh
+stop-hbase.sh
+
+浏览器验证
+http://192.168.66.181:16010
+
+验证
+hbase shell
+
+create 'test','f1'
+put 'test','1','f1:name','zhangsan'
+get 'test','1'
+scan 'test'
+disable 'test'
+drop 'test'
+enable 'test'
+exit
+
+
 
 
 
