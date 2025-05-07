@@ -548,7 +548,91 @@ lpad(字段,长度,'填充字符') // 左填充,字符串填充
 rpad(字段,长度,'填充字符') // 右填充,字符串填充
 trim(字段) // 去除字符串两端的空格
 substring(字段,起始位置,长度)
+
+select concat('Hello','MySql'); // 链接字符串
+select lower('Hello'); // 小写
+select upper('Hello'); // 大写
+select lpad('01',5,'-'); // 左填充
+select rpad('01',5,'-'); // 右填充
+select trim(' Hello MySQL '); // 去除空格
+select substring('Hello MySQL',1,5); // 截取字符串
+update emp set workno = rpad(workno, 5, '0') where id = 1; // 填充字符
 ```
+
+### 数值函数
+```
+CEIL(x) // 向上取整
+FLOOR(x) // 向下取整
+MOD(x,y) // 取余
+RAND() // 随机数0~1
+ROUND(x,y) // 四舍五入,保留小数
+
+-- 数值函数
+-- ceil
+select ceil(1.5);
+
+-- floor
+select floor(1.9);
+
+-- mod
+select mod(5,3);
+
+-- rand
+select rand();
+
+-- round
+select round(2.2453,2);
+
+-- 案例，通过函数生成一个六位数的验证码
+select lpad(round( rand()*1000000, 0), 6, '0');
+```
+
+### 时间函数
+```
+curdate(); // 当前日期
+curtime(); // 当前时间
+now();// 当前日期和时间
+year(data); // data年份
+month(data); // data月份
+day(data); // data日期
+date_add(data, interval expr day); // 返回一个日期/时间值加上一个时间间隔expr后的时间值
+datediff(data1, data2); // 返回两个日期之间的天数差
+
+-- 日期函数
+-- curdate()
+select curdate();
+
+-- curtime
+select curtime();
+
+-- now
+select now();
+
+-- year, month, day
+select year(now());
+select month(now());
+select day(now());
+
+-- date_add
+select date_add(now(), interval 70 day );
+select date_add(now(), interval 70 month );
+select date_add(now(), interval 70 year );
+
+-- datediff
+select datediff('2025-12-01','2025-10-01')
+select datediff('2025-8-01','2025-10-01')
+
+-- 案例,查找员工的入职天数,根据入职天数倒序排序
+select name, datediff(curdate(),entrydata) as 'entrydays' from emp order by entrydays desc;
+```
+
+
+
+
+
+
+
+
 
 
 查看数据库字符集
