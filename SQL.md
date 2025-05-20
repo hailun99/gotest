@@ -105,263 +105,7 @@ SELECT DISTINCT column_name(s)
 FROM table_name
 ```
 
-# Redis
-Windis下载地址
-```
-https://github.com/tporadowski/redis/releases
-```
 
-Linux下载地址
-```
-http://redis.io/download
-```
-
-redis启动
-```
-redis-server.exe redis.windows.conf
-```
-
-建立新窗口
-```
-redis-cli.exe -h 192.168.3.32 -p 6379
-```
-
-## Redis命令
-链接本地Redis服务
-```
-redis-cli
-```
-
-检测Redis服务是否启动
-```
-PING
-```
-
-远程服务器链接
-```
-redis-cli -h host -p port -a password
-```
-
-停止redis
-```
-redis-cli shutdown
-
-kill redis-pid
-```
-
-监控
-```
-monitor
-```
-
-## 切换数据库
-数据库没有名称，默认为16个，0-15
-选择编号为1的库数据库
-```
-select 1
-```
-
-## key
-*任意字符,？表示单个字符
-查看全部
-```
-keys *
-```
-
-### 设置(修改)key
-```
-set runoobkey redis
-```
-
-删除key
-```
-del runoobk
-```
-
-设置键值过期时间(默认单位为秒)
-```
-setex user2 3 aaa
-```
-
-设置多个键值对
-```
-mset user2 aaa user3 bbb user4 ccc user5 ddd
-```
-
-追加值
-```
-append user2 hahha
-```
-
-### 获取值
-获取值
-```
-get user2
-```
-
-获取多个值
-```
-mget user2 user3
-```
-
-### 删除键
-```
-del user1
-```
-
-删除多个键
-```
-del user2 user3
-```
-
-### 键命名
-查找键
-```
-keys *
-```
-
-判断键是否存在(存在返回1,不存在返回0)
-```
-exists user4
-
-exists user4 user5
-```
-
-查看键的类型
-```
-type user4
-```
-
-设置过期时间(大于0，代表有效时间,单位为秒;
-            返回-1为永久有效;
-            返回-2为键不存在)
-```
-expire user4 100
-```
-
-## hash(表， 字段，  值)
-        key  field   value
-添加/修改
-```
-hset huser1 name tom
-```
-
-设置多个值
-```
-hmset huser2 name marry sex female
-```
-
-type
-```
-type huser2
-```
-
-获取某个字段值
-```
-hget huser2 name
-```
-
-获取多个字段值
-```
-hmget huser2 name sex
-```
-
-获取所有值
-```
-hvals huser2
-```
-
-获取所有字段包括值
-```
-hgetall huser2
-```
-
-删除字段
-```
-hdel huser2 sex
-```
-
-## list
-### 添加
-列表左边添加值
-```
-lpush luser1 aa bb cc
-```
-
-列表右边添加值
-```
-rpush luser1 dd
-```
-
-从值前/后插入值
-```
-linsert luser1 before cc 11
-
-linsert luser1 after cc 22
-```
-
-### 获取(0表示开始值，-1表示最后一个值)
-```
-lrange luser1 0 -1
-```
-
-### 修改
-```
-lset luser1 1 ww
-```
-
-## 删除值
-从右侧(末尾)删除(一个)
-```
-lrem luser2 -1 h1
-```
-
-从左侧(开头)删除(下面全部)
-```
-lrem luser2 0 h1
-```
-
-## 集合set(不允许有重复值,只能添加与删)
-添加值
-```
-sadd suser1 aa bb cc
-```
-
-获取值
-```
-smembers suser1
-```
-
-删除值
-```
-srem suser1 aa
-```
-
-## zset(不允许有重复值,只能添加与删,分数可以为负数)
-添加值(通过分数从大倒小排序)
-```
-zadd zuser1 1 aa 3 dd 6 cc 2 ff
-```
-
-获取值
-```
-zrange zuser1 0 -1
-```
-
-获取值和分数
-```
-zrange zuser1 0 -1 withscores
-```
-
-通过分数获取值
-```
-zrangebyscore zuser1 1 6
-```
-
-通过值获得分数
-```
-zscore zuser1 cc
-```
 
 # MySQL
 
@@ -549,14 +293,14 @@ rpad(字段,长度,'填充字符') // 右填充,字符串填充
 trim(字段) // 去除字符串两端的空格
 substring(字段,起始位置,长度)
 
-select concat('Hello','MySql'); // 链接字符串
-select lower('Hello'); // 小写
-select upper('Hello'); // 大写
-select lpad('01',5,'-'); // 左填充
-select rpad('01',5,'-'); // 右填充
-select trim(' Hello MySQL '); // 去除空格
-select substring('Hello MySQL',1,5); // 截取字符串
-update emp set workno = rpad(workno, 5, '0') where id = 1; // 填充字符
+select concat('Hello','MySql'); // HelloMySql
+select lower('Hello'); // hello
+select upper('Hello'); // HELLO
+select lpad('01',5,'-'); // ---01
+select rpad('01',5,'-'); // 01---
+select trim(' Hello MySQL '); // Hello MySQL
+select substring('Hello MySQL',1,5); // Hello
+update emp set workno = rpad(workno, 5, '0') where id = 1; // Hello
 ```
 
 ### 数值函数
@@ -569,22 +313,22 @@ ROUND(x,y) // 四舍五入,保留小数
 
 -- 数值函数
 -- ceil
-select ceil(1.5);
+select ceil(1.5); // 2
 
 -- floor
-select floor(1.9);
+select floor(1.9); // 1
 
 -- mod
-select mod(5,3);
+select mod(5,3); // 2
 
 -- rand
-select rand();
+select rand(); // 0~1
 
 -- round
-select round(2.2453,2);
+select round(2.2453,2); // 2.24
 
 -- 案例，通过函数生成一个六位数的验证码
-select lpad(round( rand()*1000000, 0), 6, '0');
+select lpad(round( rand()*1000000, 0), 6, '0'); // 数据六个数
 ```
 
 ### 时间函数
@@ -625,6 +369,366 @@ select datediff('2025-8-01','2025-10-01')
 -- 案例,查找员工的入职天数,根据入职天数倒序排序
 select name, datediff(curdate(),entrydata) as 'entrydays' from emp order by entrydays desc;
 ```
+
+### 流程函数
+```
+if(value, t, f) // 如果value为true,则返回t,否则返回f
+ifnull(value1,value2) // 如果value1不为空,返回value1,否则返回value2\
+case when [val1] then [res1] ...else [default] end // 如果val1为true,返回res1, ...否则返回default默认值
+case [expr] when [val1] then [res1] ...else [default] end // 如果ecpr的值等于val1,返回res1, ...否则返回default默认值
+
+-- 流程图控制函数
+-- if
+select if(true, 'ok', 'Error');  -- ok
+select if(false, 'ok', 'Error'); -- Error
+
+-- ifnull
+select ifnull('ok','default'); -- ok
+select ifnull('','default'); -- default
+select ifnull(null,'default'); -- default
+
+-- case when then else end
+select
+    name,
+    (case wokaddress when '北京' then '一线城市' when '上海' then '一线城市' else '二线城市' end ) as '工作地址'
+from emp;
+
+-- 案例,统计成绩
+-- >=85,优秀
+-- >=60,及格
+-- 否则,不及格
+create table score(
+    id int comment 'ID',
+    name varchar(20) comment '姓名',
+    math int comment '数学',
+    english int comment '英语',
+    chinese int comment '语文'
+) comment '学员成绩表';
+insert into score(id, name, math, english, chinese) VALUES (1, 'Tom', 67, 88, 95 ), (2, 'Rose' , 23, 66, 90),(3, 'Jack', 56, 98, 76);
+
+--
+select
+    id,
+    name,
+    ( case when math >= 85 then '优秀' when math >= 60 then '及格' else '不及格' end) '数学',
+    ( case when english >= 85 then '优秀' when english >= 60 then '及格' else '不及格' end) '英语',
+    ( case when chinese >= 85 then '优秀' when chinese >= 60 then '及格' else '不及格' end) '语文'
+from score;
+```
+
+## 约束
+关键字
+```
+NOT NULL // 非空约束,限制该字段的数据不能为null
+UNIQUE // 唯一约束,保证该字段的数据唯一性,不能重复
+PRIMARY KEY // 主键约束,保证该字段的数据唯一性,不能重复,并且不能为null
+DEFAUT // 默认值约束,保存数据时,为字段指定值,采取默认值
+CHECK // 检查约束,保证字段的数据满足指定的条件(8.0.16版本之后)
+FOREIGN KEY // 外键约束,用来让两张表数据之间建立链接,保证数据的一致性和完整性
+```
+
+### 外键
+**添加外键**
+```
+create table 表名(
+    字段名 数据类型
+    ......
+    [constraint] [外键名] foreign key (外键字段名称) references 主表名(主表字段名称)
+)
+
+alter table emp add constraint fk_emp_dept_id foreign key (dept_id) references dept(id);
+```
+
+**删除外键**
+```
+alter table emp drop foreign key  fk_emp_dept_id;
+```
+
+**删除/更新**
+```
+no action // 在父表中删除或更新，检测是否有外键,有测不允许删除或更新
+restrict // 在父表中删除或更新，删除或更新数据时,外键字段的数据必须存在,否则不允许删除或更新
+cascade // 在父表中删除或更新，检查是否有外键,有，也删除或更新外键在子表中的记录
+set null // 在父表中删除或更新，检查是否有外键,有，则将外键字段的数据设置为null
+set default // 父表有变更时,子表将外键设置成一个默认的值
+
+-- 外键的删除/更新行为
+alter table emp add constraint fk_emp_dept_id foreign key (dept_id) references dept(id) on update cascade on delete cascade;
+
+alter table emp add constraint fk_emp_dept_id foreign key (dept_id) references dept(id) on update set null on delete set null;
+```
+
+## 多表查询
+**多对多**
+```
+create table student(
+    id int auto_increment primary key comment '主键ID',
+    name varchar(10) comment '姓名',
+    no varchar(10) comment '学号'
+);
+insert into student values (null,'拉丁语','2000100101'),(null,'海口','2000100102'),(null,'段海','2000100103'),(null,'王阳明','2000100104')
+
+create table course(
+    id int auto_increment primary key comment '主键ID',
+    name varchar(10) comment '课程名称'
+) comment '课程表';
+
+insert into course values (null,'java'),(null,'PHP'),(null,'MySQL'),(null,'hadoop')
+
+
+create table student_course(
+    id int auto_increment comment '主键' primary key ,
+    studentid int not null comment '学生ID',
+    courseid int not null comment '课程ID',
+    constraint fk_courseid foreign key (courseid) references course (id),
+    constraint fk_studentid foreign key (studentid) references student (id)
+)comment '学生课程中间表';
+
+insert into student_course values (null,1,1),(null,1,2),(null,1,3),(null,2,2),(null,2,3),(null,3,4)
+```
+
+**一对一**
+```
+create table tb_user(
+    id int auto_increment primary key comment '主键ID',
+    name varchar(10) comment '姓名',
+    age int comment '年龄',
+    gender char(1) comment '1: 男, 2: 女',
+    phone char(11) comment '手机号'
+) comment '用户信息表';
+
+create table tb_user_edu(
+    id int auto_increment primary key comment '主键ID',
+    degree varchar(20) comment '学历',
+    major varchar(50) comment '专业',
+    primaryschool varchar(50) comment '小学',
+    middleschool varchar(50) comment '中学',
+    university varchar(50) comment '大学',
+    userid int unique comment '用户ID',
+    constraint fk_userid foreign key (userid) references tb_user(id)
+) comment '用户教育信息表';
+
+```
+
+### 内连接
+**隐式内连接**()
+去重:(distinct)
+```
+select 字段列表 from 表1,表2 where 条件;
+
+select emp.name, dept.name from emp, dept where emp.dept_id = dept.id;
+
+select e.name, d.name from emp e, dept d where e.dept_id = d.id;
+```
+
+**显示内连接**(inner join / join)
+```
+select 字段列表 from 表1 [inner] join 表2 on 链接条件;
+
+select e.name, d.name from emp e, dept d inner join emp e2 on d.id = e2.dept_id
+
+select e.name, d.name from emp e, dept d join emp e2 on d.id = e2.dept_id
+```
+
+### 外连接
+**左外连接**(一般都用这个)(left)
+```
+select 字段列表 from 表1 left join 表2 on 条件;
+
+select e.*, d.name from emp e left  join dept d on e.dept_id=d.id;
+
+```
+
+**右外连接**(right)
+```
+select 字段列表 from 表1 right [left] join 表2 on 条件;
+
+select d.*, e.name from emp e right join dept d on e.dept_id=d.id;
+
+select d.*, e.name from dept d left join emp e on e.dept_id=d.id;
+```
+
+### 自连接(一定要起别名)
+```
+select 字段列表 from 表A 别名A join 表A 别名B on 条件;
+
+select a.name,b.name from emp a,emp b where a.manager_id= b.id;
+
+select a.name '员工', b.name '领导' from emp a left join emp b on a.manager_id = b.id;
+```
+
+### 联合查询(union，union all)
+```
+select 字段列表 from 表1 ... 
+union [all]
+select 字段列表 from 表2 ...;
+
+select * from emp where salary < 5000
+union
+select * from emp where age > 50;
+```
+
+### 子查询(嵌套查询)
+```
+select * from t1 where columm1 = (select column1 from t2);
+```
+
+#### 标量子查询
+**常用的操作符**
+(=, !=, <, >, <=, >=)
+```
+查询销售部ID
+select id from dept where name = '销售部';
+
+select * from emp where dept_id = (select id from dept where name = '销售部');
+```
+
+#### 列子查询
+**常用的操作符**
+```
+in // 在指定范围内，多选一
+not in // 不在指定范围内
+any // 子查询返回列表中，右任意一个满足即可
+some // 与any相同，使用some的地方都可以使用any
+all // 子查询返回列表中，所有都满足才行
+
+-- 根据ID，查询员工信息
+select * from emp where dept_id in (select id from dept where name = '研发部' or name = '销售部' or name = '市场部');
+
+
+-- 查询比财务部工资高的人
+select * from emp where salary > all (select salary from emp where dept_id = (select id from dept where name = '财务部')
+);
+
+-- 查询比研发任意一个人工资高
+select * from emp where salary > any (select salary from emp where dept_id = (select id from dept where name = '研发部')
+);
+```
+
+#### 行子查询
+**常用的操作符**
+```
+(=、<>、in、not in)
+-- 查询展示的薪资与直系领导
+select * from emp where (salary, manager_id) = (select salary, manager_id from emp where name = '展示');
+```
+
+#### 表子查询
+**常用的操作符**
+(in)
+```
+-- 查询与王五、赵六职位和薪资相同的
+select * from emp where (job, salary) in (select job, salary from emp where name = '王五' or name = '赵六');
+```
+
+## 事务
+**查看**
+```
+--查看事务情况
+select @@autocommit;
+
+-- 自动提交
+set @@autocommit = 1;
+
+-- 手动提交
+set @@autocommit = 0;
+```
+
+**开启事务**
+```
+start transaction 或 begin;
+```
+
+**提交**
+```
+commit;
+```
+
+**回滚**
+```
+rollback;
+```
+
+### 事务四大特性(ACID)
+**原子性**
+```
+Atomicity // 事务是不可分割的，要么全部成功，要么全部失败
+```
+
+**一致性**
+```
+Consistency // 事务完成时，必须使用所有的数据的保持一致状态
+```
+
+**隔离性**
+```
+Isolation // 数据库系统提供的隔离机制，保证事务在不受外部并发操作的独立操作影响的独立环境下运行
+```
+
+**持久性**
+```
+durability // 事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。
+```
+
+### 并发事务问题
+**脏读**
+一个事务读到另一个事务还没有提交的数据
+**不可重复读**
+一个事务先后读取到同一条记录，但两次读取的数据不一致，称之为不可重复读
+**幻读**
+一个事务查询时，没有对应的数据，但在插入数据时,又发现这行的数据已经存在
+
+### 事务隔离级别
+read uncommitted // 读未提交
+可能出现情况
+脏读、不可重复读、幻读
+
+read committed // 读已提交
+不可重复读、幻读
+
+repeatable read(mysql默认) // 可重复读
+幻读
+
+serializable // 串行化
+
+#### 查看运行级别
+```
+select @@transaction_isolation;
+```
+
+#### 设置事务隔离级别
+set [session | global] transaction isolation level [read uncommitted | read committed | repeatable read | serializable];
+selssion // 代表当前会话，仅对当前窗口有效
+global // 代表全局，对所有用户有效
+
+
+## 存储引擎
+### MySQL体系结构
+1连接层 -->  2服务层 -->  3引擎层 -->  4数据层
+
+### 存储引擎介绍
+存储引擎就是存储数据、建立索引、更新/查询数据等技术的实现方式。基于表
+
+-- 查询建表语句 ----默认存储引擎InnoDB
+show create table account;
+
+-- 查询当前数据库的存储引擎
+show engines ;
+
+### 存储引擎特点
+#### InnoDB
+**介绍**
+高可靠、高性能通用的存储引擎
+
+**特点**
+DML(增删改)操作遵循ACID模型,支持事务
+行级锁，高并发访问性能
+支持外键FOREIGN KEY约束，保证数据的完整性和正常
+
+
+
+
+
 
 
 
@@ -693,5 +797,20 @@ delete from users; // 清空表，仅删除数据，不删除表结构
 
 
 insert into users(username,password,gender,'singnature,vip) values('李四','123456','男','                          man','Svip');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
