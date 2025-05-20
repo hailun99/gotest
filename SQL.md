@@ -702,7 +702,7 @@ selssion // 代表当前会话，仅对当前窗口有效
 global // 代表全局，对所有用户有效
 
 
-## 存储引擎
+## 存储引擎(LIUNX版)
 ### MySQL体系结构
 1连接层 -->  2服务层 -->  3引擎层 -->  4数据层
 
@@ -726,10 +726,148 @@ DML(增删改)操作遵循ACID模型,支持事务
 支持外键FOREIGN KEY约束，保证数据的完整性和正常
 
 
+## 索引
+**索引结构**
+B+Tree索引  大部分引擎都支持，最常见的索引
+hash索引    只有精确匹配索引才有效，不支持范围查询
+R-Tree(空间索引)    是MyISAM引擎，用于地理空间类型，使用较少
+Full-text(全文索引)   倒非索引，快速匹配文档。类似Lucene，Solr,ES
+
+二叉树: 循序插入，形成列表，查询性能低
+红黑树: 大数据情况下，层级深，查询性能慢
+
+**Hash索引**
+只能用于对等比较(=, in)，不支持范围
+无法利用索引完成排序操作
+查询效率高(无Hash碰撞情况下)
 
 
+### 索引分类
+主键索引 针对表中主键创建的索引 默认自动创建，只能有一个 primary
+唯一索引 避免表数据重复 可以有多个 unique
+常规索引 快速定位数据 可以有多个
+全文索引 关键字 可以有多个 fulltext
+
+**在innoDB存储中**
+聚集索引    将数据存储放到一块，索引结构的叶子节点保存了行数据   必须有，且只有一个
+二级索引    将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键  可以存在多个
+
+规则:主键索引就是聚集索引
+     不存在主键，将使用第一个(unique)索引作为聚集索引
+     没主键，没合适的唯一索引，自动生成一个rowid作为隐藏的聚集索引
 
 
+n * 8+(n + 1)* 6=16*1024,指针比key多一个
+
+### 索引语法
+**创建索引**
+create [unique | fulltext] index index_name on table_name(index_column_name);
+
+**查看索引**
+show index from table_name;
+
+**删除索引**
+drop index index_name on table_name;
+
+#### 启动mysql
+mysql -uroot -p
+密码: Itcast@2022
+
+
+#### 性能分析
+**查询频率**
+show global status like 'com_______' // 查看执行频率
+
+**慢查询日志**
+show variabless like 'slow_query_log'; // 查看慢查询是否开启
+
+配置文件(vi /etc/my.cnf)(默认慢查询时间10秒)
+show_query_log=1; // 开启慢查询日志
+long_query_time=2; // 设置慢查询日志的时间为2秒，超过的是为慢查询
+
+查看慢日志文件记录信息
+cat /var/log/mysql/mysql-slow.log
+
+
+**profile详细**
+show profile 能够在做SQL优化时帮助我们了解时间都消耗到哪里去了
+select @@have_profiling; // 查看是否支持profile操作
+set profiling=1; // 开启profile，默认为关闭
+
+show profile; // 查看每条SQL的耗时时间
+show profile for query_id; // 查看指定query_id的SQl语句各个阶段的耗时情况
+show profile cpu for query_id; // 查看指定query_id的SQl语句cpu的使用情况
+
+**explain执行计划**
+explain/desc 字段列表 from 表名 wherr 条件;
+
+explain执行计划各字段含义:
+***id*** 表查询中执行select字句或者是操作表的顺序(id相同，执行顺序从上到下;id不同，值越大执行)
+***select_type*** 表示查询的类型，simple表示简单查询，primary表示主查询，union表示并集查询，derived表示派生查询，subquery表示子查询
+***type*** 表示链接类型，性能有好到差NULL、system、const、eq_ref、ref、rang、index、all
+***possible_keys*** 显示可以应该用在这张表上的索引，一个或多个
+
+key 实际使用的索引，如果为null，则表示没有使用索引
+key_len 表示索引中使用的字节数，该值为索引字段最大可能长度，不精确，长度越短越好
+rows 表示mysql执行该查询时使用的行数，可能并精确的
+fillered 表示返回结果的行数占读取行数的百分比，fillered的值越大越好
+
+#### 索引使用规则
+**最左前缀法则**
+索引了多列(联合索引),要遵守最左前缀法则。最左前缀法则是查询从索引的最左列开始，且不跳过索引中的列。如果跳跃某一列，后面的索引失效
+**范围查询**
+联合索引中，出现范围查询(>, <),范围查询右侧的索引失效
+
+#### 索引失效情况
+**索引列运算**
+不要在索引列上进行运算操作，索引将失效。
+**字符串不加引号**
+字符串类型字段使用时，不加引号，索引将失效。
+**模糊查询**
+如果仅仅是尾部模糊匹配,索引不会失效。如果头部模糊匹配，索引失效。
+**or链接条件**
+用or分开条件，如果or前的条件中的列有索引，而后面的列中没有索引，那么涉及的索引都不会被用到
+explain select * from user where id = 1 or age = 21;
+解决办法，age建立索引
+create index index__user_age on user(age);
+**数据分布影响**
+如果mysql评估使用索引比全表慢，侧不使用索引
+
+#### SQl提示
+explain select * from user use index(idx__user_age) where age = 21;
+建议
+use index
+不要
+ignore index
+强制
+force index
+
+#### 覆盖索引&回表查询
+drop index 索引 on 表名; // 删除索引
+
+**覆盖索引**
+尽量使用覆盖索引，即索引中包含查询的所有列，避免回表查询
+using index condition 查找使用了索引，但需要回表查询数据
+using where; using index 查找使用了索引，且不需要回表查询数据
+**回表查询**
+两层索引
+
+##### 前缀索引
+语法
+create index ind_xxxx on 表名(column(n));
+
+操作
+select count(*) from user; // 查看有多少数据
+slelct count(email) from user; // 求取email不为空的值
+select coumt(distinct email) from user; //去重
+select coumt(distinct email)/ count(*) from user; // 选择性为1
+select coumt(distinct emailemail,1,5)/ count(*) from user;
+create index ind_email_5 on user(email(5)); //提取5个前缀
+
+
+##### 单列&联合索引
+单列索引: 即一个索引只包含单个列
+联合索引: 即一个索引包含多个列
 
 
 
